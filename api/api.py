@@ -1,3 +1,4 @@
+from email.policy import strict
 import json
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
@@ -6,13 +7,14 @@ from flask_cors import CORS
 eventifyapi = Flask(__name__)
 mongo = MongoClient('mongodb://localhost:27017/')
 mongo = mongo.get_database('eventify')
-cors = CORS(eventifyapi, resources={r"/*": {"origins": "0.0.0.0"}})
+cors = CORS(eventifyapi, resources={r"/*": {"origins": "*"}})
 eventifyapi.config['CORS_HEADERS'] = 'Content-Type'
 
 @eventifyapi.route('/events', strict_slashes=False, methods=['GET'])
 def get_events():
-    events = mongo.get_collection('events').find()
-    return jsonify(list(events))
+    #events = mongo.get_collection('events').find()
+    #return jsonify(list(events))
+    return jsonify({'status': 'PASE CORS'})
 
 @eventifyapi.route('/events/<event_id>', strict_slashes=False, methods=['GET'])
 def get_event(event_id):
@@ -21,7 +23,7 @@ def get_event(event_id):
 
 @eventifyapi.route('/events', strict_slashes=False, methods=['POST'])
 def create_event():
-    print(request.form)
+    print(request.get_json())
     response = jsonify({'status': 'OK'})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
