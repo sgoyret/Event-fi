@@ -23,7 +23,7 @@ window.addEventListener("load", function() {
         }
         console.log(formdata);
         var request = new XMLHttpRequest();
-        request.open('POST', 'http://0.0.0.0:5000/events');
+        request.open('POST', 'http://127.0.0.1:5000/events');
         request.setRequestHeader('Content-Type', 'application/json');
         request.setRequestHeader('Access-Control-Allow-Origin', '*');
         request.setRequestHeader('Access-Control-Allow-Headers', '*');
