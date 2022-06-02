@@ -28,6 +28,7 @@ var geojson = {
             -34.78871729652251]
         },
         'properties': {
+          'id': '1',
           'title': 'Fiestita en HBTN',
           'description': 'Ciudad de San Salvador, El Salvador'
           }
@@ -40,6 +41,7 @@ var geojson = {
             -34.78933848243201]
         },
         'properties': {
+          'id': '2',
           'title': 'Fiestita en Regency',
           'description': 'que demas pibe'
         }
@@ -49,7 +51,9 @@ var geojson = {
   geojson.features.forEach(function(marker) {
     // create a HTML element for each feature
     var el = document.createElement('div');
-    el.className = 'marker';
+    el.id = 'marker' + '.' + marker.properties.id;
+    el.classList.add('marker');
+    console.log(el.className);
 
     // make a marker for each feature and add it to the map
     new mapboxgl.Marker(el)

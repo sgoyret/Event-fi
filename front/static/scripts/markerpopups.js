@@ -4,6 +4,7 @@ window.addEventListener("load", function() {
     for (let item of elements) {
         item.addEventListener("click", function() {
             const element = document.getElementById('popup');
+            console.log(item.id.split('.')[1]);
             element.classList.replace('popupnone', 'popup');
         });
     };

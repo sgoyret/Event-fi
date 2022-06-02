@@ -30,16 +30,27 @@
             </div>
             <div class="tofav"> Anadir a Favoritos</div>
         </div>
+        <div class="popupnone" id="eventcreate">
+            <form method="POST">
+                <input placeholder="Titulo"></input>
+                <input placeholder="Fecha y hora"></input>
+                <input placeholder="Coordenadas"></input>
+                <input placeholder="Descripcion"></input>
+                <div id="create"> Crear</div>
+            </form>
+            <div class="close" id="closeeventcreate"></div>
+        </div>
         <div id="map">
             <script src="./static/scripts/mapcontainer.js"></script>
             <script src="./static/scripts/markerpopups.js"></script>
             <script src="./static/scripts/userpopup.js"></script>
+            <script src="./static/scripts/creationpopup.js"></script>
         </div>
         <div class="header">eVentify</div>
         <div class="footer">
             <div class="icons">
                 <div class="usericon" id="usericon"><span></span></div>
-                <div class="addnew"><span></span></div>
+                <div class="addnew" id="addevent"><span></span></div>
                 <div class="burguermenu"><span></span></div>
             </div>
         </div>

@@ -54,6 +54,7 @@ body {
 }
 
 .wraper > .popup {
+    max-width: 600px;
     position: absolute;
     left: 0;
     right: 0;
@@ -95,11 +96,11 @@ body {
     max-height: 100%;
 }
 .wraper > .popup > .eventime, .wraper > .popup > .eventlocation {
-    height: 5%;
+    height: 10%;
     font-family: 'Ubuntu', sans-serif;
 }
 .wraper > .popup > .eventdesc {
-    height: 40%;
+    height: 30%;
     font-family: 'Ubuntu', sans-serif;
 }
 .wraper > .popup > .tofav {
@@ -116,6 +117,25 @@ body {
 }
 .wraper > .popup > .tofav:hover {
     background-color: rgb(231,29,54);
+}
+.wraper > .popup > form > input {
+    width: 100%;
+    height: 20%;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Ubuntu', sans-serif;
+}
+#create {
+    font-family: 'Ubuntu', sans-serif;
+    border-radius: 10px;
+    border: rgb(231,29,54) 2px solid;
+    width: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
 }
 .close {
     position: absolute;
