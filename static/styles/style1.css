@@ -34,13 +34,12 @@ body {
 .wraper > .footer {
     width: 100%;
     height: 40px;
-    background-color: #f5f5f5;
     position: absolute;
     display: flex;
     justify-content: space-around;
     bottom: 0;
-    background: rgb(231,29,54);
-    background: linear-gradient(0deg, rgba(231,29,54,1) 0%, rgba(231,29,54,0.5270483193277311) 50%, rgba(231,29,54,0) 100%);
+    background: rgba(43, 3, 100, 0.667);
+    border-radius: 5px;
 }
 
 .wraper > .footer > span {
@@ -65,7 +64,7 @@ body {
     width: 90%;
     height: 80%;
     background-color: #28292a;
-    border: rgb(231,29,54) 2px solid;
+    border: #6205e3cf 2px solid;
     z-index: 10;
     opacity: 1;
     box-sizing: border-box;
@@ -107,7 +106,7 @@ body {
     height: 5%;
     font-family: 'Ubuntu', sans-serif;
     border-radius: 10px;
-    border: rgb(231,29,54) 2px solid;
+    border: #6205e3cf 2px solid;
     margin-left: auto;
     margin-right: auto;
     position: absolute;
@@ -116,7 +115,7 @@ body {
     width: 50%;
 }
 .wraper > .popup > .tofav:hover {
-    background-color: rgb(231,29,54);
+    background-color: #6205e3cf ;
 }
 .wraper > .popup > form > input {
     width: 100%;
@@ -130,7 +129,7 @@ body {
 #create {
     font-family: 'Ubuntu', sans-serif;
     border-radius: 10px;
-    border: rgb(231,29,54) 2px solid;
+    border: #350A70 2px solid;
     width: 20%;
     margin-left: auto;
     margin-right: auto;
@@ -144,23 +143,25 @@ body {
     right: 5px;
     width: 30px;
     height: 30px;
-    background-color: rgb(231,29,54);
+    background-color: #6205e3cf;
     border-radius: 10px;
     cursor: pointer;
 }
 .addnew {
     width: 33%;
-    background-image: url(../img/addnew.png);
+    background-image: url(../img/bx-plus-circle.svg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .usericon {
     width: 33%;
-    background-image: url(../img/usericon.png);
+    background-image: url(../img/bxs-user-circle.svg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .icons {
     display: flex;
@@ -172,10 +173,11 @@ body {
 
 .burguermenu {
     width: 33%;
-    background-image: url(../img/burguermenu.png);
+    background-image: url(../img/bx-menu.svg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .marker {
     background-image: url(../img/mapbox-icon.png);
