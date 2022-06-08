@@ -10,7 +10,7 @@ mongo = mongo.get_database('EVdb')
 cors = CORS(eventifyapi, resources={r"/*": {"origins": "*"}})
 eventifyapi.config['CORS_HEADERS'] = 'Content-Type'
 
-@eventifyapi.route('/events', strict_slashes=False, methods=['GET'])
+@eventifyapi.route('/events', strict_slashes=False, methods=['GET', 'POST'])
 def get_events():
     events = mongo.get_collection('events').find()
     event_list = []
