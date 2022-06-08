@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
+    <script src="/static/scripts/creationuser.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -17,10 +18,12 @@
             <div class="welcome"> Hola de nuevo!</div>
         </div>
         <div class="container">
-            <form id="eventdata" method="POST">
-                <input name="pickname" class="login" placeholder="Email or nickname"></input>
+            <form id="userdata" method="POST">
+                <input name="name" class="login" placeholder="Name"></input>
+                <input name="last_name" class="login" placeholder="Last Name"></input>
+                <input name="email" class="login" placeholder="Email"></input>
                 <input name="password" class="login" placeholder="Password"></input>
-                <div id="create"> Crear</div>
+                <div id="create">Crear</div>
             </form>
         </div>
         <div class="footer"></div>
