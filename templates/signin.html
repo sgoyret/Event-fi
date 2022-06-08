@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
+    <script src="/static/scripts/validations.js" async></script>
     <title>Document</title>
 </head>
 <body>
@@ -17,11 +18,20 @@
             <div class="welcome"> Hola de nuevo!</div>
         </div>
         <div class="container">
-            <form id="eventdata" method="POST">
-                <input name="pickname" class="login" placeholder="Email or nickname"></input>
-                <input name="password" class="login" placeholder="Password"></input>
-                <div id="create"> Crear</div>
-            </form>
+            <div class="create-user">
+                <form id="user-data" method="POST">
+                    <div class="choose-avatar">
+                        <input name="avatar" type="file" class="avatar"></input>
+                        <p>Choose an avatar</p>
+                    </div>
+                    <input name="username" class="login" placeholder="username"></input>
+                    <input name="email" class="email" placeholder="email"></input>
+                    <input name="name" class="name" placeholder="name"></input>
+                    <input name="lastname" class="lastname" placeholder="lastname"></input>
+                    <input name="password" class="login" placeholder="Password"></input>
+                </form>
+                <button id="btn-create-user" onclick=validateUser()>register</button>
+            </div>
         </div>
         <div class="footer"></div>
     </div>

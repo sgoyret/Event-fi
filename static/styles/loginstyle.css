@@ -9,7 +9,6 @@ body {
 }
 
 .wraper > .container {
-    background-color: red;
     border-radius: 5px;
     /* align-self: center; */
     /* align-items: center; */
@@ -34,12 +33,24 @@ body {
 input {
     all: unset;
 }
-.wraper > .container > #eventdata {
+.wraper > .container > #user-data {
+    display: flex;
+    flex-direction: column;
 }
 
-.wraper > .container > #eventdata > input {
+.wraper > .container > .create-user > #user-data > input {
     display: block;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 60%;
+    height: 2rem;
+    margin: .5rem auto .5rem auto;
+    border: 2px solid #333333;
+    border-radius: 10px;
+}
+
+.wraper > .container > .create-user > #btn-create-user {
+    width: 40%;
+    height: 3rem;
+    font-size: larger;
+    border: 2px solid greenyellow;
+    border-radius: 10px;
 }
