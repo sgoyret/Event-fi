@@ -4,17 +4,12 @@ window.addEventListener("load", function() {
         const formelements = document.getElementById('user-data').getElementsByTagName('input');
         var formdata = {};
         for (let item of formelements) {
-            if (item.value == '') {
+            if (!item.value.checkValidity()) {
                 alert('Please fill in all fields');
-                return;
+                return false;
             } else {
                 formdata[item.name] = item.value;
             }
-        }
-
-        if (!validateUser(formdata)) {
-            alert('Invalid fields');
-            return false;
         }
         console.log(formdata);
         var request = new XMLHttpRequest();
@@ -24,6 +19,7 @@ window.addEventListener("load", function() {
         request.setRequestHeader('Access-Control-Allow-Headers', '*');
         request.send(JSON.stringify(formdata));
         console.log(request)
+        console.log(formdata);
     });
     
 });
