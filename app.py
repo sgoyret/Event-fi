@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, request, redirect, url_for, s
 from flask_cors import CORS
 from flask_session import Session
 from flask_pymongo import PyMongo
+from validations import *
 from werkzeug.security import generate_password_hash
 
 
@@ -19,7 +20,7 @@ app.config["SESSION_TYPE"] = "mongodb"
 app.config["SESSION_MONGODB"] = mongo.db
 app.config["SESSION_MONGODB_DB"] = "events_db"
 app.config["SESSION_MONGODB_COLLECT"] = "sessions"
-ses = Session(app)
+Session(app)
 
 @app.route('/index', strict_slashes=False)
 def index():
@@ -28,19 +29,18 @@ def index():
 @app.route('/register', methods=['POST', 'GET'], strict_slashes=False)
 def register():
     "create user account"
+    print("******************register route******************")
     if request.method == 'POST':
-            name = request.json.get('name')
-            last_name = request.json.get('last_name')
-            password = request.json.get('password')
-            email = request.json.get('email')
-            if name and last_name and password and email:
-                hashed_password = generate_password_hash(password)
-                id = mongo.db.users.insert_one(
-                    {'name': name, 'last_name': last_name, 'email': email, 'password': hashed_password}
-                )
-            session["name"] = last_name
+            print("checking the request json")
+            if validate_user_creation(request.json):
+                print('the dictionary is valid')
+                request.json['password'] = generate_password_hash(request.json['password'])
+                collection= mongo.db.users
+                id = collection.insert_one(request.json)
+                session["name"] = request.json['username']
             return redirect(url_for('index'))
-    return render_template('register.html')
+    if request.method == 'GET':
+        return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)

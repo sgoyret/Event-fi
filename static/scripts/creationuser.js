@@ -1,12 +1,12 @@
 window.addEventListener("load", function() {
-    const usercreate = document.getElementById('create');
+    const usercreate = document.getElementById('btn-create-user');
     usercreate.addEventListener("click", function() {
-        const formelements = document.getElementById('userdata').getElementsByTagName('input');
+        const formelements = document.getElementById('user-data').getElementsByTagName('input');
         var formdata = {};
         for (let item of formelements) {
-            if (item.value == '') {
+            if (!item.value.checkValidity()) {
                 alert('Please fill in all fields');
-                return;
+                return false;
             } else {
                 formdata[item.name] = item.value;
             }
@@ -19,6 +19,7 @@ window.addEventListener("load", function() {
         request.setRequestHeader('Access-Control-Allow-Headers', '*');
         request.send(JSON.stringify(formdata));
         console.log(request)
+        console.log(formdata);
     });
     
 });
