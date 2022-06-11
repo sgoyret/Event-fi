@@ -4,7 +4,7 @@ window.addEventListener("load", function() {
         const formelements = document.getElementById('user-data').getElementsByTagName('input');
         var formdata = {};
         for (let item of formelements) {
-            if (!item.value.checkValidity()) {
+            if (item.value === '') {
                 alert('Please fill in all fields');
                 return false;
             } else {

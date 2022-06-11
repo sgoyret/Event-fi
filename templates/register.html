@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
-    <script src="/static/scripts/creationuser.js" type="module" async></script>
+    <!--<script src="/static/scripts/creationuser.js" type="module" async></script>-->
     <title>eventify</title>
 </head>
 <body>
@@ -19,18 +19,19 @@
         </div>
         <div class="container">
             <div class="create-user">
-                <form id="user-data" method="POST">
+                <form id="user-data" method='POST' action='/register'>
                     <div class="choose-avatar">
                         <input name="avatar" type="file" class="avatar"></input>
                         <p>Choose an avatar</p>
                     </div>
                     <input name="username" class="login" placeholder="username" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
-                    <input name="email" class="email" placeholder="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3}){50}$"></input>
-                    <input name="name" class="name" placeholder="name" pattern="^[a-z]{20}$"></input>
-                    <input name="last_name" class="lastname" placeholder="lastname" pattern="^[a-z]{20}$"></input>
-                    <input name="password" class="login" placeholder="Password"></input>
+                    <input name="email" class="email" placeholder="email"></input>
+                    <input name="name" class="name" placeholder="name" pattern="^[a-zA-Z]{2,20}$"></input>
+                    <input name="last_name" class="lastname" placeholder="lastname" pattern="^[a-zA-Z]{2,20}$"></input>
+                    <input name="password" class="login" type='password' placeholder="Password" pattern='^[a-zA-Z0-9]+$'></input>
+                    <button id="btn-create-user" type="submit">register</button>
                 </form>
-                <button id="btn-create-user">register</button>
+                
             </div>
         </div>
         <div class="footer"></div>
