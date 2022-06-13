@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/profiles.css" type="text/css">
-    <script src="/static/scripts/creationuser.js" type="module" async></script>
+    <script src="/static/scripts/profilepopup.js" type="module" async></script>
     <title>eventify</title>
 </head>
 <body>
@@ -18,39 +18,23 @@
             </div>
             <div class="userinfo">
                 <div class="names">
-                    Diego Merentiel
+                    {{names}}
                 </div>
                 <div class="username">
-                    Diekkan5
+                    {{username}}
                 </div>
             </div>
         </div>
         <div class="selection">
-            <span>Eventos</span>
-            <span>Grupos</span>
-            <span>Contactos</span>
+            <span class="events">Eventos</span>
+            <span class="groups">Grupos</span>
+            <span class="contacts">Contactos</span>
         </div>
         <div class="content">
-            <ul>
+            <ul class="list">
                 <li>
                     <div class="event">
-                        <div class="event-image">
-                        </div>
-                        <div class="event-info">
-                                <p>Evento en Holberton</p>
-                                <p>12/2002</p>
-                                <p>Holberton School</p>
-                            </div>
-                        <div class="event-manage">
-                            <div class="event-manage-button">
-                                <button>Ver</button>
-                            </div>
-                            <div class="event-manage-button">
-                                <button>Editar</button>
-                            </div>
-                            <div class="event-manage-button">
-                                <button>Eliminar</button>
-                            </div>
+                        <p> Parece que no tienes ningún evento próximamente</p>
                         </div>
                         </div>
                     </div>
