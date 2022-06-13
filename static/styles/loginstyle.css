@@ -11,14 +11,18 @@ body {
 
 .wraper > .container {
     border-radius: 5px;
-    width: 25%;
-    height: 1%;
-    /* align-items: center; */
+    width: 70%;
     text-align: center;
     margin: auto;
-    /* padding-bottom: 15%; */
-    /* padding-top: 15%; */
     font-family: 'Ubuntu', sans-serif;
+    background-color: #6205e3;
+    color: white;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 25%;
 }
 .wraper > .header > .welcome {
     margin-left: 10%;
@@ -26,31 +30,65 @@ body {
     font-weight: bold;
     padding-bottom: 10px
 }
-.logo {
-    padding-bottom: 20%;
-}
-
 input {
     all: unset;
+}
+.options {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 1.5rem;
 }
 .wraper > .container > #user-data {
     display: flex;
     flex-direction: column;
 }
-
+label > .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+label > input {
+    display: none;
+}
 .wraper > .container > .create-user > #user-data > input {
     display: block;
     width: 60%;
-    height: 2rem;
     margin: .5rem auto .5rem auto;
-    border: 2px solid #333333;
-    border-radius: 10px;
+    border-radius: 2px;
+    background-color: #4f00bd;
+    height: 2rem;
+    border: #27005b 1px solid;
+    text-align: left;
+  }
+  .names {
+    display: inline;
+    width: 60%;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+  .wraper > .container > .create-user > #user-data > .names > input {
+    width: 29.5%;
+    /* margin: 0.5rem auto 0.5rem auto; */
+    border-radius: 2px;
+    background-color: #4f00bd;
+    height: 2rem;
+    border: #27005b 1px solid;
+    margin-top: 10px;
+  }
+button {
+    all: unset;
 }
 
-.wraper > .container > .create-user > #btn-create-user {
-    width: 40%;
-    height: 3rem;
-    font-size: larger;
-    border: 2px solid greenyellow;
-    border-radius: 10px;
+ #btn-create-user {
+    width: 30%;
+    border-radius: 2px;
+    background-color: #4f00bd;
+    color: white;
+    cursor: pointer;
+    height: 100%;
 }

@@ -21,16 +21,22 @@
             <div class="create-user">
                 <form id="user-data" method="POST">
                     <div class="choose-avatar">
-                        <input name="avatar" type="file" class="avatar"></input>
-                        <p>Choose an avatar</p>
+                        <label for="avatar">Elige un avatar
+                            <input name="avatar" type="file" class="avatar"></input>
+                        </label>
                     </div>
-                    <input name="username" class="login" placeholder="username" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
-                    <input name="email" class="email" placeholder="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3}){50}$"></input>
-                    <input name="name" class="name" placeholder="name" pattern="^[a-z]{20}$"></input>
-                    <input name="last_name" class="lastname" placeholder="lastname" pattern="^[a-z]{20}$"></input>
-                    <input name="password" class="login" placeholder="Password"></input>
+                    <div class="names">
+                        <input name="name" class="name" placeholder="Nombre" pattern="^[a-z]{20}$"></input>
+                        <input name="last_name" class="lastname" placeholder="Apellido" pattern="^[a-z]{20}$"></input>
+                    </div>
+                    <input name="username" class="login" placeholder="Nombre de usuario" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
+                    <input name="email" class="email" placeholder="Correo electronico" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3}){50}$"></input>
+                    <input name="password" class="login" placeholder="Contraseña"></input>
                 </form>
-                <button id="btn-create-user">register</button>
+                <div class="options">
+                    <div id="login"> Ya tengo una cuenta</div>
+                    <button id="btn-create-user">Registrarse</button>
+                </div>
             </div>
         </div>
         <div class="footer"></div>
