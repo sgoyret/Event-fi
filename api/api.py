@@ -2,13 +2,13 @@ from asyncio import events
 import json
 from tokenize import group
 from flask import Flask, request, jsonify
-from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask_cors import CORS
 
 eventifyapi = Flask(__name__)
-eventifyapi.config['MONGO_URI'] = 'mongodb://localhost/events_db'
-mongo = PyMongo(eventifyapi)
+mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
+mongo = mongo.get_database('EVdb')
 cors = CORS(eventifyapi, resources={r"/*": {"origins": "*"}})
 eventifyapi.config['CORS_HEADERS'] = 'Content-Type'
 
@@ -31,7 +31,7 @@ def users():
 @eventifyapi.route('/users/<user_id>', strict_slashes=False, methods=['GET'])
 def get_user(user_id):
     """returns user with matching id else error"""
-    user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+    user = mongo.get_collection('users').find_one({'_id': ObjectId(user_id)})
     if user:
         user['_id'] = str(user.get('_id'))
         return jsonify(user)
@@ -41,7 +41,7 @@ def get_user(user_id):
 @eventifyapi.route('/users/<user_id>/contacts', strict_slashes=False, methods=['GET'])
 def get_contacts(user_id):
     """returns json representation of a user contacts"""
-    user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+    user = mongo.get_collection('users').find_one({'_id': ObjectId(user_id)})
     if user:
         contacts = user['contacts']
         for item in contacts:
@@ -51,7 +51,7 @@ def get_contacts(user_id):
 @eventifyapi.route('/users/<user_id>/events', strict_slashes=False, methods=['GET'])
 def get_contact_events(user_id):
     """returns json representation of the events the user is part of"""
-    user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+    user = mongo.get_collection('users').find_one({'_id': ObjectId(user_id)})
     if user:
         events = user['events']
         for item in events:
@@ -63,7 +63,7 @@ def get_contact_events(user_id):
 @eventifyapi.route('/events', strict_slashes=False, methods=['GET'])
 def get_events():
     """returns a list with all events in database"""
-    events = mongo.db.events.find()
+    events = mongo.get_collection('events').find()
     if events:
         event_list = []
         for item in events:
@@ -76,7 +76,7 @@ def get_events():
 @eventifyapi.route('/events/<event_id>', strict_slashes=False, methods=['GET'])
 def get_event(event_id):
     """returns event with matching id else error"""
-    event = mongo.db.events.find_one({'_id': ObjectId(event_id)})
+    event = mongo.get_collection('events').find_one({'_id': ObjectId(event_id)})
     if event:
         event['_id'] = str(event.get('_id'))
         return jsonify(event)
@@ -86,7 +86,7 @@ def get_event(event_id):
 @eventifyapi.route('/events', strict_slashes=False, methods=['POST'])
 def create_event():
     """creates a new event"""
-    obj = mongo.db.events.insert_one(request.json)
+    obj = mongo.get_collection('events').insert_one(request.json)
     if obj is None:
         return ({"Status":"Failed"})
     else:
@@ -97,7 +97,7 @@ def update_event(event_id):
     """update event for given event_id"""
     event = request.get_json()
     if event:
-        mongo.db.events.update_one({'_id': ObjectId(event_id)}, {'$set': event})
+        mongo.get_collection('events').update_one({'_id': ObjectId(event_id)}, {'$set': event})
         return jsonify(event)
     else:
         return "Something Failed"
@@ -105,7 +105,7 @@ def update_event(event_id):
 @eventifyapi.route('/events/<event_id>', strict_slashes=False, methods=['DELETE'])
 def delete_event(event_id):
     """delete event for given event_id"""
-    mongo.db.events.delete_one({'_id': ObjectId(event_id)})
+    mongo.get_collection('events').delete_one({'_id': ObjectId(event_id)})
     return jsonify({'result': True})
 
 # ----GROUPS ROUTES----
@@ -114,7 +114,7 @@ def delete_event(event_id):
 def groups():
     """Returns a json representation with all the groups that are in the database"""
     if request.method == 'GET':
-        groups = mongo.db.groups.find()
+        groups = mongo.get_collection('groups').find()
         if groups:
             group_list = []
             for item in groups:
@@ -124,7 +124,7 @@ def groups():
         else:
             return "no groups found"
     if request.method == 'POST':
-        obj = mongo.db.groups.insert_one(request.json)
+        obj = mongo.get_collection('groups').insert_one(request.json)
         if obj is None:
             return ({"Status":"Failed"})
         else:
@@ -133,7 +133,7 @@ def groups():
 @eventifyapi.route('/groups/<group_id>', strict_slashes=False, methods=['GET'])
 def get_group(group_id):
     """returns group with matching id else error"""
-    group = mongo.db.groups.find_one({'_id': ObjectId(group_id)})
+    group = mongo.get_collection('groups').find_one({'_id': ObjectId(group_id)})
     if group:
         group['_id'] = str(group.get('_id'))
         return jsonify(group)

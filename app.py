@@ -2,15 +2,15 @@ from bson.objectid import ObjectId
 from flask import Flask, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
 from flask_session import Session
-from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
 app = Flask(__name__)
 
-app.config['MONGO_URI'] = 'mongodb://localhost/events_db'
-mongo = PyMongo(app)
+mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
+mongo = mongo.get_database('EVdb')
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -18,9 +18,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.secret_key = 'super secret key'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-# app.config["SESSION_MONGODB"] = mongo.db
-# app.config["SESSION_MONGODB_DB"] = "events_db"
-# app.config["SESSION_MONGODB_COLLECT"] = "sessions"
 Session(app)
 
 
@@ -53,7 +50,7 @@ def login():
         
         
         print(new_data)
-        user = mongo.db.users.find_one({'username': new_data['username']})
+        user = mongo.users.find_one({'username': new_data['username']})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
                 print('the password checked')
@@ -84,10 +81,10 @@ def register():
             new_data = {}
             for item in request.form:
                 new_data[item] = request.form[item]
-            if mongo.db.users.find_one({'username': new_data['username']}) is None:
+            if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
                 print(new_data)
-                collection= mongo.db.users
+                collection= mongo.users
                 id = collection.insert_one(new_data)
                 new_data.pop('password')
                 session['user'] = new_data
@@ -96,7 +93,7 @@ def register():
             else:
                 print('El nombre de usuario ya esta creado')
                 print(new_data['username'])
-                print(mongo.db.users.find_one({'username': new_data['username']}))
+                print(mongo.users.find_one({'username': new_data['username']}))
                 
         return redirect(url_for('register'))
     if request.method == 'GET':
@@ -164,13 +161,13 @@ def groups():
             new_group_data = request.form
             new_group_data['owner'] = session.get('user').get('_id') # set owner
             new_group_data['members'] = [{session.get('user').get('_id'): {"name": session.get('user').get('username'), "type": "admin"}}] # set owner as member with type admin
-            obj = mongo.db.groups.insert_one(new_group_data)
+            obj = mongo.groups.insert_one(new_group_data)
             # update user groups in session
             session['user']['groups'][obj.inserted_id] =  {
                 {'name': new_group_data['name'],
                  'type': 'admin'}
                 }
-            mongo.db.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}}) # update user groups in db
+            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}}) # update user groups in db
             
             return redirect(url_for('groups'))
 
@@ -179,7 +176,7 @@ def single_group(group_id):
     """route for single group, get for group info, put for group member delete, post for group members insert"""
     if request.method == 'GET':
         # return group json object
-        group = mongo.db.groups.find_one({'_id': ObjectId(group_id)})
+        group = mongo.groups.find_one({'_id': ObjectId(group_id)})
         if group:
             group['_id'] = str(group.get('_id'))
             return jsonify(group)
@@ -188,21 +185,21 @@ def single_group(group_id):
         
     if request.method == 'POST':
         # add member to group
-        group = mongo.db.groups.find_one({'_id': ObjectId(group_id)})
+        group = mongo.groups.find_one({'_id': ObjectId(group_id)})
         if group:
             new_user_group_data = {}
             new_user_group_data[ObjectId(request.form.get('id'))] = {'name': request.form.get('name')}
-            mongo.db.groups.update_one({'_id': ObjectId(group_id)}, {'$push': {'members': new_user_group_data}}) # push member to member list
-            mongo.db.groups.update_one({'_id': new_user_group_data['id']}, {'$push': {'groups': ObjectId(group_id)}}) # push group to user groups'   
+            mongo.groups.update_one({'_id': ObjectId(group_id)}, {'$push': {'members': new_user_group_data}}) # push member to member list
+            mongo.groups.update_one({'_id': new_user_group_data['id']}, {'$push': {'groups': ObjectId(group_id)}}) # push group to user groups'   
             return "user added to group"
         else:
             return "group not found"
     
     if request.method == 'PUT':
         # delete member from group
-        group = mongo.db.groups.find_one({'_id': ObjectId(group_id)})
+        group = mongo.groups.find_one({'_id': ObjectId(group_id)})
         if group:
-            if mongo.db.groups.update_one({'_id': ObjectId(group_id)},
+            if mongo.groups.update_one({'_id': ObjectId(group_id)},
                                           { '$pull': { group_id: {'members': {'_id': ObjectId(request.form.get('id'))}}}},false,true):
                 return "user removed from group"
             else:
@@ -212,7 +209,7 @@ def single_group(group_id):
 
     if request.method == 'DELETE':
         # delete group
-        if mongo.db.groups.delete_one({'_id': ObjectId(group_id)}):
+        if mongo.groups.delete_one({'_id': ObjectId(group_id)}):
             return "group deleted"
         else:
             return "group not found"
