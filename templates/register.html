@@ -14,29 +14,31 @@
 <body>
     <div class="wraper" id="wraper">
         <div class="header">
-            <div class="logo"> eVentify</div>
-            <div class="welcome"> Hola de nuevo!</div>
+            <div class="logo"></div>
+            <div class="welcome"></div>
         </div>
         <div class="container">
             <div class="create-user">
                 <form id="user-data" method='POST' action='/register'>
-                    <div class="choose-avatar">
+                    <p> Crea una cuenta </p>
+                  <!-- <div class="choose-avatar">
                         <label for="avatar">Elige un avatar
                             <input name="avatar" type="file" class="avatar"></input>
                         </label>
                     </div>
+                    --> 
                     <div class="names">
-                        <input name="name" class="name" placeholder="Nombre" pattern="^[a-z]{20}$"></input>
-                        <input name="last_name" class="lastname" placeholder="Apellido" pattern="^[a-z]{20}$"></input>
+                        <input name="name" class="name" placeholder="Nombre"></input>
+                        <input name="last_name" class="lastname" placeholder="Apellido"></input>
                     </div>
-                    <input name="username" class="login" placeholder="Nombre de usuario" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
-                    <input name="email" class="email" placeholder="Correo electronico" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3}){50}$"></input>
-                    <input name="password" class="login" placeholder="Contraseña"></input>
+                    <input name="username" class="login" placeholder="Nombre de usuario"></input>
+                    <input name="email" class="email" placeholder="Correo electronico"></input>
+                    <input name="password" class="login" type="password" placeholder="Contraseña"></input>
+                    <div class="options">
+                        <div id="login" onclick="javascript:location.href='/login'"> Ya tengo una cuenta</div>
+                        <button id="btn-create-user" type="submit">Registrarse</button>
+                    </div>
                 </form>
-                <div class="options">
-                    <div id="login"> Ya tengo una cuenta</div>
-                    <button id="btn-create-user">Registrarse</button>
-                </div>
             </div>
         </div>
         <div class="footer"></div>

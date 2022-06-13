@@ -14,18 +14,21 @@
 <body>
     <div class="wraper" id="wraper">
         <div class="header">
-            <div class="logo"> eVentify</div>
-            <div class="welcome"> Hola de nuevo!</div>
+            <div class="logo"></div>
+            <div class="welcome"></div>
         </div>
         <div class="container">
             <div class="create-user">
                 <form id="user-data" method='POST' action='/login'>
-                    <input name="username" class="login" placeholder="username" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
-                    <input name="password" class="login" type='password' placeholder="Password" pattern='^[a-zA-Z0-9]+$'></input>
-                    <button id="btn-login-user" type="submit">login</button>
-                </form>
-                <a href='/register'><button id="btn-register-user">register</button></a>
-            </div>
+                    <p> ¡Hola de nuevo!</p>
+                    <p> Inicia sesión para continuar</p>
+                    <input name="username" class="login" placeholder="Usuario o email" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
+                    <input name="password" class="login" type='password' placeholder="Contraseña" pattern='^[a-zA-Z0-9]+$'></input>
+                    <p class="passreset"> Olvidé mi contraseña</p>
+                    <div class="options">
+                        <div id="login" onclick="javascript:location.href='/register'"> No tengo una cuenta</div>
+                        <button id="btn-create-user">Ingresar</button>
+                    </div>
         </div>
         <div class="footer"></div>
     </div>
