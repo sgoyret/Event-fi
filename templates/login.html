@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
-    <script src="/static/scripts/validations.js" async></script>
+    <!--<script src="/static/scripts/creationuser.js" type="module" async></script>-->
     <title>eventify</title>
 </head>
 <body>
@@ -19,18 +19,12 @@
         </div>
         <div class="container">
             <div class="create-user">
-                <form id="user-data" method="POST">
-                    <div class="choose-avatar">
-                        <input name="avatar" type="file" class="avatar"></input>
-                        <p>Choose an avatar</p>
-                    </div>
-                    <input name="username" class="login" placeholder="username"></input>
-                    <input name="email" class="email" placeholder="email"></input>
-                    <input name="name" class="name" placeholder="name"></input>
-                    <input name="lastname" class="lastname" placeholder="lastname"></input>
-                    <input name="password" class="login" placeholder="Password"></input>
+                <form id="user-data" method='POST' action='/login'>
+                    <input name="username" class="login" placeholder="username" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
+                    <input name="password" class="login" type='password' placeholder="Password" pattern='^[a-zA-Z0-9]+$'></input>
+                    <button id="btn-login-user" type="submit">login</button>
                 </form>
-                <button id="btn-create-user" onclick=validateUser()>register</button>
+                <a href='/register'><button id="btn-register-user">register</button></a>
             </div>
         </div>
         <div class="footer"></div>

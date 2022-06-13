@@ -6,7 +6,7 @@ window.addEventListener("load", function() {
             const element = document.getElementById('wraper');
             console.log(elements[i].id.split('.')[1]);
             var request = new XMLHttpRequest();
-            request.open('GET', 'http://127.0.0.1:5000/events/' + elements[i].id.split('.')[1]);
+            request.open('GET', 'http://192.168.1.21:5000/events/' + elements[i].id.split('.')[1]);
             request.setRequestHeader('Content-Type', 'application/json');
             request.setRequestHeader('Access-Control-Allow-Origin', '*');
             request.setRequestHeader('Access-Control-Allow-Headers', '*');

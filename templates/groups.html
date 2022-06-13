@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
+    <!--<script src="/static/scripts/creationuser.js" type="module" async></script>-->
+    <title>eventify</title>
+</head>
+<body>
+    <div class="wraper" id="wraper">
+        <div class="header">
+            <div class="logo"> eVentify</div>
+            <div class="welcome"> Hola de nuevo!</div>
+        </div>
+        <div class="container">
+            <div class="group-container">
+                {% if groups %}
+                    {% for id in groups %}
+                        <div class='group'>
+                            <p>{{group}}</p>
+                            <h3>{{groups[id]['name']}}</h3>
+                            {% if groups[id].get('type') %}
+                                <p>{{groups[id]['type']}}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="footer"></div>
+    </div>
+</body>
+</html>

@@ -1,10 +1,10 @@
-from flask import Flask, render_template, session, request, redirect, url_for, session, flash
+from flask import Flask, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
 from flask_session import Session
 from flask_pymongo import PyMongo
 from validations import *
-from werkzeug.security import generate_password_hash
-
+from werkzeug.security import generate_password_hash, check_password_hash
+import json
 
 app = Flask(__name__)
 
@@ -16,31 +16,147 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.secret_key = 'super secret key'
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "mongodb"
-app.config["SESSION_MONGODB"] = mongo.db
-app.config["SESSION_MONGODB_DB"] = "events_db"
-app.config["SESSION_MONGODB_COLLECT"] = "sessions"
+app.config["SESSION_TYPE"] = "filesystem"
+# app.config["SESSION_MONGODB"] = mongo.db
+# app.config["SESSION_MONGODB_DB"] = "events_db"
+# app.config["SESSION_MONGODB_COLLECT"] = "sessions"
 Session(app)
 
-@app.route('/index', strict_slashes=False)
+
+@app.route('/', strict_slashes=False)
+@app.route('/index', methods=['GET'], strict_slashes=False)
 def index():
-    return render_template('index.html')
+    """user base page"""
+    # checks if session exists
+    if session.get('user'):
+        print(f'user: {session}')
+        return render_template('index.html')
+    print('session user doesnt exist')
+    return redirect(url_for('login'))
+
+@app.route('/login', strict_slashes=False, methods=['GET', 'POST'])
+def login():
+    """log in for the user with register option"""
+    if request.method == 'GET':
+        if session.get('user') is None:
+            return render_template('login.html')
+        else:
+            return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        for key, value in request.form.items():
+            print(f'{key}: {value}')
+        new_data = {}
+        for item in request.form:
+            new_data[item] = request.form[item]
+        
+        
+        print(new_data)
+        user = mongo.db.users.find_one({'username': new_data['username']})
+        if user:
+            if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
+                print('the password checked')
+                user.pop('password')
+                session['user'] = user
+                session['test'] = 'am i here?'
+                print(session['user'])
+                return redirect('/')
+            else:
+                return 'Wrong password'
+        else:
+            return 'User not found'
+
+@app.route('/logout', strict_slashes=False)
+def logout():
+    if session.get('user'):
+        session.pop('user')
+    return redirect(url_for('index'))
 
 @app.route('/register', methods=['POST', 'GET'], strict_slashes=False)
 def register():
-    "create user account"
+    """create user account"""
     print("******************register route******************")
     if request.method == 'POST':
-            print("checking the request json")
-            if validate_user_creation(request.json):
-                print('the dictionary is valid')
-                request.json['password'] = generate_password_hash(request.json['password'])
+        if validate_user_creation(request.form):
+             
+            print('the dictionary is valid')
+            new_data = {}
+            for item in request.form:
+                new_data[item] = request.form[item]
+            if mongo.db.users.find_one({'username': new_data['username']}) is None:
+                new_data['password'] = generate_password_hash(new_data['password'])
+                print(new_data)
                 collection= mongo.db.users
-                id = collection.insert_one(request.json)
-                session["name"] = request.json['username']
-            return redirect(url_for('index'))
+                id = collection.insert_one(new_data)
+                new_data.pop('password')
+                session['user'] = new_data
+                print(f'the session[user] is: {session["user"]}')
+                return redirect(url_for('index'))
+            else:
+                print('El nombre de usuario ya esta creado')
+                print(new_data['username'])
+                print(mongo.db.users.find_one({'username': new_data['username']}))
+                
+        return redirect(url_for('register'))
     if request.method == 'GET':
         return render_template('register.html')
+
+
+
+
+# *********************** HOLA API **********************
+"""Goroup API"""
+@app.route('/groups', strict_slashes=False, methods=['GET', 'POST'])
+def groups():
+    """Returns all the groups from the current logged user"""
+    if session.get('user') is None:
+       return redirect(url_for('index'))
+    
+    if request.method == 'GET':
+        user_groups = session.get('user').get('groups')
+        if user_groups:
+            print("groups from current logged user")
+            print(user_groups)
+            user_groups = json.loads(user_groups)
+        return render_template('groups.html', groups=user_groups)
+    
+    if request.method == 'POST':
+        if validate_group_creation(request.form):
+            print('the group dict is valid')
+    return redirect(url_for('index'))
+
+
+
+@app.route('/users', methods=['GET'], strict_slashes=False)
+def users():
+    """get all users"""
+    if session['user']:
+        print(f'there is a session {session["user"]}')
+    users = mongo.get_collection('users').find()
+    if users:
+        user_list = []
+        for item in users:
+            item['_id'] = str(item.get('_id'))
+            user_list.append(item)
+        return jsonify(user_list)
+    else:
+        return "no users found"
+    
+@app.route('/users/<user_id>', strict_slashes=False, methods=['GET'])
+def get_user(user_id):
+    """returns user with matching id else error"""
+    if session['user']:
+        print(f'there is a session {session["user"]}')
+    user = mongo.get_collection('users').find_one({'_id': ObjectId(user_id)})
+    if user:
+        user['_id'] = str(user.get('_id'))
+        return jsonify(user)
+    else:
+        return "user not found"
+
+
+
+
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
