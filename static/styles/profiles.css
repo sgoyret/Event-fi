@@ -18,11 +18,26 @@ body {
     justify-content: space-around;
     align-items: center;
 }
+.edit_prof{
+    width: 100%;
+    font-family: 'Ubuntu', sans-serif;
+    background-color:#6105e3c4;
+    color: black;
+    border-radius: 6px;
+    border:none;
+}
+.back .bx{
+    position: absolute;
+    color: black;
+    font-size:50px;
+    left: 5px;
+    top: 5px;
+}
 
 .selection {
     height: 5%;
     display: flex;
-    background-color: violet;
+    background-color: #6105e3c4;
     justify-content: space-around;
     align-items: center;
     width: 100%;
@@ -45,6 +60,13 @@ body {
 }
 .event > .event-manage > .event-manage-button > button {
     all: unset;
+}
+.selection .test:hover{
+    width: 33%;
+    background-color:#4A4E69;
+    text-align: center;
+    border-radius: 6px; 
+    color: white;
 }
 .event {
     margin-top: 10px;

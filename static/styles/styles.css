@@ -7,15 +7,30 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-:root {
-  /*---colors---*/
+/*:root {
+  ---colors---
   --body-color: #504b43;
   --sidebar-color: #6f8f72;
   --primary-color: #77ad78;
   --primary-color-light: #85b86e;
   --toggle-color: #8fd694;
   --text-color: #31473f;
-
+*/
+/*:root{
+  --body-color: #504b43;
+  --sidebar-color: #EE6C4D;
+  --primary-color: #b43f21;
+  --primary-color-light: #EC4920;
+  --toggle-color: #fafafa;
+  --text-color:#fafafa;
+*/
+:root{ 
+  --body-color: #22223B;
+  --sidebar-color: #6105e3c4;
+  --primary-color: #4A4E69;
+  --primary-color-light: #9A8C98;
+  --toggle-color: #fafafa;
+  --text-color:#F2E9E4;
   /*---transition---*/
   --tran-03: all 0.2 ease;
   --tran-03: all 0.3 ease;
@@ -29,7 +44,7 @@ body {
 }
 body.dark {
   --body-color: #18191a;
-  --sidebar-color: #242526;
+  --sidebar-color: #242526d2;
   --primary-color: #3a3b3c;
   --primary-color-light: #3a3b3c;
   --toggle-color: #fff;
