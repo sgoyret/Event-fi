@@ -99,7 +99,11 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
 
-
+@app.route('/user', methods=['GET'], strict_slashes=False)
+def user():
+    print(session)
+    return render_template('user.html', username= '@' + session['user']['username'],
+                            names=session['user']['name'] + ' ' + session['user']['last_name'])
 
 
 # *********************** HOLA API **********************

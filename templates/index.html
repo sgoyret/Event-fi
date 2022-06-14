@@ -1,53 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles/style1.css" type="text/css">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!---mapbox-->
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!---css--->
+    <link rel="stylesheet" href="/static/styles/styles.css" />
+    <link rel="stylesheet" href="/static/styles/map.css" />
+    <!---boxicons--->
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Event</title>
+  </head>
+  <body>
+    <div id="map">
+    <nav class="sidebar close">
+      <header>
+        <div class="image-text">
+          <span class="image">
+            <img src="/static/img/logo.png" alt="logo"></i>
+          </span>
+
+          <div class="text header-text">
+            <span class="name">Event</span>
+            <span class="tagline">Fun Finder</span>
+          </div>
+        </div>
+        
+        <i class="bx bxs-chevron-right toggle"></i>
+      </header>
+
+      <div class="menu-bar">
+        <div class="menu">
+          
+          <li class="search-box">
+            <i class="bx bx-search icon"></i>
+            <input type="text" placeholder="Search...">
+          </li>
+
+          <ul class="menu-links">
+            <li class="nav-link">
+              <a href="#">
+                <i class="bx bxs-user icon" onclick="javascript:location.href='/user'"></i>
+                <span class="text nav-text">User</span>
+              </a>
+            </li>
+            <li class="nav-link ">
+              <a href="#">
+                <i class="bx bx-plus icon"></i>
+                <span class="text nav-text">Create</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="#">
+                <i class="bx bx-slider-alt icon"></i>
+                <span class="text nav-text">Filter</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="#">
+                <i class="bx bxs-bell-ring icon"></i>
+                <span class="text nav-text">Alert</span>
+              </a>
+            </li>
+            <li class="nav-link">
+              <a href="#">
+                <i class="bx bx-info-circle icon"></i>
+                <span class="text nav-text">Info</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="bottom-content">
+          <li class="">
+            <a href="#">
+              <i class="bx bx-log-out icon" onclick="javascript:location.href='/logout'" ></i>
+              <span class="text nav-text">Logout</span>
+            </a>
+          </li>
+            <li class="mode">
+              <div class="moon-sun">
+                <i class="bx bx-moon icon moon" ></i>
+                <i class="bx bx-sun icon sun" ></i>
+              </div>
+              <span class="mode-text text">Dark Mode</span>
+              <div class="toggle-switch">
+                <span class="switch"></span>
+              </div>
+            </li>
+        </div>
+      </div>
+    </nav>
+</div>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
-
-
-    <script src="/static/scripts/mapcontainer.js" async></script>
-    <!--<script src="/static/scripts/markerpopups.js"></script>-->
-    <script src="/static/scripts/userpopup.js" async></script>
-    <script src="/static/scripts/creationpopup.js" async></script>
-
-    <title>Document</title>
-</head>
-<body>
-    <div id="wraper" class="wraper">
-        <div class="popupnone" id="userpopup">
-            <div class="close" id="closeuserpopup"></div>
-        </div>
-        <div class="popupnone" id="eventcreate">
-            <form id="eventdata" method="POST">
-                <input name="title" class="creation" placeholder="Titulo"></input>
-                <input name="date" class="creation" placeholder="Fecha y hora"></input>
-                <input name="coordinates"class="creation" placeholder="Coordenadas"></input>
-                <input name="description" class="creation" placeholder="Descripcion"></input>
-                <div id="create"> Crear</div>
-            </form>
-            <div class="close" id="closeeventcreate"></div>
-        </div>
-        <div id="map">
-            
-        </div>
-        <div class="header">
-            eVentify
-            <a href='/logout'>Logout</a>
-        </div>
-        <div class="footer">
-            <div class="icons">
-                <div class="usericon" id="usericon"><span></span></div>
-                <div class="addnew" id="addevent"><span></span></div>
-                <div class="burguermenu"><span></span></div>
-            </div>
-        </div>
-    </div>
-</body>
+    <script type="text/javascript" src="/static/scripts/map.js"></script>
+    <script src="/static/scripts/scripts.js"></script>
+    </body>
 </html>

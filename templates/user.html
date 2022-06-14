@@ -17,7 +17,7 @@
             <div class="avatar">
             </div>
             <div class="userinfo">
-                <div class="names">
+                <div cl ass="names">
                     {{names}}
                 </div>
                 <div class="username">
@@ -32,13 +32,34 @@
         </div>
         <div class="content">
             <ul class="list">
+                {% if groups %}
+                {% for group in groups %}
                 <li>
-                    <div class="event">
-                        <p> Parece que no tienes ningún evento próximamente</p>
+                    <div class="listed">
+                        <div class="image">
                         </div>
+                        <div class="info">
+                            <p>{{event.title}}</p>
+                            <p>{{event.date}}</p>
+                            <p>{{event.location}}</p>
                         </div>
-                    </div>
-                </li>
+                            <div class="manage">
+                                <div class="manage-button">
+                                    <button>Ver</button>
+                                </div>
+                                <div class="manage-button">
+                                    <button>Editar</button>
+                                </div>
+                                <div class="manage-button">
+                                    <button>Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+                {% else %}
+                    <li> Parece que no tienes ningún evento próximamente</li>
+                {% endif %}
             </ul>
         </div>
     </div>
