@@ -1,36 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
-    <!--<script src="/static/scripts/creationuser.js" type="module" async></script>-->
-    <title>eventify</title>
-</head>
-<body>
-    <div class="wraper" id="wraper">
-        <div class="header">
-            <div class="logo"></div>
-            <div class="welcome"></div>
+{% extends 'base.html' %}
+
+{% block container %}
+<div class="create-user">
+    <form id="user-data" method='POST' action='/login'>
+        <p> ¡Hola de nuevo!</p>
+        <p> Inicia sesión para continuar </p>
+        <input name="username" class="login" placeholder="Usuario o email" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
+        <input name="password" class="login" type='password' placeholder="Contraseña" pattern='^[a-zA-Z0-9]+$'></input>
+        <p class="passreset"> Olvidé mi contraseña </p>
+        <div class="options">
+            <div id="login" onclick="javascript:location.href='/register'"> No tengo una cuenta</div>
+            <button id="btn-create-user">Ingresar</button>
         </div>
-        <div class="container">
-            <div class="create-user">
-                <form id="user-data" method='POST' action='/login'>
-                    <p> ¡Hola de nuevo!</p>
-                    <p> Inicia sesión para continuar </p>
-                    <input name="username" class="login" placeholder="Usuario o email" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
-                    <input name="password" class="login" type='password' placeholder="Contraseña" pattern='^[a-zA-Z0-9]+$'></input>
-                    <p class="passreset"> Olvidé mi contraseña </p>
-                    <div class="options">
-                        <div id="login" onclick="javascript:location.href='/register'"> No tengo una cuenta</div>
-                        <button id="btn-create-user">Ingresar</button>
-                    </div>
-        </div>
-        <div class="footer"></div>
-    </div>
-</body>
-</html>
+</div>
+{% endblock container %}
