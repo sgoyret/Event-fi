@@ -1,44 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+{% extends 'base.html' %}
+
+{% block html_head %}
     <link rel="stylesheet" href="/static/styles/profiles.css" type="text/css">
     <script src="/static/scripts/profilepopup.js" type="module" async></script>
-    <title>eventify</title>
-</head>
-<body>
-    <div class="wraper" id="wraper">
-        <div class="back">
-            <i class='bx bxs-chevron-left' onclick="javascript:location.href ='/index'"></i>
-        </div>
-        <div class="header">
-            <div class="avatar">
-            </div>
-            <div class="userinfo">
-                <div cl ass="names">
-                    {{user.name}} {{user.last_name}}
-                </div>
-                <div class="username">
-                    {{user.username}}
-                </div>
-                <button class="edit_prof" onclick="javascript:location.href ='user/settings'">Edit profile</button>
-            </div>
-        </div>
-        <div class="selection">
-            <span class="events selected">Eventos</span>
-            <span class="groups">Grupos</span>
-            <span class="contacts">Contactos</span>
-        </div>
-        <div class="content">
-            <ul class="list">
-            </ul>
-        </div>
+{% endblock html_head %}
+
+{% block wrapper %}
+    <div class="back">
+        <i class='bx bxs-chevron-left' onclick="javascript:location.href ='/index'"></i>
     </div>
-</body>
-</html>
+{% endblock wrapper %}
+
+{% block header %}
+    <div class="avatar"></div>
+    <div class="userinfo">
+        <div cl ass="names">
+            {{user.name}} {{user.last_name}}
+        </div>
+        <div class="username">
+            {{user.username}}
+        </div>
+        <button class="edit_prof" onclick="javascript:location.href ='user/settings'">Edit profile</button>
+    </div>
+{% endblock header %}
+
+{% block container %}
+    <div class="selection">
+        <span class="events selected">Eventos</span>
+        <span class="groups">Grupos</span>
+        <span class="contacts">Contactos</span>
+    </div>
+    <div class="content">
+        <ul class="list">
+        </ul>
+    </div>
+{% endblock container %}

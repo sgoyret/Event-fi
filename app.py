@@ -3,7 +3,6 @@ from flask import Flask, render_template, session, request, redirect, url_for, s
 from flask_cors import CORS
 from flask_session import Session
 from pymongo import MongoClient
-from functions.refresh import *
 from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
@@ -21,6 +20,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# Auxiliary functions
+def session_refresh():
+    print('refreshing user session')
+    session['user'] = mongo.users.find_one({'_id': ObjectId(session['user']['_id'])})
 
 @app.route('/', strict_slashes=False)
 @app.route('/index', methods=['GET'], strict_slashes=False)
@@ -28,9 +31,7 @@ def index():
     """user base page"""
     # checks if session exists
     if session.get('user'):
-        print(f'user: {session}')
         return render_template('index.html')
-    print('session user doesnt exist')
     return redirect(url_for('login'))
 
 @app.route('/login', strict_slashes=False, methods=['GET', 'POST'])
@@ -50,7 +51,6 @@ def login():
             new_data[item] = request.form[item]
         
         
-        print(new_data)
         user = mongo.users.find_one({'username': new_data['username']})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
@@ -58,7 +58,6 @@ def login():
                 user.pop('password')
                 session['user'] = user
                 session['test'] = 'am i here?'
-                print(session['user'])
                 return redirect('/')
             else:
                 return 'Wrong password'
@@ -74,27 +73,22 @@ def logout():
 @app.route('/register', methods=['POST', 'GET'], strict_slashes=False)
 def register():
     """create user account"""
-    print("******************register route******************")
     if request.method == 'POST':
-        if validate_user_creation(request.form):
-             
+        check_response = validate_user_creation(request.form)
+        if check_response is True:             
             print('the dictionary is valid')
             new_data = {}
             for item in request.form:
                 new_data[item] = request.form[item]
             if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
-                print(new_data)
                 collection= mongo.users
                 id = collection.insert_one(new_data)
                 new_data.pop('password')
                 session['user'] = new_data
-                print(f'the session[user] is: {session["user"]}')
                 return redirect(url_for('index'))
             else:
-                print('El nombre de usuario ya esta creado')
-                print(new_data['username'])
-                print(mongo.users.find_one({'username': new_data['username']}))
+                return {'error': 'the username iis already in use'}
                 
         return redirect(url_for('register'))
     if request.method == 'GET':
@@ -105,6 +99,7 @@ def user():
     if session.get('user') is None:
         return redirect(url_for('login'))
 
+    session_refresh()
     return render_template('user.html', user=session['user'])
 
 
@@ -280,7 +275,6 @@ def single_group(group_id):
             new_user_group_data[ObjectId(request.form.get('id'))] = {'name': request.form.get('name')}
             mongo.groups.update_one({'_id': ObjectId(group_id)}, {'$push': {'members': new_user_group_data}}) # push member to member list
             mongo.groups.update_one({'_id': new_user_group_data['id']}, {'$push': {'groups': ObjectId(group_id)}}) # push group to user groups'   
-            session_refresh() # refresh session
             return "user added to group"
         else:
             return "group not found"
@@ -292,7 +286,6 @@ def single_group(group_id):
             if mongo.groups.update_one({'_id': ObjectId(group_id)}, { '$pull': { group_id: {'members': {'_id': ObjectId(request.form.get('id'))}}}},False,True): # si puedo deletear el miembro del grupo dsp borro la id del grupo de la lista de grupos del usuario
                 mongo.users.update_one({'_id': ObjectId(request.form.get('id'))},
                                        {'$pull': {'groups': {'_id': ObjectId(group_id)}}},False,True)
-                session_refresh()
                 return "user removed from group"
             else:
                 return "user not found"
@@ -303,7 +296,6 @@ def single_group(group_id):
         # delete group
         if mongo.groups.delete_one({'_id': ObjectId(group_id)}):
             mongo.users.update_many({'groups': {'_id': ObjectId(group_id)}}, {'$pull': {'groups': {'_id': ObjectId(group_id)}}},False,True) # find all users with this group and remove it from their groups
-            session_refresh()
             return "group deleted"
         else:
             return "group not found"
