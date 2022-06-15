@@ -1,73 +1,3 @@
-<!-- CUIDADO CHICOS HAY QUE TENER ENN CUENTA QUE TODO TIENE QUE ESTAR EN LUGARES ESPECIFICOS
-DENTRO DEL WRAPPER HAY  1) HEADER 2) CONTAINER 3) FOOTER 
-EL CSS DEL CONTAINER EN ESTE MOMENTO AL PARECER ES UN POPUP COSA QUE NO DEBERIA SER ASI
-EL WRAPPER ES EL PACKETE GENERAL O SEA EL BODY
-EL HEADER SERIA PARA LAS COSAS QUE ESTAN EN LA CABECERA POR LO CUAL DEBERIA TENER 100% WIDTH
-EL CONTAINER ES PARA EL CONTENIDO PRINCIPAL QUE QUERRAMOS MOSTRAR... POR LO CUAL NO DEBERIA ESTAR CON 85% DE WIDTH COMO UN POPUP
-NO CAMBIE COSAS DEL CSS POR MIEDO A ROMPER TODO...-->
-
-<!-- DEJO ESTO COMENTADO QUE ES DONDE TENDRIAN QUE ESTAR LAS COSAS PARA QUE SE AGARRE BIEN CON EL BASE MODEL EN JINJA2
-{% extends 'base.html' %}
-
-{% block html_head %}
-    <link rel="stylesheet" href="/static/styles/profiles.css" type="text/css">
-    <script src="/static/scripts/profilepopup.js" type="module" async></script>
-{% endblock html_head %}
-
-{% block header %}
-    <div class="avatar">
-    </div>
-    <div class="userinfo">
-        <div cl ass="names">
-            {{names}}
-        </div>
-        <div class="username">
-            {{username}}
-        </div>
-    </div>
-    <div class="selection">
-        <span class="events">Eventos</span>
-        <span class="groups">Grupos</span>
-        <span class="contacts">Contactos</span>
-    </div>
-{% endblock header %}
-
-{% block container %}
-    <ul class="list">
-        {% if groups %}
-        {% for group in groups %}
-        <li>
-            <div class="listed">
-                <div class="image">
-                </div>
-                <div class="info">
-                    <p>{{event.title}}</p>
-                    <p>{{event.date}}</p>
-                    <p>{{event.location}}</p>
-                </div>
-                    <div class="manage">
-                        <div class="manage-button">
-                            <button>Ver</button>
-                        </div>
-                        <div class="manage-button">
-                            <button>Editar</button>
-                        </div>
-                        <div class="manage-button">
-                            <button>Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        {% endfor %}
-        {% else %}
-            <li> Parece que no tienes ningún evento próximamente</li>
-        {% endif %}
-    </ul>
-{% endblock container %}
-
--->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,10 +18,10 @@ NO CAMBIE COSAS DEL CSS POR MIEDO A ROMPER TODO...-->
             </div>
             <div class="userinfo">
                 <div cl ass="names">
-                    {{names}}
+                    {{user.name}} {{user.last_name}}
                 </div>
                 <div class="username">
-                    {{username}}
+                    {{user.username}}
                 </div>
             </div>
         </div>

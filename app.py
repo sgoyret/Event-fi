@@ -101,9 +101,10 @@ def register():
 
 @app.route('/user', methods=['GET'], strict_slashes=False)
 def user():
-    print(session)
-    return render_template('user.html', username= '@' + session['user']['username'],
-                            names=session['user']['name'] + ' ' + session['user']['last_name'])
+    if session.get('user') is None:
+        return redirect(url_for('login'))
+
+    return render_template('user.html', user=session['user'])
 
 
 # *********************** HOLA API **********************
@@ -151,14 +152,16 @@ def events():
     
     if request.method == 'GET':
         # returns events list
-        session['user']['events'] = {'id1': {'avatar':'', 'title':'Graduation', 'location':'Holberton School', 'date': '20/06/2022'},
-                                     'id2': {'avatar':'', 'title':'First job', 'location':'A very good company', 'date': '01/07/2022'}}
+        # session['user']['events'] = {'id1': {'avatar':'', 'title':'Graduation', 'location':'Holberton School', 'date': '20/06/2022'},
+        #                              'id2': {'avatar':'', 'title':'First job', 'location':'A very good company', 'date': '01/07/2022'}}
         user_events = session.get('user').get('events')
         if user_events:
             print("events from current logged user")
             print(user_events)
             #user_events = json.loads(user_events)
-        return jsonify(user_events)
+            return jsonify(user_events)
+        else:
+            return 'no current events'
     
     if request.method == 'POST':
         #create new event
