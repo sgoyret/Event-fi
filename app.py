@@ -163,14 +163,27 @@ def events():
         #create new event
         if validate_event_creation(request.form):
             print('the event dict is valid')
-            new_event_data = request.form
-            new_event_data['owner'] = session.get('user').get('_id') # set owner
-            new_event_data['members'] = [{session.get('user').get('_id'): {"name": session.get('user').get('username'), "type": "admin"}}] # set owner as member with type admin
+            new_event_data = {}
+            for item in request.form:
+                new_event_data[item] = request.form[item]
+    
+            new_event_data['owner'] = str(session.get('user').get('_id')) # set owner
+            owner_admin = {
+                '_id': new_event_data['owner'],
+                'username': session.get('user').get('username'),
+                'name': session.get('user').get('name'),
+                'last_name': session.get('user').get('last_name'),
+                'type': 'admin'
+            }
+            new_event_data['members'] = { owner_admin['_id']: owner_admin } # set owner as member with type admin
             obj = mongo.events.insert_one(new_event_data)
             # update user events in session
-            session['user']['events'][obj.inserted_id] =  {
-                {'name': new_event_data['name'],
-                 'type': 'admin'}
+
+            if session.get('user').get('events') is None:
+                session['user']['events'] = {}
+            session['user']['events'][str(obj.inserted_id)] =  {
+                'name': new_event_data['name'],
+                'type': 'admin'
                 }
             mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
             
@@ -233,25 +246,37 @@ def groups():
         # returns groups list
         user_groups = session.get('user').get('groups')
         if user_groups:
-            print("groups from current logged user")
-            print(user_groups)
-            user_groups = json.loads(user_groups)
-        return jsonify(user_groups)
+            user_groups = jsonify(user_groups)
+
+        return user_groups
 
     if request.method == 'POST':
         #create new group
         if validate_group_creation(request.form):
             print('the group dict is valid')
-            new_group_data = request.form
-            new_group_data['owner'] = session.get('user').get('_id') # set owner
-            new_group_data['members'] = [{session.get('user').get('_id'): {"name": session.get('user').get('username'), "type": "admin"}}] # set owner as member with type admin
+            new_group_data = {}
+            for item in request.form:
+                new_group_data[item] = request.form[item]
+
+            new_group_data['owner'] = str(session.get('user').get('_id')) # set owner
+            creator_info = {
+                "_id": new_group_data['owner'],
+                "username": session.get('user').get('username'),
+                "name": session.get('user').get('name'),
+                'last_name': session.get('user').get('lastname'),
+                "type": "admin"
+            }
+            new_group_data['members'] = {str(session.get('user').get('_id')): creator_info} # set owner as member with type admin
             obj = mongo.groups.insert_one(new_group_data)
             # update user groups in session
-            session['user']['groups'][obj.inserted_id] =  {
-                {'name': new_group_data['name'],
-                 'type': 'admin'}
+            session['user']['groups'][str(obj.inserted_id)] =  {
+                'name': new_group_data['name'],
+                'type': 'admin'
                 }
-            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}}) # update user groups in db
+
+            print('getteame lso grupos')
+            print(session.get('user').get('groups'))
+            mongo.users.update_one({'_id': str(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}}) # update user groups in db
 
             return redirect(url_for('groups'))
 
@@ -271,13 +296,26 @@ def single_group(group_id):
         # add member to group
         group = mongo.groups.find_one({'_id': ObjectId(group_id)})
         if group:
-            new_user_group_data = {}
-            new_user_group_data[ObjectId(request.form.get('id'))] = {'name': request.form.get('name')}
-            mongo.groups.update_one({'_id': ObjectId(group_id)}, {'$push': {'members': new_user_group_data}}) # push member to member list
-            mongo.groups.update_one({'_id': new_user_group_data['id']}, {'$push': {'groups': ObjectId(group_id)}}) # push group to user groups'   
-            return "user added to group"
+            user = mongo.users.find_one({'_id': ObjectId(request.form.get('_id'))})
+            if user:
+                new_user_to_group = {}
+                # {_id, type?}
+                for item in request.form:
+                    new_user_to_group[item] = request.form[item]
+                new_user_to_group['username'] = str(user.get('username'))
+                new_user_to_group['name'] = str(user.get('name'))
+                new_user_to_group['last_name'] = str(user.get('last_name'))
+
+                new_group_to_user = {
+                    '_id': str(group.get('_id')),
+                    'name': group.get('name')
+                }
+                mongo.groups.update_one({'_id': ObjectId(group_id)}, {'$set': {f'members.{str(user.get("_id"))}': new_user_to_group}}) # push member to member list
+                mongo.users.update_one({'_id': user['_id']}, {'$set': {f'groups.{group_id}': new_group_to_user}}) # push group to user groups'   
+                return "user added to group"
+            return {'error': 'user does not exist'}
         else:
-            return "group not found"
+            return {'error': 'group does not exist'}
 
     if request.method == 'PUT':
         # delete member from group
