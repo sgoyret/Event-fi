@@ -3,7 +3,8 @@ from flask import Flask, render_template, session, request, redirect, url_for, s
 from flask_cors import CORS
 from flask_session import Session
 from pymongo import MongoClient
-from validations import *
+from functions.refresh import *
+from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
@@ -279,6 +280,7 @@ def single_group(group_id):
             new_user_group_data[ObjectId(request.form.get('id'))] = {'name': request.form.get('name')}
             mongo.groups.update_one({'_id': ObjectId(group_id)}, {'$push': {'members': new_user_group_data}}) # push member to member list
             mongo.groups.update_one({'_id': new_user_group_data['id']}, {'$push': {'groups': ObjectId(group_id)}}) # push group to user groups'   
+            session_refresh() # refresh session
             return "user added to group"
         else:
             return "group not found"
@@ -287,8 +289,10 @@ def single_group(group_id):
         # delete member from group
         group = mongo.groups.find_one({'_id': ObjectId(group_id)})
         if group:
-            if mongo.groups.update_one({'_id': ObjectId(group_id)},
-                                          { '$pull': { group_id: {'members': {'_id': ObjectId(request.form.get('id'))}}}},false,true):
+            if mongo.groups.update_one({'_id': ObjectId(group_id)}, { '$pull': { group_id: {'members': {'_id': ObjectId(request.form.get('id'))}}}},False,True): # si puedo deletear el miembro del grupo dsp borro la id del grupo de la lista de grupos del usuario
+                mongo.users.update_one({'_id': ObjectId(request.form.get('id'))},
+                                       {'$pull': {'groups': {'_id': ObjectId(group_id)}}},False,True)
+                session_refresh()
                 return "user removed from group"
             else:
                 return "user not found"
@@ -298,6 +302,8 @@ def single_group(group_id):
     if request.method == 'DELETE':
         # delete group
         if mongo.groups.delete_one({'_id': ObjectId(group_id)}):
+            mongo.users.update_many({'groups': {'_id': ObjectId(group_id)}}, {'$pull': {'groups': {'_id': ObjectId(group_id)}}},False,True) # find all users with this group and remove it from their groups
+            session_refresh()
             return "group deleted"
         else:
             return "group not found"
