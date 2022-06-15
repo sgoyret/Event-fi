@@ -15,7 +15,10 @@ window.addEventListener("load", function() {
                 prototype +=             
                 '<li>' +
                 '<div class="listed">' +
-                    '<div class="image">' + '</div>' +
+                    '<div class="image">' +
+                        '<div class="img">' +
+                        '</div>' +
+                    '</div>' +
                     '<div class="info">' +
                     '<p>'+ value.title  +'</p>' +
                     '<p>' + value.date + '</p>' +

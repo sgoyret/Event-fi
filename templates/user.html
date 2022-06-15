@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles/profiles.css" type="text/css">
     <script src="/static/scripts/profilepopup.js" type="module" async></script>
@@ -13,6 +14,9 @@
 </head>
 <body>
     <div class="wraper" id="wraper">
+        <div class="back">
+            <i class='bx bxs-chevron-left' onclick="javascript:location.href ='/index'"></i>
+        </div>
         <div class="header">
             <div class="avatar">
             </div>
@@ -23,6 +27,7 @@
                 <div class="username">
                     {{user.username}}
                 </div>
+                <button class="edit_prof" onclick="javascript:location.href ='user/settings'">Edit profile</button>
             </div>
         </div>
         <div class="selection">
