@@ -218,7 +218,7 @@ def single_event(event_id):
         event = mongo.events.find_one({'_id': ObjectId(event_id)})
         if event:
             if mongo.events.update_one({'_id': ObjectId(event_id)},
-                                          { '$pull': { event_id: {'members': {'_id': ObjectId(request.form.get('id'))}}}},false,true):
+                                          { '$pull': { event_id: {'members': {'_id': ObjectId(request.form.get('id'))}}}},False,True):
                 return "user removed from event"
             else:
                 return "user not found"

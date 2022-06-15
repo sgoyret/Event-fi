@@ -50,7 +50,7 @@ map.on('load', function() {
           el.classList.add('marker');
           el.addEventListener("click", function() {
             var request = new XMLHttpRequest();
-            request.open('GET', 'http://192.168.1.21:5000/events/' + marker.properties.id);
+            request.open('GET','127.0.0.1:5000/events/' + marker.properties.id);
             request.setRequestHeader('Content-Type', 'application/json');
             request.setRequestHeader('Access-Control-Allow-Origin', '*');
             request.setRequestHeader('Access-Control-Allow-Headers', '*');
