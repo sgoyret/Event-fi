@@ -100,6 +100,7 @@ def user():
         return redirect(url_for('login'))
 
     session_refresh()
+    print(f'user groups {session.get("user").get("groups")}')
     return render_template('user.html', user=session['user'])
 
 
@@ -257,11 +258,12 @@ def groups():
 
     if request.method == 'POST':
         #create new group
-        if validate_group_creation(request.form):
+        print(f'entered with {request.get_json()}')
+        if validate_group_creation(request.get_json()):
             print('the group dict is valid')
             new_group_data = {}
-            for item in request.form:
-                new_group_data[item] = request.form[item]
+            for item in request.get_json():
+                new_group_data[item] = request.get_json()[item]
 
             new_group_data['owner'] = str(session.get('user').get('_id')) # set owner
             creator_info = {
@@ -274,6 +276,8 @@ def groups():
             new_group_data['members'] = {str(session.get('user').get('_id')): creator_info} # set owner as member with type admin
             obj = mongo.groups.insert_one(new_group_data)
             # update user groups in session
+            if session.get('user').get('groups') is None:
+                session['user']['groups'] = {}
             session['user']['groups'][str(obj.inserted_id)] =  {
                 'name': new_group_data['name'],
                 'type': 'admin'
@@ -283,7 +287,7 @@ def groups():
             print(session.get('user').get('groups'))
             mongo.users.update_one({'_id': str(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}}) # update user groups in db
 
-            return redirect(url_for('groups'))
+            return {'success': f'created new group: {new_group_data.get("name")}'}
 
 @app.route('/api/groups/<group_id>', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def single_group(group_id):
