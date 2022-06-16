@@ -183,7 +183,8 @@ def events():
             if session.get('user').get('events') is None:
                 session['user']['events'] = {}
             session['user']['events'][str(obj.inserted_id)] =  {
-                'name': session['user']['name'],
+                'name': new_event_data['title'],
+                'date': new_event_data['date'],
                 'type': 'admin'
                 }
             mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
@@ -228,8 +229,10 @@ def single_event(event_id):
 
     if request.method == 'DELETE':
         # delete event
-        if mongo.events.delete_one({'_id': ObjectId(event_id)}):
-            session_refresh()
+        event = mongo.events.find_one({'_id': ObjectId(event_id)})
+        if event:
+            mongo.users.update_many({'_id': {'$in': [event['members']]}}, {'$pull': {'events': ObjectId(event_id)}})
+            mongo.events.delete_one({'_id': ObjectId(event_id)})
             return "event deleted"
         else:
             return "event not found"
