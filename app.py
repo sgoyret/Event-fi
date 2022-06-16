@@ -161,11 +161,11 @@ def events():
     
     if request.method == 'POST':
         #create new event
-        if validate_event_creation(request.form):
+        if validate_event_creation(request.get_json()):
             print('the event dict is valid')
             new_event_data = {}
-            for item in request.form:
-                new_event_data[item] = request.form[item]
+            for item in request.get_json():
+                new_event_data[item] = request.get_json()[item]
     
             new_event_data['owner'] = str(session.get('user').get('_id')) # set owner
             owner_admin = {
@@ -176,13 +176,14 @@ def events():
                 'type': 'admin'
             }
             new_event_data['members'] = { owner_admin['_id']: owner_admin } # set owner as member with type admin
+            print(new_event_data)
             obj = mongo.events.insert_one(new_event_data)
             # update user events in session
 
             if session.get('user').get('events') is None:
                 session['user']['events'] = {}
             session['user']['events'][str(obj.inserted_id)] =  {
-                'name': new_event_data['name'],
+                'name': session['user']['name'],
                 'type': 'admin'
                 }
             mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
@@ -228,6 +229,7 @@ def single_event(event_id):
     if request.method == 'DELETE':
         # delete event
         if mongo.events.delete_one({'_id': ObjectId(event_id)}):
+            session_refresh()
             return "event deleted"
         else:
             return "event not found"

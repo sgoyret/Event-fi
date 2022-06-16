@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-  <!--mapbox-->
+{% extends 'base.html' %}
+
+{% block html_head %}
+  <!---mapbox-->
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"/>
   <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"/>
-  <!--css-->
+  <!---css--->
   <link rel="stylesheet" href="/static/styles/styles.css" />
   <link rel="stylesheet" href="/static/styles/map.css" />
-  <!--boxicons-->
+  <!---boxicons--->
   <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"/>
   <!-- mapbox js-->
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js" async></script>
   <script type="text/javascript" src="/static/scripts/map.js" async></script>
   <script src="/static/scripts/scripts.js" async></script>
-
+{% endblock html_head %}
+    
+{% block wrapper %}
   <div id="map">
     <nav class="sidebar close">
       <header>
@@ -92,4 +95,4 @@
       </div>
     </nav>
   </div>
-</html>
+{% endblock wrapper %}

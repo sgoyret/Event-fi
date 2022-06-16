@@ -14,12 +14,8 @@
 {% block header %}
     <div class="avatar"></div>
     <div class="userinfo">
-        <div cl ass="names">
-            {{user.name}} {{user.last_name}}
-        </div>
-        <div class="username">
-            {{user.username}}
-        </div>
+        <div class="names">{{user.name}} {{user.last_name}}</div>
+        <div class="username">@{{user.username}}</div>
         <button class="edit_prof" onclick="javascript:location.href ='user/settings'">Edit profile</button>
     </div>
 {% endblock header %}
