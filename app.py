@@ -203,12 +203,6 @@ def single_event(event_id):
         # add member to event
         check_response = validate_add_user_event(request.form)
         if check_response is True:
-            group = mongo.groups.find_one({'_id': ObjectId(group_id)})
-            if group:
-                user = mongo.users.find_one({'_id': ObjectId(request.form.get('_id'))})
-                if user:
-                    new_user_to_group = {}
-
             event = mongo.events.find_one({'_id': ObjectId(event_id)})
             if event:
                 user = mongo.users.find_one({'_id': ObjectId(request.form.get('_id'))})

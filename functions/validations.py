@@ -61,3 +61,7 @@ def validate_event_creation(values):
                 return {'error': f'{value} didnt mmatch {event_regex[key]}'}
 
     return True
+
+
+def validate_add_user_event(values):
+    return True
