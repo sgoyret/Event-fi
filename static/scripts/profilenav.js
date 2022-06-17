@@ -1,5 +1,5 @@
 window.addEventListener("load", function() {
-    this.document.querySelector('.events').addEventListener("click", function() {
+    this.document.querySelector('#events').addEventListener("click", function() {
         const selected = document.getElementsByClassName('selected');
         const active = document.getElementsByClassName('active');
         console.log(selected);
@@ -11,7 +11,7 @@ window.addEventListener("load", function() {
         document.getElementById('usercontacts').classList.add('none');
         this.classList.add('selected');
     });
-    this.document.querySelector('.groups').addEventListener("click", function() {
+    this.document.querySelector('#groups').addEventListener("click", function() {
         const selected = document.getElementsByClassName('selected');
         const active = document.getElementsByClassName('active');
         console.log(selected);
@@ -23,7 +23,7 @@ window.addEventListener("load", function() {
         document.getElementById('usercontacts').classList.add('none');
         this.classList.add('selected');
     });
-    this.document.querySelector('.contacts').addEventListener("click", function() {
+    this.document.querySelector('#contacts').addEventListener("click", function() {
         const selected = document.getElementsByClassName('selected')
         const active = document.getElementsByClassName('active')
         console.log(selected);

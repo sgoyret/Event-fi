@@ -184,7 +184,7 @@ def events():
             if session.get('user').get('events') is None:
                 session['user']['events'] = {}
             session['user']['events'][str(obj.inserted_id)] =  {
-                'name': new_event_data['title'],
+                'name': new_event_data['name'],
                 'date': new_event_data['date'],
                 'type': 'admin'
                 }
