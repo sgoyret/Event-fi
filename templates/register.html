@@ -15,16 +15,16 @@
                 </label>
             </div>
             <div class="names">
-                <input name="name" class="name" placeholder="Nombre" pattern="^[a-z]{20}$"></input>
-                <input name="last_name" class="lastname" placeholder="Apellido" pattern="^[a-z]{20}$"></input>
+                <input name="name" class="name" placeholder="Nombre" pattern="^[a-zA-Z]{1,20}$"></input>
+                <input name="last_name" class="lastname" placeholder="Apellido" pattern="^[a-zA-Z]{1,20}$"></input>
             </div>
             <input name="username" class="login" placeholder="Nombre de usuario" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
-            <input name="email" class="email" placeholder="Correo electronico" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3}){50}$"></input>
+            <input name="email" class="email" placeholder="Correo electronico"></input>
             <input name="password" class="login" type="password" placeholder="Contraseña"></input>
                             <div class="options">
             <div id="login" onclick="javascript:location.href='/login'"> Ya tengo una cuenta</div>
             <button id="btn-create-user" type="submit">Registrarse</button>
         </div>
         </form>
-</div>
+    </div>
 {% endblock container %}
