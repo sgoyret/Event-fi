@@ -2,7 +2,8 @@
 
 {% block html_head %}
     <link rel="stylesheet" href="/static/styles/profiles.css" type="text/css">
-    <script src="/static/scripts/profilepopup.js" type="module" async></script>
+    <script src="/static/scripts/profilepopups.js" type="module" async></script>
+    <script src="/static/scripts/profilenav.js" type="module" async></script>
 {% endblock html_head %}
 
 {% block wrapper %}
@@ -14,21 +15,17 @@
 {% block header %}
     <div class="avatar"></div>
     <div class="userinfo">
-        <div cl ass="names">
-            {{user.name}} {{user.last_name}}
-        </div>
-        <div class="username">
-            {{user.username}}
-        </div>
+        <div class="names">{{user.name}} {{user.last_name}}</div>
+        <div class="username">@{{user.username}}</div>
         <button class="edit_prof" onclick="javascript:location.href ='user/settings'">Edit profile</button>
     </div>
 {% endblock header %}
 
 {% block container %}
     <div class="selection">
-        <span class="events selected">Eventos</span>
-        <span class="groups">Grupos</span>
-        <span class="contacts">Contactos</span>
+        <span id="events" class="selected">Eventos</span>
+        <span id="groups">Grupos</span>
+        <span id="contacts">Contactos</span>
     </div>
     <div class="content">
         <ul class="list">
@@ -44,7 +41,7 @@
                                 <div class="info"> 
                                 <p>  {{value.name }} </p> 
                                 <p>  {{value.date }}  </p> 
-                                <p>  {{value.location}}  </p> 
+                                <p>  {{value.coordinates}}  </p> 
                                 </div> 
                                 <div class="manage"> 
                                     <div class="manage-button"> 
