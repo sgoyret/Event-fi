@@ -305,17 +305,19 @@ def groups():
             }
             new_group_data['members'] = {str(session.get('user').get('_id')): creator_info} # set owner as member with type admin
             obj = mongo.groups.insert_one(new_group_data)
+            
             # update user groups in session
             if session.get('user').get('groups') is None:
-                session['user']['groups'] = {}
-            session['user']['groups'][str(obj.inserted_id)] =  {
+                session['user']['groups'] = []
+            session['user']['groups'].append({
+                '_id': str(obj.inserted_id),
                 'name': new_group_data['name'],
                 'type': 'admin'
-                }
+                })
 
             print('getteame lso grupos')
             print(session.get('user').get('groups'))
-            mongo.users.update_one({'_id': str(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}}) # update user groups in db
+            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
 
             return {'success': f'created new group: {new_group_data.get("name")}'}
 
