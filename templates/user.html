@@ -31,7 +31,7 @@
         <ul class="list">
             <div id="userevents">
                 {% if user.events %}
-                    {% for key, value in user.events.items() %}
+                    {% for value in user.events %}
                         <li> 
                             <div class="listed"> 
                                 <div class="image"> 
@@ -39,9 +39,9 @@
                                     </div> 
                                 </div> 
                                 <div class="info"> 
-                                <p>  {{value.name }} </p> 
-                                <p>  {{value.date }}  </p> 
-                                <p>  {{value.coordinates}}  </p> 
+                                <p>  {{ value.name }} </p> 
+                                <p>  {{ value.date }}  </p> 
+                                <p>  {{ value.coordinates }}  </p> 
                                 </div> 
                                 <div class="manage"> 
                                     <div class="manage-button"> 
@@ -51,7 +51,7 @@
                                         <button>Editar</button> 
                                     </div> 
                                     <div class="manage-button"> 
-                                        <button>Eliminar</button> 
+                                        <i class='bx bxs-x-circle'></i>
                                     </div> 
                                 </div> 
                             </div> 
@@ -63,7 +63,7 @@
                 </div>
                 <div id="usergroups" class="none">
                 {% if user.groups %}
-                    {% for key, value in user.groups.items() %}
+                    {% for value in user.groups %}
                         <li> 
                             <div class="listed"> 
                                 <div class="image"> 

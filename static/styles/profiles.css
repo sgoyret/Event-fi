@@ -28,7 +28,7 @@ body {
     border-radius: 1px;
     border:none;
 }
-.back, .bx{
+.back{
     position: absolute;
     color: black;
     font-size:50px;

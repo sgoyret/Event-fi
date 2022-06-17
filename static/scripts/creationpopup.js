@@ -48,7 +48,7 @@ window.addEventListener("load", function() {
                 request.setRequestHeader('Content-Type', 'application/json');
                 request.setRequestHeader('Access-Control-Allow-Origin', '*');
                 request.setRequestHeader('Access-Control-Allow-Headers', '*');
-                request.send(formdata);
+                request.send(JSON.stringify(formdata));
                 request.onload = function() {
                     const data = request.responseText;
                     console.log(data);
