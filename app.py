@@ -285,7 +285,7 @@ def event_members(event_id):
 # ---------GROUP ROUTES----------
 
 
-@app.route('/api/groups', strict_slashes=False, methods=['GET', 'POST'])
+@app.route('/api/groups', strict_slashes=False, methods=['GET', 'POST', 'DELETE'])
 def groups():
     """Returns all the groups from the current logged user"""
     if session.get('user') is None:
@@ -318,32 +318,59 @@ def groups():
             }
             new_group_data['members'] = {str(session.get('user').get('_id')): creator_info} # set owner as member with type admin
             obj = mongo.groups.insert_one(new_group_data)
+            
             # update user groups in session
             if session.get('user').get('groups') is None:
-                session['user']['groups'] = {}
-            session['user']['groups'][str(obj.inserted_id)] =  {
+                session['user']['groups'] = []
+            session['user']['groups'].append({
+                '_id': str(obj.inserted_id),
                 'name': new_group_data['name'],
                 'type': 'admin'
-                }
+                })
 
             print('getteame lso grupos')
             print(session.get('user').get('groups'))
-            mongo.users.update_one({'_id': str(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}}) # update user groups in db
+            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
 
             return {'success': f'created new group: {new_group_data.get("name")}'}
+
+    
 
 @app.route('/api/groups/<group_id>', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def single_group(group_id):
     """route for single group, get for group info, put for group member delete, post for group members insert"""
-    if request.method == 'GET':
-        # return group json object
-        group = mongo.groups.find_one({'_id': ObjectId(group_id)})
-        if group:
+    group = mongo.groups.find_one({'_id': ObjectId(group_id)})
+    
+    if group:
+        if request.method == 'GET':
+            # return group json object
             group['_id'] = str(group.get('_id'))
             return jsonify(group)
-        else:
-            return "group not found"
 
+        if request.method == 'DELETE':
+            # delete group
+            id_list = []
+            for item in group['members']:
+                id_list.append(ObjectId(item))
+            
+            # remove event from user events
+            for item in id_list:
+                mongo.users.update_one({'_id': item},
+                                    {'$pull': {'groups': {'name': group['name']}}},False,True) 
+            # delete event
+            mongo.groups.delete_one({'_id': ObjectId(group_id)})
+            
+            # update session
+            user_groups = mongo.users.find_one({'_id': session.get('user').get('_id')})['groups']
+            session['user']['groups'] = user_groups
+            return "group deleted"
+    else:
+        return "group not found"
+
+
+@app.route('/api/groups/<group_id>/members', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
+def group_members(group_id):
+    """manage members for groups"""
     if request.method == 'POST':
         # add member to group
         group = mongo.groups.find_one({'_id': ObjectId(group_id)})
@@ -381,14 +408,5 @@ def single_group(group_id):
                 return "user not found"
         else:
             return "group not found"
-
-    if request.method == 'DELETE':
-        # delete group
-        if mongo.groups.delete_one({'_id': ObjectId(group_id)}):
-            mongo.users.update_many({'groups': {'_id': ObjectId(group_id)}}, {'$pull': {'groups': {'_id': ObjectId(group_id)}}},False,True) # find all users with this group and remove it from their groups
-            return "group deleted"
-        else:
-            return "group not found"
-
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
