@@ -29,7 +29,17 @@ window.addEventListener("load", function() {
                         request.setRequestHeader('Access-Control-Allow-Origin', '*');
                         request.setRequestHeader('Access-Control-Allow-Headers', '*');
                         request.send(JSON.stringify({'user_id': user_id}));
-                        console.log("Si");
+                        /* check request response */
+                        request.onload = () => {
+                            if (request.status == 200) {
+                                console.log("you have been removed from the event");
+                                document.location.href = '/user'
+                            }
+                            console.log(request.text);
+                        }
+                        
+                            
+
                     };
                     document.getElementById('wraper').removeChild(document.getElementById('minipopup'));
                 });
