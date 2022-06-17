@@ -181,6 +181,7 @@ def events():
                 session['user']['events'] = {}
             session['user']['events'][str(obj.inserted_id)] =  {
                 'name': new_event_data['name'],
+                'date': new_event_data['date'],
                 'type': 'admin'
                 }
             mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
@@ -241,10 +242,17 @@ def single_event(event_id):
 
     if request.method == 'DELETE':
         # delete event
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+
         if mongo.events.delete_one({'_id': ObjectId(event_id)}):
+            if session.get('user').get('events').get('event_id'):
+                session.get('user').get('events').pop('event_id')
             return "event deleted"
         else:
-            return "event not found"
+            return {'error': 'event not found' }
+        
+        
 
 
 # ---------GROUP ROUTES----------
