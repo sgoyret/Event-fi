@@ -95,8 +95,8 @@ body {
     color: white;
 }
 .listed {
-    margin-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -209,3 +209,56 @@ ul, li {
     padding-top: 10px;
     height: 50px;
 }
+.bx-trash {
+    font-size: 35px;
+    color: #5a5a5a;
+}
+.manage {
+    display: flex;
+    align-content: space-around;
+    justify-content: center;
+    align-items: center;
+}
+.image {
+    display: flex;
+    align-content: flex-end;
+    justify-content: center;
+}
+.minipopup {
+    max-width: 800px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 30%;
+    top: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    height: 30%;
+    background-color: #fafafa;
+    z-index: 10;
+    border: #6105e3 2px solid;
+    opacity: 1;
+    box-sizing: border-box;
+    border-radius: 3px;
+    color: black;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    align-content: space-between;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+.minipopupbtn {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+}
+  .minipopup-button {
+    all: unset;
+    background-color: #6205e3;
+    width: 33%;
+    border-radius: 2px;
+    color: white;
+  }

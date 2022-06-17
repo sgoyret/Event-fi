@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="/static/styles/profiles.css" type="text/css">
     <script src="/static/scripts/profilepopups.js" type="module" async></script>
     <script src="/static/scripts/profilenav.js" type="module" async></script>
+    <script src="/static/scripts/profilebuttons.js" type="module" async></script>
 {% endblock html_head %}
 
 {% block wrapper %}
@@ -33,7 +34,7 @@
                 {% if user.events %}
                     {% for value in user.events %}
                         <li> 
-                            <div class="listed"> 
+                            <div class="listed" id="{{value._id}}"> 
                                 <div class="image"> 
                                     <div class="img"> 
                                     </div> 
@@ -45,13 +46,7 @@
                                 </div> 
                                 <div class="manage"> 
                                     <div class="manage-button"> 
-                                        <button>Ver</button> 
-                                    </div> 
-                                    <div class="manage-button"> 
-                                        <button>Editar</button> 
-                                    </div> 
-                                    <div class="manage-button"> 
-                                        <i class='bx bxs-x-circle'></i>
+                                        <i class='bx bx-trash'></i>
                                     </div> 
                                 </div> 
                             </div> 

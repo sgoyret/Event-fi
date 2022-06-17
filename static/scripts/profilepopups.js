@@ -27,7 +27,8 @@ window.addEventListener("load", function() {
                 '<div class="closepopup" id="closepopup"> </div>' +
             "</div>";
         for (let element of document.getElementsByClassName('listed')) {
-            element.addEventListener("click", function() {
+            element.addEventListener("click", function(evt) {
+                if (evt.target !== this) return;
                 document.getElementById('wraper').insertAdjacentHTML('afterbegin', eventpopup);
                 const close = document.getElementById('closepopup');
                 close.addEventListener("click", function() {
@@ -50,7 +51,8 @@ window.addEventListener("load", function() {
                 "<div class='closepopup' id='closepopup'> </div>" +
             "</div>";
         for (let element of document.getElementsByClassName('listed')) {
-            element.addEventListener("click", function() {
+            element.addEventListener("click", function(evt) {
+                if (evt.target !== this) return;
                 document.getElementById('wraper').insertAdjacentHTML('afterbegin', grouppopup);
                 const close = document.getElementById('closepopup');
                 close.addEventListener("click", function() {
