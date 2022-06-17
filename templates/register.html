@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block html_head %}
+    <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
+
+{% endblock html_head %}
+
 {% block container %}
     <div class="create-user">
         <form id="user-data" method='POST' action='/register'>
