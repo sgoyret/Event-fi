@@ -160,11 +160,11 @@ def events():
     
     if request.method == 'POST':
         #create new event
-        if validate_event_creation(request.form):
+        if validate_event_creation(request.get_json()):
             print('the event dict is valid')
             new_event_data = {}
-            for item in request.form:
-                new_event_data[item] = request.form[item]
+            for item in request.get_json():
+                new_event_data[item] = request.get_json().get(item)
     
             new_event_data['owner'] = str(session.get('user').get('_id')) # set owner
             owner_admin = {
@@ -235,13 +235,13 @@ def event_members(event_id):
 
     if request.method == 'POST':
         # add member to event
-        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
+        user = mongo.users.find_one({'_id': ObjectId(request.get_json.get('user_id'))})
         if user is None:
             return {'error': 'user does not exist'}
 
         new_user_event_data = {}
-        for item in request.form:
-            new_user_event_data[item] = request.form.get(item)
+        for item in request.get_json:
+            new_user_event_data[item] = request.get_json().get(item)
         new_user_event_data['name'] = user.get('name')
         new_user_event_data['last_name'] = user.get('last_name')
         new_user_event_data['username'] = user.get('username')
@@ -274,14 +274,14 @@ def event_members(event_id):
 
     if request.method == 'DELETE':
         # delete member from event
-        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
+        user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
         if user is None:
             return {'error': 'user does not exist'}
 
         user_at = {}
         event_at_user = {}
         for idx, item in enumerate(event.get('members')):
-            if item.get('user_id') == request.form.get('user_id'):
+            if item.get('user_id') == request.get_json().get('user_id'):
                 user_at = event.get('members')[idx]
         for idx, item in enumerate(user.get('events')):
             if item.get('_id') == event_id:
@@ -290,7 +290,7 @@ def event_members(event_id):
         print(f'user to delete: {user_at}')
         if mongo.events.update_one({'_id': event['_id']},
                                    { '$pull': {'members': user_at}},False,True):
-            mongo.users.update_one({'_id': ObjectId(request.form.get('user_id'))},
+            mongo.users.update_one({'_id': ObjectId(request.get_json().get('user_id'))},
                                    {'$pull': {'events': event_at_user}},False,True) # remove event from user events
             if user.get('events') and len(user.get('events')) == 0:
                 user.pop('events')
@@ -319,12 +319,12 @@ def groups():
 
     if request.method == 'POST':
         #create new group
-        print(f'entered with {request.form}')
-        if validate_group_creation(request.form):
+        print(f'entered with {request.get_json()}')
+        if validate_group_creation(request.get_json()):
             print('the group dict is valid')
             new_group_data = {}
-            for item in request.form:
-                new_group_data[item] = request.form[item]
+            for item in request.get_json():
+                new_group_data[item] = request.get_json()[item]
 
             new_group_data['owner'] = str(session.get('user').get('_id')) # set owner
             creator_info = {
@@ -419,8 +419,8 @@ def group_members(group_id):
         # delete member from group
         group = mongo.groups.find_one({'_id': ObjectId(group_id)})
         if group:
-            if mongo.groups.update_one({'_id': ObjectId(group_id)}, { '$pull': { group_id: {'members': {'_id': ObjectId(request.form.get('id'))}}}},False,True): # si puedo deletear el miembro del grupo dsp borro la id del grupo de la lista de grupos del usuario
-                mongo.users.update_one({'_id': ObjectId(request.form.get('id'))},
+            if mongo.groups.update_one({'_id': ObjectId(group_id)}, { '$pull': { group_id: {'members': {'_id': ObjectId(request.get_json().get('id'))}}}},False,True): # si puedo deletear el miembro del grupo dsp borro la id del grupo de la lista de grupos del usuario
+                mongo.users.update_one({'_id': ObjectId(request.get_json().get('id'))},
                                        {'$pull': {'groups': {'_id': ObjectId(group_id)}}},False,True)
                 return "user removed from group"
             else:

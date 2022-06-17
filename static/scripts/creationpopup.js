@@ -59,7 +59,7 @@ window.addEventListener("load", function() {
         document.getElementById('eventmake').addEventListener("click", function() {
             const eventform =
                 '<form id="eventdata" method="POST">' +
-                '<input name="title" class="creation" placeholder="Titulo"></input>' +
+                '<input name="name" class="creation" placeholder="Titulo"></input>' +
                 '<input name="date" class="creation" placeholder="Fecha"></input>' +
                 '<input name="coordinates" class="creation" placeholder="Coordenadas"></input>' +
                 '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +

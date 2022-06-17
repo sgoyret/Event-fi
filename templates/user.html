@@ -14,7 +14,7 @@
 {% endblock wrapper %}
 
 {% block header %}
-    <div class="avatar"></div>
+    <div class="avatar" id="{{user._id}}"></div>
     <div class="userinfo">
         <div class="names">{{user.name}} {{user.last_name}}</div>
         <div class="username">@{{user.username}}</div>
