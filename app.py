@@ -22,8 +22,7 @@ Session(app)
 
 # Auxiliary functions
 def session_refresh():
-    user_id = session['user']['_id']
-    session['user'] = None
+    user_id = session.get('user').get('_id')
     session['user'] = mongo.users.find_one({'_id': ObjectId(user_id)})
 
 @app.route('/', strict_slashes=False)
@@ -32,7 +31,8 @@ def index():
     """user base page"""
     # checks if session exists
     if session.get('user'):
-        return render_template('index.html')
+        session_refresh()
+        return render_template('index.html', session=session)
     return redirect(url_for('login'))
 
 @app.route('/login', strict_slashes=False, methods=['GET', 'POST'])
@@ -83,13 +83,14 @@ def register():
                 new_data[item] = request.form[item]
             if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
+                new_data['type'] = 'user'
                 collection= mongo.users
                 id = collection.insert_one(new_data)
                 new_data.pop('password')
                 session['user'] = new_data
                 return redirect(url_for('index'))
             else:
-                return {'error': 'the username iis already in use'}
+                return {'error': 'the username is already in use'}
                 
         return redirect(url_for('register'))
     if request.method == 'GET':
@@ -100,7 +101,6 @@ def user():
     if session.get('user') is None:
         return redirect(url_for('login'))
     session_refresh()
-    print(f'user groups {session.get("user").get("groups")}')
     return render_template('user.html', user=session['user'])
 
 
@@ -223,8 +223,6 @@ def single_event(event_id):
             return "event deleted"
         else:
             return {'error': 'event not found' }
-        
-        
 
 @app.route('/api/events/<event_id>/members', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def event_members(event_id):
@@ -235,7 +233,7 @@ def event_members(event_id):
 
     if request.method == 'POST':
         # add member to event
-        user = mongo.users.find_one({'_id': ObjectId(request.get_json.get('user_id'))})
+        user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
         if user is None:
             return {'error': 'user does not exist'}
 
@@ -260,18 +258,42 @@ def event_members(event_id):
         return "user added to event"
 
     if request.method == 'PUT':
-        user = mongo.users.find_one({'_id': ObjectId(request.get_json['user_id'])})
+        # update member type
+        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
         if user is None:
             return {'error': 'user does not exist'}
 
-        new_type = request.json_get().get('type')        
+        # update member type in user events
+        new_type = request.form.get('type')
+        event_at_user = {}
+        event_index = None
+        for idx, item in enumerate(user.get('events')):
+            if item.get('_id') == event_id:
+                event_at_user = user.get('events')[idx]
+                event_index = idx
+                break
+        mongo.users.update_one({'_id': user['_id']}, {'$set': {f'events.{event_index}.type': new_type}}) # set new type to event in user events
+        # update member type in event members
+        user_at = {}
+        user_idx = None
+        for idx, item in enumerate(event.get('members')):
+            if item.get('_id') == str(user['_id']):
+                user_at = event.get('members')[idx]
+                user_idx = idx
+                break
+        mongo.events.update_one({'_id': event['_id']}, {'$set': {f'members.{user_idx}.type': new_type}}) # set new type member in event members
+        
+        session_refresh()
+        return {"success": "event member updated successfully"}
+        """
         if not user.get('events').get('type') and new_type:
             user['events']['type'] = new_type
         elif user.get('events').get('type') and new_type:
             user['events']['type'] = new_type
         elif user.get('events').get('type') and new_type is None:
             user['events'].pop('type')
-
+        """
+        
     if request.method == 'DELETE':
         # delete member from event
         user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
@@ -289,7 +311,7 @@ def event_members(event_id):
 
         print(f'user to delete: {user_at}')
         if mongo.events.update_one({'_id': event['_id']},
-                                   { '$pull': {'members': user_at}},False,True):
+                                   {'$pull': {'members': user_at}},False,True):
             mongo.users.update_one({'_id': ObjectId(request.get_json().get('user_id'))},
                                    {'$pull': {'events': event_at_user}},False,True) # remove event from user events
             if user.get('events') and len(user.get('events')) == 0:
@@ -359,7 +381,6 @@ def groups():
 def single_group(group_id):
     """route for single group, get for group info, put for group member delete, post for group members insert"""
     group = mongo.groups.find_one({'_id': ObjectId(group_id)})
-    
     if group:
         if request.method == 'GET':
             # return group json object
@@ -390,42 +411,77 @@ def single_group(group_id):
 @app.route('/api/groups/<group_id>/members', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def group_members(group_id):
     """manage members for groups"""
+    group = mongo.groups.find_one({'_id': ObjectId(group_id)})
+    if group is None:
+        return {"error": "group not found"}
+    user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
+    if user is None:
+        return {"error": "user not found"}
+    
     if request.method == 'POST':
         # add member to group
-        group = mongo.groups.find_one({'_id': ObjectId(group_id)})
-        if group:
-            user = mongo.users.find_one({'_id': ObjectId(request.get_json.get('user_id'))})
-            if user:
-                new_user_to_group = {}
-                # {_id, type?}
-                for item in request.json_get():
-                    new_user_to_group[item] = request.get_json.get(item)
-                new_user_to_group['username'] = str(user.get('username'))
-                new_user_to_group['name'] = str(user.get('name'))
-                new_user_to_group['last_name'] = str(user.get('last_name'))
+        new_user_to_group = {}
+        # {_id, type?}
+        for item in request.json_get():
+            new_user_to_group[item] = request.get_json.get(item)
+        new_user_to_group['username'] = str(user.get('username'))
+        new_user_to_group['name'] = str(user.get('name'))
+        new_user_to_group['last_name'] = str(user.get('last_name'))
 
-                new_group_to_user = {
-                    '_id': str(group.get('_id')),
-                    'name': group.get('name')
-                }
-                mongo.groups.update_one({'_id': group['_id']}, {'$push': {'members': new_user_to_group}}) # push member to member list
-                mongo.users.update_one({'_id': user['_id']}, {'$push': {f'groups': new_group_to_user}}) # push group to user groups'   
-                return "user added to group"
-            return {'error': 'user does not exist'}
-        else:
-            return {'error': 'group does not exist'}
+        new_group_to_user = {
+            '_id': str(group.get('_id')),
+            'name': group.get('name')
+        }
+        mongo.groups.update_one({'_id': group['_id']}, {'$push': {'members': new_user_to_group}}) # push member to member list
+        mongo.users.update_one({'_id': user['_id']}, {'$push': {f'groups': new_group_to_user}}) # push group to user groups'   
+        return "user added to group"
 
-    if request.method == 'PUT':
+    if request.method == 'DELETE':
         # delete member from group
-        group = mongo.groups.find_one({'_id': ObjectId(group_id)})
-        if group:
-            if mongo.groups.update_one({'_id': ObjectId(group_id)}, { '$pull': { group_id: {'members': {'_id': ObjectId(request.get_json().get('id'))}}}},False,True): # si puedo deletear el miembro del grupo dsp borro la id del grupo de la lista de grupos del usuario
-                mongo.users.update_one({'_id': ObjectId(request.get_json().get('id'))},
-                                       {'$pull': {'groups': {'_id': ObjectId(group_id)}}},False,True)
-                return "user removed from group"
-            else:
-                return {'error': 'user not found'}
-        else:
-            return {'error': 'group not found'}
+        user_at = {}
+        group_at_user = {}
+        for idx, item in enumerate(group.get('members')):
+            if item.get('user_id') == request.get_json().get('user_id'):
+                user_at = group.get('members')[idx]
+        for idx, item in enumerate(user.get('groups')):
+            if item.get('_id') == group_id:
+                group_at_user = user.get('group')[idx]
+
+        print(f'user to delete: {user_at}')
+        if mongo.groups.update_one({'_id': group['_id']},
+                                   {'$pull': {'members': user_at}},False,True): # remove member from group
+            mongo.users.update_one({'_id': ObjectId(request.get_json().get('user_id'))},
+                                   {'$pull': {'groups': group_at_user}},False,True) # remove group from user events
+            if user.get('groups') and len(user.get('groups')) == 0:
+                user.pop('groups') # remove groups from user if no groups left
+            return "user removed from group"
+    if request.method == 'PUT':
+        # update member type
+        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
+        if user is None:
+            return {'error': 'user does not exist'}
+
+        # update member type in user groups
+        new_type = request.form.get('type')
+        group_at_user = {}
+        group_index = None
+        for idx, item in enumerate(user.get('groups')):
+            if item.get('_id') == group_id:
+                group_at_user = user.get('groups')[idx]
+                group_index = idx
+                break
+        mongo.users.update_one({'_id': user['_id']}, {'$set': {f'groups.{group_index}.type': new_type}}) # set new type to event in user groups
+        # update member type in group members
+        user_at = {}
+        user_idx = None
+        for idx, item in enumerate(group.get('members')):
+            if item.get('_id') == str(user['_id']):
+                user_at = group.get('members')[idx]
+                user_idx = idx
+                break
+        mongo.groups.update_one({'_id': group['_id']}, {'$set': {f'members.{user_idx}.type': new_type}}) # set new type member in group members
+        
+        session_refresh()
+        return {"success": "group member updated successfully"}
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
