@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/style1.css" type="text/css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+
+
+    <script src="/static/scripts/mapcontainer.js" async></script>
+    <!--<script src="/static/scripts/markerpopups.js"></script>-->
+    <script src="/static/scripts/userpopup.js" async></script>
+    <script src="/static/scripts/creationpopup.js" async></script>
+
+    <title>Document</title>
+</head>
+<body>
+    <div id="wraper" class="wraper">
+        <div class="popupnone" id="userpopup">
+            <div class="close" id="closeuserpopup"></div>
+        </div>
+        <div class="popupnone" id="eventcreate">
+            <form id="eventdata" method="POST">
+                <input name="title" class="creation" placeholder="Titulo"></input>
+                <input name="date" class="creation" placeholder="Fecha y hora"></input>
+                <input name="coordinates"class="creation" placeholder="Coordenadas"></input>
+                <input name="description" class="creation" placeholder="Descripcion"></input>
+                <div id="create"> Crear</div>
+            </form>
+            <div class="close" id="closeeventcreate"></div>
+        </div>
+        <div id="map">
+            
+        </div>
+        <div class="header">
+            eVentify
+            <a href='/logout'>Logout</a>
+        </div>
+        <div class="footer">
+            <div class="icons">
+                <div class="usericon" id="usericon"><span></span></div>
+                <div class="addnew" id="addevent"><span></span></div>
+                <div class="burguermenu"><span></span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

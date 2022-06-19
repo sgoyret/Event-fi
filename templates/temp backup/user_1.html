@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href=https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css rel=stylesheet>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/profiles.css" type="text/css">
+    <script src="/static/scripts/profilepopup.js" type="module" async></script>
+    <title>eventify</title>
+</head>
+<body>
+    <div class="wraper" id="wraper">
+        <div class="back">
+            <i class=bx bxs-chevron-left onclick="javascript:location.href =/index"></i>
+        </div>
+        <div class="header">
+            <div class="avatar">
+            </div>
+            <div class="userinfo">
+                <div class="names">
+                    {{user.name}} {{user.lastname}}
+                </div>
+                <div class="username">
+                    {{user.username}}
+                </div>
+                <button class="edit_prof" onclick="javascript:location.href =user/settings">Edit profile</button>
+            </div>
+        </div>
+        <div class="selection">
+            <span class="events selected">Eventos</span>
+            <span class="groups">Grupos</span>
+            <span class="contacts">Contactos</span>
+        </div>
+        <div class="content">
+            <ul class="list">
+                <div id="userevents">
+                {% if user.events %}
+                    {% for key, value in user.events.items() %}
+                        <li> 
+                            <div class="listed"> 
+                                <div class="image"> 
+                                    <div class="img"> 
+                                    </div> 
+                                </div> 
+                                <div class="info"> 
+                                <p>  {{value.title }} </p> 
+                                <p>  {{value.date }}  </p> 
+                                <p>  {{value.location}}  </p> 
+                                </div> 
+                                <div class="manage"> 
+                                    <div class="manage-button"> 
+                                        <button>Ver</button> 
+                                    </div> 
+                                    <div class="manage-button"> 
+                                        <button>Editar</button> 
+                                    </div> 
+                                    <div class="manage-button"> 
+                                        <button>Eliminar</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </li>
+                {% endfor %}
+                {% else %}
+                    <li style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún evento próximamente</li>
+                {% endif %}
+                </div>
+                <div id="usergroups" class="none">
+                {% if user.groups %}
+                    {% for key, value in user.groups.items() %}
+                        <li> 
+                            <div class="listed"> 
+                                <div class="image"> 
+                                    <div class="img"> 
+                                    </div> 
+                                </div> 
+                                <div class="info"> 
+                                <p>  {{value.name}}  </p>  
+                                </div> 
+                                <div class="manage"> 
+                                    <div class="manage-button"> 
+                                        <button>Ver</button> 
+                                    </div> 
+                                    <div class="manage-button"> 
+                                        <button>Editar</button> 
+                                    </div> 
+                                    <div class="manage-button"> 
+                                        <button>Eliminar</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </li>
+                {% endfor %}
+                {% else %}
+                    <li style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún grupo</li>
+                {% endif %}
+                </div>
+                <div id="usercontacts" class="none">
+                {% if user.contacts %}
+                    {% for key, value in user.contacts.items() %}
+                        <li> 
+                            <div class="listed"> 
+                                <div class="image"> 
+                                    <div class="img"> 
+                                    </div> 
+                                </div> 
+                                <div class="info"> 
+                                <p>  {{value.name}} {{value.lastname}} </p>
+                                <p>  {{value.username}}  </p>
+                                <div class="manage"> 
+                                    <div class="manage-button"> 
+                                        <button>Ver</button> 
+                                    </div> 
+                                    <div class="manage-button"> 
+                                        <button>Editar</button> 
+                                    </div> 
+                                    <div class="manage-button"> 
+                                        <button>Eliminar</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </li>
+                {% endfor %}
+                {% else %}
+                    <li style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún contacto</li>
+                {% endif %}
+                </div>
+        </div>
+    </body>
+</html>

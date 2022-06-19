@@ -1,0 +1,194 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.wraper {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    position: absolute;
+}
+
+.wraper > #map {
+    position: absolute;
+    top: 0;
+    bottom: 0%;
+    width: 100%;
+}
+
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-bottom-right {
+    display: none;
+}
+
+.wraper > .header {
+    position: absolute;
+    top: 0%;
+    font-size: 30px;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.wraper > .footer {
+    width: 100%;
+    height: 40px;
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    bottom: 0;
+    background: rgba(43, 3, 100, 0.667);
+    border-radius: 5px;
+}
+
+.wraper > .footer > span {
+    font-size: 20px;
+    color: #000;
+}
+
+
+.wraper > .popupnone {
+    display: none;
+}
+
+.wraper > .popup {
+    max-width: 600px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 40%;
+    top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: 80%;
+    background-color: #28292a;
+    border: #6205e3cf 2px solid;
+    z-index: 10;
+    opacity: 1;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+}
+.wraper > .popup > *{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.wraper > .popup > .eventitle {
+    height: 10%;
+    font-family: 'Ubuntu', sans-serif;
+}
+.wraper > .popup > .eventimg {
+    align-items: center;
+    height: 30%;
+    width: 100%;
+    background-size: contain;
+    object-fit: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.wraper > .popup > .eventimg > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+.wraper > .popup > .eventime, .wraper > .popup > .eventlocation {
+    height: 10%;
+    font-family: 'Ubuntu', sans-serif;
+}
+.wraper > .popup > .eventdesc {
+    height: 30%;
+    font-family: 'Ubuntu', sans-serif;
+}
+.wraper > .popup > .tofav {
+    height: 5%;
+    font-family: 'Ubuntu', sans-serif;
+    border-radius: 10px;
+    border: #6205e3cf 2px solid;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 50%;
+}
+.wraper > .popup > .tofav:hover {
+    background-color: #6205e3cf ;
+}
+.wraper > .popup > form > input {
+    width: 100%;
+    height: 20%;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Ubuntu', sans-serif;
+}
+#create {
+    font-family: 'Ubuntu', sans-serif;
+    border-radius: 10px;
+    border: #350A70 2px solid;
+    width: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+}
+.close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: #6205e3cf;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.addnew {
+    width: 33%;
+    background-image: url(../img/bx-plus-circle.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+}
+.usericon {
+    width: 33%;
+    background-image: url(../img/bxs-user-circle.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+}
+.icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+}
+
+.burguermenu {
+    width: 33%;
+    background-image: url(../img/bx-menu.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+}
+.marker {
+    background-image: url(../img/mapbox-icon.png);
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .mapboxgl-popup {
+    max-width: 200px;
+  }
+  .mapboxgl-popup-content {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+  }
