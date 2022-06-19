@@ -514,10 +514,12 @@ def group_members(group_id):
         if item.get('user_id') == str(session.get('user').get('_id')):
             user_idx = idx
             break
-    print(f'post group - user_idx: {user_idx}')
+    if user_idx is None:
+        return {'error': 'you are not a member of this group'}
+
     if group.get('members')[user_idx].get('type') != 'admin':
-        return {'error': 'you are not the admin of this event'}
-    
+        return {'error': 'you are not the admin of this group'}
+
     if request.method == 'POST':
         # add member to group
         new_user_to_group = {}
