@@ -1,6 +1,9 @@
 window.addEventListener("load", function() {
-    const basepopup = '<div class="popup" id="popup">' +
-                        "<div class='closepopup' id='closepopup'> </div>";
+    const basepopup =  '<div class="behind" id="behind"> </div>' +
+                        '<div class="popup" id="popup">' +
+                        "<div class='closepopup' id='closepopup'>" +
+                            "<i class='bx bx-arrow-back'></i>" +
+                         '</div>';
 
     async function popupnav() {
         // Function that adds aesthetic to the navbar
@@ -35,8 +38,8 @@ window.addEventListener("load", function() {
         const close = document.getElementsByClassName('closepopup')[0];
         close.addEventListener("click", function() {
             document.getElementById('wraper').removeChild(document.getElementById('popup'));
+            document.getElementById('wraper').removeChild(document.getElementById('behind'));
             });
-        console.log()
     };
 
     async function eventpopup () {

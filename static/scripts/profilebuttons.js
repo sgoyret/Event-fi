@@ -1,4 +1,17 @@
 // Profile buttons for deleting, editing and adding events and groups( if admin), or leaving an event if normal user.
+async function groups_redirect () {
+    // Displays the group page when redirected from dashboard
+    const selected = document.getElementsByClassName('selected');
+    console.log(selected);
+    for (let element of selected) {
+        element.classList.remove('selected');
+    };
+    document.getElementById('usergroups').classList.remove('none');
+    document.getElementById('userevents').classList.add('none');
+    document.getElementById('usercontacts').classList.add('none');
+    document.getElementById('groups').classList.add('selected');
+};
+
 window.addEventListener("load", function() {
     console.log("Profile buttons loaded");
     const eventminipopup = 
@@ -37,7 +50,7 @@ window.addEventListener("load", function() {
                         let request = new XMLHttpRequest();
                         let user_id = document.getElementsByClassName('avatar')[0].id
                         console.log('user and event id ', user_id, ' ', event_id)
-                        request.open("DELETE", "api/events/"+event_id+"/members")
+                        request.open("DELETE", "api/events/"+ event_id +"/members")
                         request.setRequestHeader('Content-Type', 'application/json');
                         request.setRequestHeader('Access-Control-Allow-Origin', '*');
                         request.setRequestHeader('Access-Control-Allow-Headers', '*');
@@ -47,6 +60,7 @@ window.addEventListener("load", function() {
                             if (request.status == 200) {
                                 console.log("you have been removed from the event");
                                 document.location.href = '/user'
+                                groups_redirect();
                             }
                             console.log(request.text);
                         }
@@ -79,6 +93,7 @@ window.addEventListener("load", function() {
                         request.onload = () => {
                             if (request.status == 200) {
                                 console.log("you have been removed from the event");
+                                document.location.href = '/user';
                             }
                             console.log(request.text);
                         };
