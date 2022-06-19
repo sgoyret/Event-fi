@@ -1,5 +1,5 @@
 // Profile buttons for deleting, editing and adding events and groups( if admin), or leaving an event if normal user.
-async function groups_redirect () {
+function groups_redirect () {
     // Displays the group page when redirected from dashboard
     const selected = document.getElementsByClassName('selected');
     console.log(selected);
@@ -59,8 +59,7 @@ window.addEventListener("load", function() {
                         request.onload = () => {
                             if (request.status == 200) {
                                 console.log("you have been removed from the event");
-                                document.location.href = '/user'
-                                groups_redirect();
+                                document.location.href = '/user';
                             }
                             console.log(request.text);
                         }
@@ -93,9 +92,8 @@ window.addEventListener("load", function() {
                         request.onload = () => {
                             if (request.status == 200) {
                                 console.log("you have been removed from the event");
-                                document.location.href = '/user';
                             }
-                            console.log(request.text);
+                            console.log(request.responseText);
                         };
                     };
                 });

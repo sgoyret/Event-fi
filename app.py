@@ -277,12 +277,22 @@ def single_event(event_id):
     event = mongo.events.find_one({'_id': ObjectId(event_id)})
     if event is None:
         return {'error': 'event does not exist'}
-    if str(session.get('user').get('_id')) not in event.get('members'):
+    
+    user_idx = None
+    for idx, item in enumerate(event.get('members')):
+        print(f'{idx}: {item}')
+        print(session.get('user').get('user_id'))
+
+        if item.get('user_id') == session.get('user').get('_id'):
+            user_idx = idx
+            print('found user')
+            break
+    if user_idx is None:
         return {'error': 'event information only for members'}
+
 
     if request.method == 'GET':
         # return event json object
-        event['_id'] = str(event.get('_id'))
         return jsonify(event)
 
     if request.method == 'DELETE':
@@ -324,6 +334,10 @@ def event_members(event_id):
             break
     if user_idx is None:
         return {'error': 'event information only for members'}
+
+
+    if request.method == 'GET':
+        return jsonify(event.get('members'))
 
     if request.method == 'POST':
         # add member to event
@@ -405,8 +419,134 @@ def event_members(event_id):
             return {'success': 'user removed from event'}
         else:
             return {'error': 'user not found'}
-         
-            
+
+
+@app.route('/api/events/<event_id>/groups', strict_slashes=False, methods=['GET', 'POST','DELETE'])
+def event_groups(event_id):
+    """methos for managing the groups of a given event"""
+    if session.get('user') is None:
+        return(redirect(url_for('login')))
+
+    event = mongo.events.find_one({'_id': ObjectId(event_id)})
+    if event is None:
+        return {'error': 'event does not exist'}
+
+    user_idx = None
+    for idx, item in enumerate(event.get('members')):
+        print(f'{idx}: {item}')
+        print(session.get('user').get('user_id'))
+
+        if item.get('user_id') == session.get('user').get('_id'):
+            user_idx = idx
+            print('found user')
+            break
+    if user_idx is None:
+        return {'error': 'event information only for members'}
+
+    if request.method == 'GET':
+        return jsonify(event.get('groups'))
+
+    # must change to request.get_json().get()
+    group = mongo.groups.find_one({'_id': ObjectId(request.form.get('group_id'))})
+    if group is None:
+        return {'error': 'group does not exist'}
+
+    if request.method == 'POST':
+        print(event.get('members')[user_idx].get('type'))
+        if event.get('members')[user_idx].get('type') != 'admin':
+            return {'error': 'you are not the admin of this event'}
+
+        group_at_event = {
+            'group_id': str(group.get('_id')),
+            'name': group.get('name'),
+            'avatar': group.get('avatar')
+        }
+        event_at_group = {
+            'event_id': str(event.get('_id')),
+            'name': event.get('name'),
+            'start_date': event.get('start_date'),
+            'end_date': event.get('end_date'),
+            'location': event.get('location'),
+            'avatar': event.get('avatar')
+        }
+
+        # add group to event
+        mongo.events.update_one({'_id': event['_id']}, {'$push': {'groups': group_at_event}}, upsert=True)
+        # add event to group
+        mongo.groups.update_one({'_id': group['_id']}, {'$push': {'events': event_at_group}}, upsert=True)
+        user_id_list = []
+        for member in group.get('members'):
+            event_at_user = event_at_group
+            event_at_user['type'] = 'guest'
+            user_at_event = {
+                'user_id': member.get('user_id'),
+                'username': member.get('username'),
+                'name': member.get('name'),
+                'last_name': member.get('last_name'),
+                'type': 'guest',
+                'avatar': 'mi pequeño avatar'
+            }
+            user_id_list.append(ObjectId(member['user_id']))
+            print(user_at_event)
+            mongo.events.update_one({'_id': event['_id']}, {'$push': {'members': user_at_event}})
+        
+        mongo.users.update_many({'_id': {'$in': user_id_list}}, {'$push': {'events': event_at_user}})
+        return {'success': 'group has been added', 'status': 201}
+
+    if request.method == 'DELETE':
+        print(event.get('members')[user_idx].get('type'))
+        if event.get('members')[user_idx].get('type') != 'admin':
+            return {'error': 'you are not the admin of this event'}
+
+        group_in_event_idx = None
+        evnet_in_group_idx = None
+        event_at_user = {
+            'event_id': str(event.get('_id')),
+            'name': event.get('name'),
+            'start_date': event.get('start_date'),
+            'end_date': event.get('end_date'),
+            'location': event.get('location'),
+            'avatar': event.get('avatar')
+        }
+
+        for idx, item in enumerate(event.get('groups')):
+            if str(group.get('_id')) == item.get('group_id'):
+                group_in_event_idx = idx
+                break
+        for idx, item in enumerate(group.get('events')):
+            if str(event.get('_id')) == item.get('event_id'):
+                evnet_in_group_idx = idx
+                break
+        print(f'group_in_event_idx: {group_in_event_idx} event_in_group_idx: {evnet_in_group_idx}')
+
+        user_id_list = []
+        for member in group.get('members'):
+            user_at_event = {
+                'user_id': member.get('user_id'),
+                'username': member.get('username'),
+                'name': member.get('name'),
+                'last_name': member.get('last_name'),
+                'type': member.get('type'),
+                'avatar': member.get('avatar')
+            }
+            mongo.events.update_one({'_id': event['_id']}, {'$pull': user_at_event})
+            user_id_list.append(ObjectId(member['user_id']))
+        mongo.users.update_many({'_id': {'$in': user_id_list}}, { '$pull': {'events': event_at_user}})
+
+        if mongo.events.update_one({'_id': event['_id']},
+                                   {'$pull': {'groups': event.get('groups')[group_in_event_idx]}},False,True): # remove group from events.group
+            mongo.groups.update_one({'_id': group['_id']},
+                                   {'$pull': {'events': group.get('events')[evnet_in_group_idx]}},False,True) # remove event from group.events
+            if group.get('events') and len(group.get('events')) == 0:
+                group.pop('events')
+                mongo.groups.update_one({'_id': group['_id']}, { '$unset': {'events': ""}})
+            if event.get('groups') and len(event.get('groups')) == 0:
+                event.pop('groups')
+                mongo.event.update_one({'_id': event['_id']}, { '$unset': {'groups': ""}})
+            return {'success': 'group removed from event'}
+        else:
+            return {'error': 'user not found'}
+
 # ---------GROUP ROUTES----------
 
 
@@ -419,10 +559,8 @@ def groups():
     if request.method == 'GET':
         # returns groups list
         user_groups = session.get('user').get('groups')
-        if user_groups:
-            user_groups = jsonify(user_groups)
+        return jsonify(user_groups)
 
-        return user_groups
 
     if request.method == 'POST':
         #create new group
@@ -449,7 +587,7 @@ def groups():
             if session.get('user').get('groups') is None:
                 session['user']['groups'] = []
             session['user']['groups'].append({
-                '_id': str(obj.inserted_id),
+                'group_id': str(obj.inserted_id),
                 'name': new_group_data['name'],
                 'type': 'admin'
                 })
@@ -528,6 +666,8 @@ def group_members(group_id):
     if group.get('members')[user_idx].get('type') != 'admin':
         return {'error': 'you are not the admin of this group'}
 
+    if request.method == 'GET':
+        return jsonify(group['members'])
     if request.method == 'POST':
         # add member to group
         new_user_to_group = {}
