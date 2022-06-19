@@ -387,3 +387,33 @@ input {
   justify-content: center;
   align-items: center;
 }
+.addpopup
+{
+  max-width: 800px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30%;
+  top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+  height: 90%;
+  background-color: #fafafa;
+  z-index: 10;
+  border: #6105e3 2px solid;
+  opacity: 1;
+  box-sizing: border-box;
+  border-radius: 2px;
+  color: black;
+  text-align: center;
+  justify-content: space-around; 
+}
+.addgroup {
+  display: flex;
+  justify-content: space-around;
+}
+.popupheader {
+  padding-top: 10%;
+    padding-bottom: 10%;
+}
