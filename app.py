@@ -39,10 +39,9 @@ def index():
 def login():
     """log in for the user with register option"""
     if request.method == 'GET':
-        if session.get('user') is None:
-            return render_template('login.html')
-        else:
+        if session.get('user'):
             return redirect(url_for('index'))
+        return render_template('login.html')
 
     if request.method == 'POST':
         for key, value in request.form.items():
@@ -50,8 +49,7 @@ def login():
         new_data = {}
         for item in request.form:
             new_data[item] = request.form[item]
-        
-        
+
         user = mongo.users.find_one({'username': new_data['username']})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
@@ -61,9 +59,9 @@ def login():
                 session['test'] = 'am i here?'
                 return redirect('/')
             else:
-                return 'Wrong password'
+                return {'error': 'wrong password'}
         else:
-            return 'User not found'
+            return {'error': 'user does not exist'}
 
 @app.route('/logout', strict_slashes=False)
 def logout():
@@ -74,6 +72,9 @@ def logout():
 @app.route('/register', methods=['POST', 'GET'], strict_slashes=False)
 def register():
     """create user account"""
+    if session.get('user'):
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
         check_response = validate_user_creation(request.form)
         if check_response is True:             
@@ -91,8 +92,8 @@ def register():
                 return redirect(url_for('index'))
             else:
                 return {'error': 'the username is already in use'}
-                
         return redirect(url_for('register'))
+
     if request.method == 'GET':
         return render_template('register.html')
 
@@ -105,14 +106,11 @@ def user():
 
 
 # *********************** HOLA API **********************
-
-
 # ---------USER ROUTES----------
-
-
+"""
 @app.route('/api/users', methods=['GET'], strict_slashes=False)
 def users():
-    """get all users"""
+    ""get all users""
     if session['user']:
         print(f'there is a session {session["user"]}')
     users = mongo.get_collection('users').find()
@@ -124,12 +122,12 @@ def users():
         return jsonify(user_list)
     else:
         return "no users found"
-    
+""" 
 @app.route('/api/users/<user_id>', strict_slashes=False, methods=['GET'])
 def get_user(user_id):
     """returns user with matching id else error"""
-    if session['user']:
-        print(f'there is a session {session["user"]}')
+    if session.get('user') is None:
+        return redirect(url_for('login'))
     user = mongo.get_collection('users').find_one({'_id': ObjectId(user_id)})
     if user:
         user['_id'] = str(user.get('_id'))
@@ -137,13 +135,62 @@ def get_user(user_id):
     else:
         return "user not found"
     
+@app.route('/api/users/contacts', strict_slashes=False, methods=['POST', 'GET', 'DELETE'])
+def contacts():
+    if session.get('user') is None:
+        return redirect(url_for('login'))
+    user = mongo.users.find_one({'_id': session.get('user').get('_id')})
+    if user is None:
+        return {"error": "user not found"}
+    
+    if request.method == 'GET':
+        #return all user contacts
+        return jsonify(user.get('contacts'))
+    
+    if request.method == 'POST':
+        # add new contact
+        new_contact = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        keys_to_pop = ['password', 'email', 'events', 'groups']
+        for item in keys_to_pop:
+            new_contact.pop(item)
+        new_contact['_id'] = str(new_contact['_id'])
+        # add contact in session
+        if session.get('user').get('contacts') is None:
+            session['user']['contacts'] = []
+        session['user']['contacts'].append(new_contact)
+        # add contact in db
+        mongo.users.update_one({'_id': user['_id']},
+                               {'$push': {'contacts': new_contact}})
+        return jsonify(session['user']['contacts']), 201
+    
+    if request.method == 'DELETE':
+        # delete contact
+        contact_to_delete = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        keys_to_pop = ['password', 'email', 'events', 'groups']
+        for item in keys_to_pop:
+            contact_to_delete.pop(item)
+        contact_to_delete['_id'] = str(contact_to_delete['_id'])
+        # remove contact in session
+        if session.get('user').get('contacts'):
+            print(session['user']['contacts'])
+            session['user']['contacts'].remove(contact_to_delete)
+            if len(session['user']['contacts']) == 0:
+                session['user'].pop('contacts') # if no contacts left pop contacts list
+        # remove contact in db
+        mongo.users.update_one({'_id': user['_id']},
+                               {'$pull': {'contacts': contact_to_delete}})
+        if mongo.users.find_one({{ 'contacts.0': {'$exists' : False }}}):
+            mongo.users.update_one({'_id': user['_id']},
+                                   {'$pull': 'contacts'})# if no contacts left pop contact list
+        return {"success": "contact deleted"}
+
     
 # ---------event ROUTES----------
 @app.route('/api/events', strict_slashes=False, methods=['GET', 'POST'])
 def events():
     """Returns all the events from the current logged user"""
     if session.get('user') is None:
-       return redirect(url_for('index'))
+       return redirect(url_for('login'))
     
     if request.method == 'GET':
         # returns events list
@@ -151,15 +198,12 @@ def events():
         #                              'id2': {'avatar':'', 'title':'First job', 'location':'A very good company', 'date': '01/07/2022'}}
         user_events = session.get('user').get('events')
         if user_events:
-            print("events from current logged user")
-            print(user_events)
-            #user_events = json.loads(user_events)
             return jsonify(user_events)
         else:
             return 'no current events'
     
     if request.method == 'POST':
-        #create new event
+        # create new event
         if validate_event_creation(request.get_json()):
             print('the event dict is valid')
             new_event_data = {}
@@ -168,7 +212,7 @@ def events():
     
             new_event_data['owner'] = str(session.get('user').get('_id')) # set owner
             owner_admin = {
-                '_id': new_event_data['owner'],
+                'user_id': new_event_data['owner'],
                 'username': session.get('user').get('username'),
                 'name': session.get('user').get('name'),
                 'last_name': session.get('user').get('last_name'),
@@ -196,50 +240,68 @@ def single_event(event_id):
     """route for single event, get for event info, put for event member delete, post for event members insert"""
     if not session.get('user'):
         return redirect(url_for('login'))
+
+    event = mongo.events.find_one({'_id': ObjectId(event_id)})
+    if event is None:
+        return {'error': 'event does not exist'}
+    if str(session.get('user').get('_id')) not in event.get('members'):
+        return {'error': 'event information only for members'}
+
     if request.method == 'GET':
         # return event json object
-        event = mongo.events.find_one({'_id': ObjectId(event_id)})
-        if event:
-            event['_id'] = str(event.get('_id'))
-            return jsonify(event)
-        else:
-            return {'error': 'event not found'}
-        
+        event['_id'] = str(event.get('_id'))
+        return jsonify(event)
+
     if request.method == 'DELETE':
         # delete event
-        event = mongo.events.find_one({'_id': ObjectId(event_id)})
+        if event.get('owner') != str(session.get('user').get('_id')):
+            return {'error': 'you are not the owner of the event'}
         id_list = []
         for item in event['members']:
             id_list.append(ObjectId(item))
-        if event:
-            for item in id_list:
-                mongo.users.update_one({'_id': item},
-                                       {'$pull': {'events': {'name': event['name']}}},False,True) # remove event from user events
-            mongo.events.delete_one({'_id': ObjectId(event_id)})
-            
-            # update session
-            user_events = mongo.users.find_one({'_id': session.get('user').get('_id')})['events']
-            session['user']['events'] = user_events
-            return "event deleted"
-        else:
-            return {'error': 'event not found' }
+        for item in id_list:
+            mongo.users.update_one({'_id': item},
+                                    {'$pull': {'events': {'name': event['name']}}},False,True) # remove event from user events
+        mongo.events.delete_one({'_id': ObjectId(event_id)})
+        
+        # update session
+        user_events = mongo.users.find_one({'_id': session.get('user').get('_id')})['events']
+        session['user']['events'] = user_events
+
+        return {'success': 'event deleted'}
 
 @app.route('/api/events/<event_id>/members', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def event_members(event_id):
     """route for event member managment"""
+    if session.get('user') is None:
+        return(redirect(url_for('login')))
+
     event = mongo.events.find_one({'_id': ObjectId(event_id)})
     if event is None:
         return {'error': 'event does not exist'}
 
+    user_idx = None
+    for idx, item in enumerate(event.get('members')):
+        print(f'{idx}: {item}')
+        print(session.get('user').get('user_id'))
+
+        if item.get('user_id') == str(session.get('user').get('_id')):
+            user_idx = idx
+            break
+    if user_idx is None:
+        return {'error': 'event information only for members'}
+
     if request.method == 'POST':
         # add member to event
-        user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
+        if event.get('members')[user_idx].get('type') != 'admin':
+            return {'error': 'you are not the admin of this event'}
+        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
         if user is None:
             return {'error': 'user does not exist'}
 
         new_user_event_data = {}
-        for item in request.get_json:
-            new_user_event_data[item] = request.get_json().get(item)
+        for item in request.form:
+            new_user_event_data[item] = request.form.get(item)
         new_user_event_data['name'] = user.get('name')
         new_user_event_data['last_name'] = user.get('last_name')
         new_user_event_data['username'] = user.get('username')
@@ -259,6 +321,8 @@ def event_members(event_id):
 
     if request.method == 'PUT':
         # update member type
+        if event.get('members')[user_idx].get('type') != 'admin':
+            return {'error': 'you are not the admin of this event'}
         user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
         if user is None:
             return {'error': 'user does not exist'}
@@ -268,34 +332,23 @@ def event_members(event_id):
         event_at_user = {}
         event_index = None
         for idx, item in enumerate(user.get('events')):
-            if item.get('_id') == event_id:
+            if item.get('user_id') == event_id:
                 event_at_user = user.get('events')[idx]
                 event_index = idx
                 break
         mongo.users.update_one({'_id': user['_id']}, {'$set': {f'events.{event_index}.type': new_type}}) # set new type to event in user events
         # update member type in event members
         user_at = {}
-        user_idx = None
-        for idx, item in enumerate(event.get('members')):
-            if item.get('_id') == str(user['_id']):
-                user_at = event.get('members')[idx]
-                user_idx = idx
-                break
         mongo.events.update_one({'_id': event['_id']}, {'$set': {f'members.{user_idx}.type': new_type}}) # set new type member in event members
         
         session_refresh()
         return {"success": "event member updated successfully"}
-        """
-        if not user.get('events').get('type') and new_type:
-            user['events']['type'] = new_type
-        elif user.get('events').get('type') and new_type:
-            user['events']['type'] = new_type
-        elif user.get('events').get('type') and new_type is None:
-            user['events'].pop('type')
-        """
-        
+              
     if request.method == 'DELETE':
         # delete member from event
+        user_idx = event.get('members').index(str(session.get('user').get('_id')))
+        if event.get('members')[user_idx].get('type') != 'admin':
+            return {'error': 'you are not the admin of this event'}
         user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
         if user is None:
             return {'error': 'user does not exist'}
@@ -305,23 +358,22 @@ def event_members(event_id):
         for idx, item in enumerate(event.get('members')):
             if item.get('user_id') == request.get_json().get('user_id'):
                 user_at = event.get('members')[idx]
+
         for idx, item in enumerate(user.get('events')):
             if item.get('_id') == event_id:
                 event_at_user = user.get('events')[idx]
 
-        print(f'user to delete: {user_at}')
         if mongo.events.update_one({'_id': event['_id']},
                                    {'$pull': {'members': user_at}},False,True):
             mongo.users.update_one({'_id': ObjectId(request.get_json().get('user_id'))},
                                    {'$pull': {'events': event_at_user}},False,True) # remove event from user events
             if user.get('events') and len(user.get('events')) == 0:
                 user.pop('events')
-            return "user removed from event"
+            return {'success': 'user removed from event'}
         else:
             return {'error': 'user not found'}
+         
             
-
-
 # ---------GROUP ROUTES----------
 
 
@@ -350,7 +402,7 @@ def groups():
 
             new_group_data['owner'] = str(session.get('user').get('_id')) # set owner
             creator_info = {
-                "_id": new_group_data['owner'],
+                "user_id": new_group_data['owner'],
                 "username": session.get('user').get('username'),
                 "name": session.get('user').get('name'),
                 'last_name': session.get('user').get('lastname'),
@@ -375,55 +427,70 @@ def groups():
 
             return {'success': f'created new group: {new_group_data.get("name")}'}
 
-    
-
 @app.route('/api/groups/<group_id>', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def single_group(group_id):
     """route for single group, get for group info, put for group member delete, post for group members insert"""
+    if session.get('user') is None:
+       return redirect(url_for('index'))
+
     group = mongo.groups.find_one({'_id': ObjectId(group_id)})
-    if group:
-        if request.method == 'GET':
-            # return group json object
-            group['_id'] = str(group.get('_id'))
-            return jsonify(group)
+    if group is None:
+        return {'error': 'group not found'}
 
-        if request.method == 'DELETE':
-            # delete group
-            id_list = []
-            for item in group['members']:
-                id_list.append(ObjectId(item))
-            
-            # remove event from user events
-            for item in id_list:
-                mongo.users.update_one({'_id': item},
-                                    {'$pull': {'groups': {'name': group['name']}}},False,True) 
-            # delete event
-            mongo.groups.delete_one({'_id': ObjectId(group_id)})
-            
-            # update session
-            user_groups = mongo.users.find_one({'_id': session.get('user').get('_id')})['groups']
-            session['user']['groups'] = user_groups
-            return "group deleted"
-    else:
-        return "group not found"
+    if str(session.get('user').get('_id')) not in group.get('members'):
+        return {'error': 'group information only for members'}
 
+    if request.method == 'GET':
+        # return group json object
+        return jsonify(group)
+
+    if request.method == 'DELETE':
+        # delete group
+        if str(session.get('user').get('_id')) != group.get('owner'):
+            return {'error': 'you are not the owner of the group'}
+        id_list = []
+        for item in group['members']:
+            id_list.append(ObjectId(item))
+        # remove event from user events
+        for item in id_list:
+            mongo.users.update_one({'_id': item},
+                                   {'$pull': {'groups': {'name': group['name']}}},False,True) 
+        # delete event
+        mongo.groups.delete_one({'_id': ObjectId(group_id)})
+
+        # update session
+        user_groups = mongo.users.find_one({'_id': session.get('user').get('_id')})['groups']
+        session['user']['groups'] = user_groups
+        return {'success': 'group has been deleted'}
 
 @app.route('/api/groups/<group_id>/members', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def group_members(group_id):
     """manage members for groups"""
+    if session.get('user') is None:
+        return redirect(url_for('login'))
+
     group = mongo.groups.find_one({'_id': ObjectId(group_id)})
     if group is None:
         return {"error": "group not found"}
     user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
     if user is None:
         return {"error": "user not found"}
+    user_idx = None
+    for idx, item in enumerate(group.get('members')):
+        print(f'{idx}: {item}')
+        if item.get('user_id') == str(session.get('user').get('_id')):
+            user_idx = idx
+            break
+    print(f'post group - user_idx: {user_idx}')
+    if group.get('members')[user_idx].get('type') != 'admin':
+        return {'error': 'you are not the admin of this event'}
     
     if request.method == 'POST':
         # add member to group
         new_user_to_group = {}
         # {_id, type?}
-        for item in request.json_get():
-            new_user_to_group[item] = request.get_json.get(item)
+        for item in request.form:
+            new_user_to_group[item] = request.form[item]
         new_user_to_group['username'] = str(user.get('username'))
         new_user_to_group['name'] = str(user.get('name'))
         new_user_to_group['last_name'] = str(user.get('last_name'))
@@ -455,6 +522,7 @@ def group_members(group_id):
             if user.get('groups') and len(user.get('groups')) == 0:
                 user.pop('groups') # remove groups from user if no groups left
             return "user removed from group"
+    
     if request.method == 'PUT':
         # update member type
         user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
@@ -475,13 +543,14 @@ def group_members(group_id):
         user_at = {}
         user_idx = None
         for idx, item in enumerate(group.get('members')):
-            if item.get('_id') == str(user['_id']):
+            if item.get('user_id') == str(user['_id']):
                 user_at = group.get('members')[idx]
                 user_idx = idx
                 break
         mongo.groups.update_one({'_id': group['_id']}, {'$set': {f'members.{user_idx}.type': new_type}}) # set new type member in group members
         
         session_refresh()
-        return {"success": "group member updated successfully"}
+        return {'success': 'group member updated successfully'}
+
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
