@@ -513,10 +513,7 @@ def groups():
     if request.method == 'GET':
         # returns groups list
         user_groups = session.get('user').get('groups')
-        if user_groups:
-            user_groups = jsonify(user_groups)
-
-        return user_groups
+        jsonify(user_groups)
 
     if request.method == 'POST':
         #create new group
