@@ -135,6 +135,55 @@ def get_user(user_id):
     else:
         return "user not found"
     
+@app.route('/api/users/contacts', strict_slashes=False, methods=['POST', 'GET', 'DELETE'])
+def contacts():
+    if session.get('user') is None:
+        return redirect(url_for('login'))
+    user = mongo.users.find_one({'_id': session.get('user').get('_id')})
+    if user is None:
+        return {"error": "user not found"}
+    
+    if request.method == 'GET':
+        #return all user contacts
+        return jsonify(user.get('contacts'))
+    
+    if request.method == 'POST':
+        # add new contact
+        new_contact = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        keys_to_pop = ['password', 'email', 'events', 'groups']
+        for item in keys_to_pop:
+            new_contact.pop(item)
+        new_contact['_id'] = str(new_contact['_id'])
+        # add contact in session
+        if session.get('user').get('contacts') is None:
+            session['user']['contacts'] = []
+        session['user']['contacts'].append(new_contact)
+        # add contact in db
+        mongo.users.update_one({'_id': user['_id']},
+                               {'$push': {'contacts': new_contact}})
+        return jsonify(session['user']['contacts']), 201
+    
+    if request.method == 'DELETE':
+        # delete contact
+        contact_to_delete = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        keys_to_pop = ['password', 'email', 'events', 'groups']
+        for item in keys_to_pop:
+            contact_to_delete.pop(item)
+        contact_to_delete['_id'] = str(contact_to_delete['_id'])
+        # remove contact in session
+        if session.get('user').get('contacts'):
+            print(session['user']['contacts'])
+            session['user']['contacts'].remove(contact_to_delete)
+            if len(session['user']['contacts']) == 0:
+                session['user'].pop('contacts') # if no contacts left pop contacts list
+        # remove contact in db
+        mongo.users.update_one({'_id': user['_id']},
+                               {'$pull': {'contacts': contact_to_delete}})
+        if mongo.users.find_one({{ 'contacts.0': {'$exists' : False }}}):
+            mongo.users.update_one({'_id': user['_id']},
+                                   {'$pull': 'contacts'})# if no contacts left pop contact list
+        return {"success": "contact deleted"}
+
     
 # ---------event ROUTES----------
 @app.route('/api/events', strict_slashes=False, methods=['GET', 'POST'])
@@ -294,15 +343,7 @@ def event_members(event_id):
         
         session_refresh()
         return {"success": "event member updated successfully"}
-        """
-        if not user.get('events').get('type') and new_type:
-            user['events']['type'] = new_type
-        elif user.get('events').get('type') and new_type:
-            user['events']['type'] = new_type
-        elif user.get('events').get('type') and new_type is None:
-            user['events'].pop('type')
-        """
-        
+              
     if request.method == 'DELETE':
         # delete member from event
         user_idx = event.get('members').index(str(session.get('user').get('_id')))
@@ -331,9 +372,8 @@ def event_members(event_id):
             return {'success': 'user removed from event'}
         else:
             return {'error': 'user not found'}
+         
             
-
-
 # ---------GROUP ROUTES----------
 
 
@@ -386,8 +426,6 @@ def groups():
             mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
 
             return {'success': f'created new group: {new_group_data.get("name")}'}
-
-    
 
 @app.route('/api/groups/<group_id>', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def single_group(group_id):
