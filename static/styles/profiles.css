@@ -155,8 +155,6 @@ ul, li {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 100%;
-    height: 100%;
     color: #6105e3;
     cursor: pointer;
     font-size: 30px;
@@ -256,3 +254,47 @@ ul, li {
     color:#6205e3;
     font-size:35px;
 }
+.minipopup {
+    max-width: 800px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 30%;
+    top: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    height: 30%;
+    background-color: #fafafa;
+    z-index: 10;
+    border: #6105e3 2px solid;
+    opacity: 1;
+    box-sizing: border-box;
+    border-radius: 3px;
+    color: black;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    align-content: space-between;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+.minipopupbtn {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+}
+  .minipopup-button {
+    all: unset;
+    background-color: #6205e3;
+    width: 33%;
+    border-radius: 2px;
+    color: white;
+  }
+  .behind {
+    background-color: #8080808a;
+    position: absolute;
+    width: 100%;
+    height: 100%
+  }

@@ -157,7 +157,7 @@ def get_user(user_id):
     """returns user with matching id else error"""
     if session.get('user') is None:
         return redirect(url_for('login'))
-    user = mongo.get_collection('users').find_one({'_id': ObjectId(user_id)})
+    user = mongo.users.find_one({'_id': ObjectId(user_id)})
     if user:
         user['_id'] = str(user.get('_id'))
         return jsonify(user)
@@ -168,7 +168,7 @@ def get_user(user_id):
 def contacts():
     if session.get('user') is None:
         return redirect(url_for('login'))
-    user = mongo.users.find_one({'_id': session.get('user').get('_id')})
+    user = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
     if user is None:
         return {"error": "user not found"}
     
@@ -179,6 +179,8 @@ def contacts():
     if request.method == 'POST':
         # add new contact
         new_contact = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        if new_contact is None:
+            return {'error': 'user does not exist'}
         keys_to_pop = ['password', 'email', 'events', 'groups']
         for item in keys_to_pop:
             new_contact.pop(item)
@@ -195,6 +197,8 @@ def contacts():
     if request.method == 'DELETE':
         # delete contact
         contact_to_delete = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        if contact_to_delete is None:
+            return {'error': 'user does not exist'}
         keys_to_pop = ['password', 'email', 'events', 'groups']
         for item in keys_to_pop:
             contact_to_delete.pop(item)
@@ -260,7 +264,7 @@ def events():
                 'date': new_event_data['date'],
                 'type': 'admin'
                 })
-            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
+            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
             
             return redirect(url_for('events'))
 
@@ -294,7 +298,7 @@ def single_event(event_id):
         mongo.events.delete_one({'_id': ObjectId(event_id)})
         
         # update session
-        user_events = mongo.users.find_one({'_id': session.get('user').get('_id')})['events']
+        user_events = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})['events']
         session['user']['events'] = user_events
 
         return {'success': 'event deleted'}
@@ -314,8 +318,9 @@ def event_members(event_id):
         print(f'{idx}: {item}')
         print(session.get('user').get('user_id'))
 
-        if item.get('user_id') == str(session.get('user').get('_id')):
+        if item.get('user_id') == session.get('user').get('_id'):
             user_idx = idx
+            print('found user')
             break
     if user_idx is None:
         return {'error': 'event information only for members'}
@@ -375,7 +380,6 @@ def event_members(event_id):
               
     if request.method == 'DELETE':
         # delete member from event
-        user_idx = event.get('members').index(str(session.get('user').get('_id')))
         if event.get('members')[user_idx].get('type') != 'admin':
             return {'error': 'you are not the admin of this event'}
         user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
@@ -452,7 +456,7 @@ def groups():
 
             print('getteame lso grupos')
             print(session.get('user').get('groups'))
-            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
+            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
 
             return {'success': f'created new group: {new_group_data.get("name")}'}
 
@@ -466,7 +470,13 @@ def single_group(group_id):
     if group is None:
         return {'error': 'group not found'}
 
-    if str(session.get('user').get('_id')) not in group.get('members'):
+    user_idx = None
+    for idx, item in enumerate(group.get('members')):
+        print(f'group members: {idx}: {item}')
+        if session.get('user').get('_id') == item.get('user_id'):
+            user_idx = idx
+            break
+    if user_idx is None:
         return {'error': 'group information only for members'}
 
     if request.method == 'GET':
@@ -475,20 +485,22 @@ def single_group(group_id):
 
     if request.method == 'DELETE':
         # delete group
-        if str(session.get('user').get('_id')) != group.get('owner'):
+        print('entered delete')
+        if session.get('user').get('_id') != group.get('owner'):
             return {'error': 'you are not the owner of the group'}
         id_list = []
         for item in group['members']:
-            id_list.append(ObjectId(item))
+            id_list.append(ObjectId(item.get('user_id')))
         # remove event from user events
         for item in id_list:
             mongo.users.update_one({'_id': item},
                                    {'$pull': {'groups': {'name': group['name']}}},False,True) 
         # delete event
+        print('going to delete group')
         mongo.groups.delete_one({'_id': ObjectId(group_id)})
 
         # update session
-        user_groups = mongo.users.find_one({'_id': session.get('user').get('_id')})['groups']
+        user_groups = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})['groups']
         session['user']['groups'] = user_groups
         return {'success': 'group has been deleted'}
 
@@ -510,10 +522,12 @@ def group_members(group_id):
         if item.get('user_id') == str(session.get('user').get('_id')):
             user_idx = idx
             break
-    print(f'post group - user_idx: {user_idx}')
+    if user_idx is None:
+        return {'error': 'you are not a member of this group'}
+
     if group.get('members')[user_idx].get('type') != 'admin':
-        return {'error': 'you are not the admin of this event'}
-    
+        return {'error': 'you are not the admin of this group'}
+
     if request.method == 'POST':
         # add member to group
         new_user_to_group = {}
