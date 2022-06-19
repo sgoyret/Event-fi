@@ -70,7 +70,7 @@ window.addEventListener("load", function() {
                         let request = new XMLHttpRequest();
                         let user_id = document.getElementsByClassName('avatar')[0].id
                         console.log('user and event id ', user_id, ' ', group_id)
-                        request.open("DELETE", "api/groups/" + group_id + "/members")
+                        request.open("DELETE", "api/groups/" + group_id)
                         request.setRequestHeader('Content-Type', 'application/json');
                         request.setRequestHeader('Access-Control-Allow-Origin', '*');
                         request.setRequestHeader('Access-Control-Allow-Headers', '*');

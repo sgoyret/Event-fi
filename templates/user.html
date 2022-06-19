@@ -22,19 +22,22 @@
     </div>
 {% endblock header %}
 
+{% block nav%}
+<div class="selection">
+    <span id="events" class="selected">Eventos</span>
+    <span id="groups">Grupos</span>
+    <span id="contacts">Contactos</span>
+</div>
+{% endblock nav%}
+
 {% block container %}
-    <div class="selection">
-        <span id="events" class="selected">Eventos</span>
-        <span id="groups">Grupos</span>
-        <span id="contacts">Contactos</span>
-    </div>
     <div class="content">
         <ul class="list">
             <div id="userevents">
                 {% if user.events %}
                     {% for value in user.events %}
                         <li> 
-                            <div class="listed" id="{{value._id}}"> 
+                            <div class="listevent" id="{{value._id}}"> 
                                 <div class="image"> 
                                     <div class="img"> 
                                     </div> 
@@ -60,7 +63,7 @@
                 {% if user.groups %}
                     {% for value in user.groups %}
                         <li> 
-                            <div class="listed"> 
+                            <div class="listgroup" id="{{value._id}}"> 
                                 <div class="image"> 
                                     <div class="img"> 
                                     </div> 
@@ -69,14 +72,8 @@
                                 <p>  {{value.name}}  </p>  
                                 </div> 
                                 <div class="manage"> 
-                                    <div class="manage-button"> 
-                                        <button>Ver</button> 
-                                    </div> 
-                                    <div class="manage-button"> 
-                                        <button>Editar</button> 
-                                    </div> 
-                                    <div class="manage-button"> 
-                                        <button>Eliminar</button> 
+                                    <div class="manage-button-group"> 
+                                        <i class='bx bx-x'></i>
                                     </div> 
                                 </div> 
                             </div> 
@@ -90,7 +87,7 @@
                 {% if user.contacts %}
                     {% for key, value in user.contacts.items() %}
                         <li> 
-                            <div class="listed"> 
+                            <div class="listcontact"> 
                                 <div class="image"> 
                                     <div class="img"> 
                                     </div> 
