@@ -443,13 +443,64 @@ def event_groups(event_id):
     if request.method == 'GET':
         return jsonify(event.get('groups'))
 
+    # must change to request.get_json().get()
+    group = mongo.groups.find_one({'_id': ObjectId(request.form.get('group_id'))})
+    if group is None:
+        return {'error': 'group does not exist'}
     if request.method == 'POST':
         print(event.get('members')[user_idx].get('type'))
         if event.get('members')[user_idx].get('type') != 'admin':
             return {'error': 'you are not the admin of this event'}
-            #change to get_json
-        group = mongo.groups.find_one({'_id': ObjectId(request.form.get('group_id'))})
-        if group is None
+
+        group_at_event = {
+            'group_id': str(group.get('_id')),
+            'name': group.get('name'),
+            'avatar': group.get('avatar')
+        }
+        event_at_group = {
+            'event_id': str(event.get('_id')),
+            'name': group.get('name'),
+            'avatar': group.get('avatar')
+        }
+
+        # add group to event
+        mongo.events.update_one({'_id': event['_id']}, {'$push': {'groups': group_at_event}}, upsert=True)
+        # add event to group
+        mongo.groups.update_one({'_id': group['_id']}, {'$push': {'events': event_at_group}}, upsert=True)
+        return {'success': 'group has been added', 'status': 201}
+
+    if request.method == 'DELETE':
+        print(event.get('members')[user_idx].get('type'))
+        if event.get('members')[user_idx].get('type') != 'admin':
+            return {'error': 'you are not the admin of this event'}
+
+        group_in_event_idx = None
+        evnet_in_group_idx = None
+
+        for idx, item in enumerate(event.get('groups')):
+            if str(group.get('_id')) == item.get('group_id'):
+                group_in_event_idx = idx
+                break
+        for idx, item in enumerate(group.get('events')):
+            if str(event.get('_id')) == item.get('event_id'):
+                evnet_in_group_idx = idx
+                break
+        print(f'group_in_event_idx: {group_in_event_idx} event_in_group_idx: {evnet_in_group_idx}')
+
+        if mongo.events.update_one({'_id': event['_id']},
+                                   {'$pull': {'groups': event.get('groups')[group_in_event_idx]}},False,True): # remove group from events.group
+            mongo.groups.update_one({'_id': group['_id']},
+                                   {'$pull': {'events': group.get('events')[evnet_in_group_idx]}},False,True) # remove event from group.events
+            if group.get('events') and len(group.get('events')) == 0:
+                group.pop('events')
+                mongo.groups.update_one({'_id': group['_id']}, { '$unset': {'events': ""}})
+            if event.get('groups') and len(event.get('groups')) == 0:
+                event.pop('groups')
+                mongo.event.update_one({'_id': event['_id']}, { '$unset': {'groups': ""}})
+            return {'success': 'group removed from event'}
+        else:
+            return {'error': 'user not found'}
+
 # ---------GROUP ROUTES----------
 
 
