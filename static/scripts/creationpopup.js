@@ -17,7 +17,7 @@ window.addEventListener("load", function() {
                 ' <div id="creationevent" class="creationbutton"> Crear</div>' +
                 '</form>' +
             '</div>' + 
-            '<div class="closepopup" id="closepopup"> </div>' +
+            '<div id="closepopup class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
         '</div>';
         document.getElementById('wraper').insertAdjacentHTML("afterbegin", creationpopup);
         // Add a click listener for create a group button

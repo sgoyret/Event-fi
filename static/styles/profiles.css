@@ -25,20 +25,20 @@ body {
     font-family: 'Ubuntu', sans-serif;
     background-color:#6205e3;
     color: white;
-    border-radius: 1px;
+    border-radius: 2px;
     border:none;
 }
 .back{
     position: absolute;
-    color: black;
-    font-size:50px;
-    left: 2.5px;
-    top: 5px;
+    color: #6205e3;
+    font-size:30px;
+    left: 10px;
+    top: 10px;
 }
 .selected{
     background-color: #6205e3;
     color: white;
-    border-radius: 1px;
+    border-radius: 2px;
     border: none;
 }
 #events, #groups, #contacts {
@@ -95,8 +95,8 @@ body {
     color: white;
 }
 .listed {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    margin-top: 10px;
+    padding-bottom: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -138,7 +138,7 @@ ul, li {
    .tofav {
     height: 5%;
     font-family: 'Ubuntu', sans-serif;
-    border-radius: 10px;
+    border-radius: 2px;
     border: #6205e3cf 2px solid;
     margin-left: auto;
     margin-right: auto;
@@ -152,13 +152,13 @@ ul, li {
 }
   .closepopup {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 30px;
-    height: 30px;
-    background-color: #6105e3;
-    border-radius: 10px;
+    top: 10px;
+    left: 10px;
+    width: 100%;
+    height: 100%;
+    color: #6105e3;
     cursor: pointer;
+    font-size: 30px;
   }
   .popup {
     max-width: 800px;
@@ -176,7 +176,7 @@ ul, li {
     border: #6105e3 2px solid;
     opacity: 1;
     box-sizing: border-box;
-    border-radius: 3px;
+    border-radius: 2px;
     color: black;
     text-align: center;
     justify-content: space-around;
@@ -209,56 +209,19 @@ ul, li {
     padding-top: 10px;
     height: 50px;
 }
-.bx-trash {
-    font-size: 35px;
-    color: #5a5a5a;
+.navselected{
+border-radius:2px;
+color: black;
+border: none;
+width: 45%;
+height: 70%;
+transform: translateY(25%);
 }
-.manage {
-    display: flex;
-    align-content: space-around;
-    justify-content: center;
-    align-items: center;
-}
-.image {
-    display: flex;
-    align-content: flex-end;
-    justify-content: center;
-}
-.minipopup {
-    max-width: 800px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 30%;
-    top: 40%;
-    margin-left: auto;
-    margin-right: auto;
-    width: 95%;
-    height: 30%;
-    background-color: #fafafa;
-    z-index: 10;
-    border: #6105e3 2px solid;
-    opacity: 1;
-    box-sizing: border-box;
-    border-radius: 3px;
+.navselected button:hover{
+    background-color:#6205e3cf;
     color: black;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    align-content: space-between;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-.minipopupbtn {
-    width: 100%;
-    display: flex;
-    align-items: stretch;
-    justify-content: space-around;
 }
-  .minipopup-button {
-    all: unset;
-    background-color: #6205e3;
-    width: 33%;
-    border-radius: 2px;
-    color: white;
-  }
+#trash{
+    color:#6205e3;
+    font-size:35px;
+}
