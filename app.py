@@ -23,7 +23,9 @@ Session(app)
 # Auxiliary functions
 def session_refresh():
     user_id = session.get('user').get('_id')
-    session['user'] = mongo.users.find_one({'_id': ObjectId(user_id)})
+    user = mongo.users.find_one({'_id': ObjectId(user_id)})
+    user['_id'] = str(user_id)
+    session['user'] = user
 
 @app.route('/', strict_slashes=False)
 @app.route('/index', methods=['GET'], strict_slashes=False)
@@ -86,8 +88,9 @@ def register():
                 new_data['password'] = generate_password_hash(new_data['password'])
                 new_data['type'] = 'user'
                 collection= mongo.users
-                id = collection.insert_one(new_data)
+                obj = collection.insert_one(new_data)
                 new_data.pop('password')
+                new_data['_id'] = str(obj.inserted_id)
                 session['user'] = new_data
                 return redirect(url_for('index'))
             else:
@@ -104,6 +107,32 @@ def user():
     session_refresh()
     return render_template('user.html', user=session['user'])
 
+@app.route('/user/settings', methods=['GET', 'POST'], strict_slashes=False)
+def settings():
+    """user settings any info of user"""
+    if  session.get('user') is None:
+        return redirect(url_for('login'))
+    if request.method == 'GET':
+        # render settings template passing session for Info
+        # return render_template('settings.html', user=session['user'])
+        return jsonify(session['user'])
+    if request.method == 'POST':
+        # update user info
+        update_data = {}
+        for item in request.form:
+            if session['user'][item] == request.form[item]:
+                continue
+            update_data[item] = request.form[item]
+        if len(update_data) == 0:
+            return redirect(url_for('user'))
+        if update_data.get('password'):
+            update_data['password'] = generate_password_hash(update_data['password'])
+        mongo.users.update_one({'_id': ObjectId(session['user']['_id'])}, {'$set': update_data})
+        session_refresh()
+        return redirect(url_for('user'))
+        
+    
+        
 
 # *********************** HOLA API **********************
 # ---------USER ROUTES----------
