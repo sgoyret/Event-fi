@@ -305,7 +305,7 @@ input {
 .wraper > .popup > .tofav {
   height: 5%;
   font-family: 'Ubuntu', sans-serif;
-  border-radius: 10px;
+  border-radius: 2px;
   border: #6205e3cf 2px solid;
   margin-left: auto;
   margin-right: auto;
@@ -337,15 +337,13 @@ input {
   border-radius: 2px;
   cursor: pointer;
 }
-.closepopup {
+.closepopup{
   position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 30px;
-  height: 30px;
-  background-color: #6105e3;
-  border-radius: 10px;
+  top: 10px;
+  left: 10px;
   cursor: pointer;
+  color: #6105e3;
+  font-size:30px;  
 }
 .popup {
   max-width: 800px;
@@ -363,7 +361,7 @@ input {
   border: #6105e3 2px solid;
   opacity: 1;
   box-sizing: border-box;
-  border-radius: 3px;
+  border-radius: 2px;
   color: black;
   text-align: center;
   display: flex;
