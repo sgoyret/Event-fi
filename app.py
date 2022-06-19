@@ -157,7 +157,7 @@ def get_user(user_id):
     """returns user with matching id else error"""
     if session.get('user') is None:
         return redirect(url_for('login'))
-    user = mongo.get_collection('users').find_one({'_id': ObjectId(user_id)})
+    user = mongo.users.find_one({'_id': ObjectId(user_id)})
     if user:
         user['_id'] = str(user.get('_id'))
         return jsonify(user)
@@ -168,7 +168,7 @@ def get_user(user_id):
 def contacts():
     if session.get('user') is None:
         return redirect(url_for('login'))
-    user = mongo.users.find_one({'_id': session.get('user').get('_id')})
+    user = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
     if user is None:
         return {"error": "user not found"}
     
@@ -264,7 +264,7 @@ def events():
                 'date': new_event_data['date'],
                 'type': 'admin'
                 })
-            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
+            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
             
             return redirect(url_for('events'))
 
@@ -298,7 +298,7 @@ def single_event(event_id):
         mongo.events.delete_one({'_id': ObjectId(event_id)})
         
         # update session
-        user_events = mongo.users.find_one({'_id': session.get('user').get('_id')})['events']
+        user_events = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})['events']
         session['user']['events'] = user_events
 
         return {'success': 'event deleted'}
@@ -318,8 +318,9 @@ def event_members(event_id):
         print(f'{idx}: {item}')
         print(session.get('user').get('user_id'))
 
-        if item.get('user_id') == str(session.get('user').get('_id')):
+        if item.get('user_id') == session.get('user').get('_id'):
             user_idx = idx
+            print('found user')
             break
     if user_idx is None:
         return {'error': 'event information only for members'}
@@ -379,7 +380,6 @@ def event_members(event_id):
               
     if request.method == 'DELETE':
         # delete member from event
-        user_idx = event.get('members').index(str(session.get('user').get('_id')))
         if event.get('members')[user_idx].get('type') != 'admin':
             return {'error': 'you are not the admin of this event'}
         user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
@@ -456,7 +456,7 @@ def groups():
 
             print('getteame lso grupos')
             print(session.get('user').get('groups'))
-            mongo.users.update_one({'_id': session.get('user').get('_id')}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
+            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
 
             return {'success': f'created new group: {new_group_data.get("name")}'}
 
@@ -492,7 +492,7 @@ def single_group(group_id):
         mongo.groups.delete_one({'_id': ObjectId(group_id)})
 
         # update session
-        user_groups = mongo.users.find_one({'_id': session.get('user').get('_id')})['groups']
+        user_groups = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})['groups']
         session['user']['groups'] = user_groups
         return {'success': 'group has been deleted'}
 
