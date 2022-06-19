@@ -1,4 +1,4 @@
-// Profile buttons for deleting, editing and adding events and groups(if admin), or leaving an event if normal user.
+// Profile buttons for deleting, editing and adding events and groups( if admin), or leaving an event if normal user.
 window.addEventListener("load", function() {
     console.log("Profile buttons loaded");
     const eventminipopup = 
