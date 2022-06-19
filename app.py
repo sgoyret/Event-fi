@@ -405,8 +405,39 @@ def event_members(event_id):
             return {'success': 'user removed from event'}
         else:
             return {'error': 'user not found'}
-         
-            
+
+
+@app.route('/api/events/<event_id>/groups', strict_slashes=False, methods=['GET', 'POST','DELETE'])
+def event_groups(event_id):
+    """methos for managing the groups of a given event"""
+    if session.get('user') is None:
+        return(redirect(url_for('login')))
+
+    event = mongo.events.find_one({'_id': ObjectId(event_id)})
+    if event is None:
+        return {'error': 'event does not exist'}
+
+    user_idx = None
+    for idx, item in enumerate(event.get('members')):
+        print(f'{idx}: {item}')
+        print(session.get('user').get('user_id'))
+
+        if item.get('user_id') == session.get('user').get('_id'):
+            user_idx = idx
+            print('found user')
+            break
+    if user_idx is None:
+        return {'error': 'event information only for members'}
+
+    if request.method == 'GET':
+        return jsonify(event.get('groups'))
+
+    if request.method == 'POST':
+        print(event.get('members')[user_idx].get('type'))
+        if event.get('members')[user_idx].get('type') != 'admin':
+            return {'error': 'you are not the admin of this event'}
+            #change to get_json
+        group = mongo.groups.find_one({'_id': ObjectId(request.form.get('group_id'))})
 # ---------GROUP ROUTES----------
 
 
