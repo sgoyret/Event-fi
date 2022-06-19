@@ -35,7 +35,7 @@ body {
     left: 10px;
     top: 10px;
 }
-.selected{
+.selected, .navselected{
     background-color: #6205e3;
     color: white;
     border-radius: 2px;
@@ -94,14 +94,15 @@ body {
     border-radius: 6px; 
     color: white;
 }
-.listed {
-    margin-top: 10px;
-    padding-bottom: 10px;
+
+.listevent, .listcontact, .listgroup {
+    padding-top: 15px;
+    padding-bottom: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    border-bottom: 1px solid #5a5a5a;
+    border-bottom: 1px solid #f1f1f1;
 }
 .avatar img {
     height: 100%;
@@ -193,6 +194,12 @@ ul, li {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    height: 30%;
+    padding-bottom: 30px;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
 .popupheader > .popupheaderavatar {
     width: 100px;
@@ -209,17 +216,41 @@ ul, li {
     padding-top: 10px;
     height: 50px;
 }
-.navselected{
-border-radius:2px;
-color: black;
-border: none;
-width: 45%;
-height: 70%;
-transform: translateY(25%);
+.bx-trash, .bx-x {
+    font-size: 35px;
+    color: #5a5a5a;
 }
+
 .navselected button:hover{
     background-color:#6205e3cf;
     color: black;
+}
+  .minipopup-button {
+    all: unset;
+    background-color: #6205e3;
+    width: 33%;
+    border-radius: 2px;
+    color: white;
+  }
+.container {
+    height: 65%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#membersnav, #groupsnav, #eventsnav {
+    width: 50%;
+    text-align: center;
+    height: 100%;
+    line-height: 200%;
+}
+.popupnav {
+    height: 5%;
+    display: flex;
+    background-color: #f1f1f1;
+    color: black;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
 }
 #trash{
     color:#6205e3;
