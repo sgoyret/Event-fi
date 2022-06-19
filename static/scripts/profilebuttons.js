@@ -93,9 +93,8 @@ window.addEventListener("load", function() {
                         request.onload = () => {
                             if (request.status == 200) {
                                 console.log("you have been removed from the event");
-                                document.location.href = '/user';
                             }
-                            console.log(request.text);
+                            console.log(request.responseText);
                         };
                     };
                 });
