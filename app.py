@@ -470,7 +470,13 @@ def single_group(group_id):
     if group is None:
         return {'error': 'group not found'}
 
-    if str(session.get('user').get('_id')) not in group.get('members'):
+    user_idx = None
+    for idx, item in enumerate(group.get('members')):
+        print(f'group members: {idx}: {item}')
+        if session.get('user').get('_id') == item.get('user_id'):
+            user_idx = idx
+            break
+    if user_idx is None:
         return {'error': 'group information only for members'}
 
     if request.method == 'GET':
@@ -479,16 +485,18 @@ def single_group(group_id):
 
     if request.method == 'DELETE':
         # delete group
-        if str(session.get('user').get('_id')) != group.get('owner'):
+        print('entered delete')
+        if session.get('user').get('_id') != group.get('owner'):
             return {'error': 'you are not the owner of the group'}
         id_list = []
         for item in group['members']:
-            id_list.append(ObjectId(item))
+            id_list.append(ObjectId(item.get('user_id')))
         # remove event from user events
         for item in id_list:
             mongo.users.update_one({'_id': item},
                                    {'$pull': {'groups': {'name': group['name']}}},False,True) 
         # delete event
+        print('going to delete group')
         mongo.groups.delete_one({'_id': ObjectId(group_id)})
 
         # update session
