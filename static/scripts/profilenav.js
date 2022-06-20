@@ -163,6 +163,7 @@ window.addEventListener("load", function() {
         document.getElementById('userevents').classList.remove('none');
         document.getElementById('usergroups').classList.add('none');
         document.getElementById('usercontacts').classList.add('none');
+        document.getElementsByClassName('content')[0].id = 'eventscontent';
         this.classList.add('selected');
     });
     this.document.querySelector('#groups').addEventListener("click", function() {
@@ -174,6 +175,7 @@ window.addEventListener("load", function() {
         document.getElementById('usergroups').classList.remove('none');
         document.getElementById('userevents').classList.add('none');
         document.getElementById('usercontacts').classList.add('none');
+        document.getElementsByClassName('content')[0].id = 'groupscontent';
         this.classList.add('selected');
     });
     this.document.querySelector('#contacts').addEventListener("click", function() {
@@ -186,6 +188,16 @@ window.addEventListener("load", function() {
         document.getElementById('usergroups').classList.add('none');
         document.getElementById('userevents').classList.add('none');
         this.classList.add('selected');
+        document.getElementById('addcontact').addEventListener("click", function() {
+            const request = new XMLHttpRequest();
+            const username = document.getElementById('searchcontact').value;
+            request.open('POST', '/api/users/contacts', true);
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify({username: username}));
+            request.onload = function() {
+                console.log(request.response);
+            };
+        });
     });
 
     grouppopup();
