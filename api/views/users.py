@@ -54,7 +54,7 @@ def contacts():
     
     if request.method == 'POST':
         # add new contact
-        new_contact = mongo.users.find_one({'username': ObjectId(request.get_json().get('username'))})
+        new_contact = mongo.users.find_one({'username': request.get_json().get('username')})
         if new_contact is None:
             return {'error': 'user does not exist'}
         keys_to_pop = ['password', 'email', 'events', 'groups']

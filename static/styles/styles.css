@@ -317,7 +317,13 @@ input {
 .wraper > .popup > .tofav:hover {
   background-color: #6205e3cf ;
 }
-.wraper > .popup > #form > form > input {
+label > input {
+  display: none;
+}
+label {
+  display: block;
+}
+.wraper > .popup > #form > form > input, label {
   width: 100%;
   height: 30px;
   border: none;
@@ -326,8 +332,6 @@ input {
   font-size: 20px;
   text-align: left;
   margin-bottom: 5px;
-  /* border-bottom: 1px solid gray; */
-  border: 1px solid gray;
 }
 .creationbutton {
   margin-top: 50px;
@@ -407,13 +411,40 @@ input {
   border-radius: 2px;
   color: black;
   text-align: center;
-  justify-content: space-around; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .addgroup {
   display: flex;
   justify-content: space-around;
 }
 .popupheader {
-  padding-top: 10%;
-    padding-bottom: 10%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+.next {
+  background-color: #6105e3;
+  width: 60%;
+  color: white;
+  border-radius: 2px;
+  position: fixed;
+  bottom: 2rem;
+  margin-bottom: 5%;
+}
+.add {
+  display: unset;
+  width: 100%;
+}
+.addgroup > * {
+  width: 35%;
+}
+.addgroupname {
+  text-align: left;
+}
+.addgroupbutton {
+  text-align: right;
+}
+.image, .info, .manage {
+  width: 33.33%;
 }
