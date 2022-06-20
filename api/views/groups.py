@@ -5,6 +5,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
+from api.session_refresh import session_refresh
 import json
 
 
@@ -114,9 +115,6 @@ def group_members(group_id):
     group = mongo.groups.find_one({'_id': ObjectId(group_id)})
     if group is None:
         return {"error": "group not found"}
-    user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
-    if user is None:
-        return {"error": "user not found"}
     user_idx = None
     for idx, item in enumerate(group.get('members')):
         print(f'{idx}: {item}')
@@ -126,23 +124,35 @@ def group_members(group_id):
     if user_idx is None:
         return {'error': 'you are not a member of this group'}
 
+    if request.get_json().get('user_id'):
+        user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
+    elif request.get_json().get('username'):
+        user = mongo.users.find_one({'username': request.get_json().get('username')})
+    if user is None:
+        return {"error": "user not found"}
+
     if group.get('members')[user_idx].get('type') != 'admin':
         return {'error': 'you are not the admin of this group'}
 
     if request.method == 'GET':
         return jsonify(group['members'])
+
     if request.method == 'POST':
         # add member to group
+        for member in group.get('members'):
+            if member.get('username') == request.get_json().get('username'):
+                return {'error': 'user is already in group'}
+
         new_user_to_group = {}
         # {_id, type?}
-        for item in request.form:
-            new_user_to_group[item] = request.form[item]
+        for item in request.get_json():
+            new_user_to_group[item] = request.get_json()[item]
         new_user_to_group['username'] = str(user.get('username'))
         new_user_to_group['name'] = str(user.get('name'))
         new_user_to_group['last_name'] = str(user.get('last_name'))
 
         new_group_to_user = {
-            '_id': str(group.get('_id')),
+            'group_id': str(group.get('_id')),
             'name': group.get('name')
         }
         mongo.groups.update_one({'_id': group['_id']}, {'$push': {'members': new_user_to_group}}) # push member to member list
@@ -157,7 +167,7 @@ def group_members(group_id):
             if item.get('user_id') == request.get_json().get('user_id'):
                 user_at = group.get('members')[idx]
         for idx, item in enumerate(user.get('groups')):
-            if item.get('_id') == group_id:
+            if item.get('group_id') == group_id:
                 group_at_user = user.get('group')[idx]
 
         print(f'user to delete: {user_at}')
@@ -171,16 +181,11 @@ def group_members(group_id):
     
     if request.method == 'PUT':
         # update member type
-        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
-        if user is None:
-            return {'error': 'user does not exist'}
-
-        # update member type in user groups
-        new_type = request.form.get('type')
+        new_type = request.get_json().get('type')
         group_at_user = {}
         group_index = None
         for idx, item in enumerate(user.get('groups')):
-            if item.get('_id') == group_id:
+            if item.get('group_id') == group_id:
                 group_at_user = user.get('groups')[idx]
                 group_index = idx
                 break

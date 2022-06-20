@@ -5,6 +5,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
+from api.session_refresh import session_refresh
 import json
 
 
@@ -119,14 +120,18 @@ def event_members(event_id):
     user_idx = None
     for idx, item in enumerate(event.get('members')):
         print(f'{idx}: {item}')
-        print(session.get('user').get('user_id'))
-
         if item.get('user_id') == session.get('user').get('_id'):
             user_idx = idx
-            print('found user')
             break
     if user_idx is None:
         return {'error': 'event information only for members'}
+    if request.get_json().get('user_id'):
+        user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
+    elif request.get_json().get('user_id'):
+        user = mongo.users.find_one({'username': request.get_json().get('username')})
+    if user is None:
+        return {"error": "user not found"}
+    
 
 
     if request.method == 'GET':
@@ -136,13 +141,17 @@ def event_members(event_id):
         # add member to event
         if event.get('members')[user_idx].get('type') != 'admin':
             return {'error': 'you are not the admin of this event'}
-        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
-        if user is None:
-            return {'error': 'user does not exist'}
+        for member in event.get('members'):
+            if request.get_json().get('user_id'):
+                if member.get('user_id') == request.get_json().get('user_id'):
+                    return {'error': 'user is already in group'}
+            if request.get_json().get('username'):
+                if member.get('username') == request.get_json().get('username').lower():
+                    return {'error': 'user is already in group'}
 
         new_user_event_data = {}
-        for item in request.form:
-            new_user_event_data[item] = request.form.get(item)
+        for item in request.get_json():
+            new_user_event_data[item] = request.get_json().get(item)
         new_user_event_data['name'] = user.get('name')
         new_user_event_data['last_name'] = user.get('last_name')
         new_user_event_data['username'] = user.get('username')
@@ -164,12 +173,8 @@ def event_members(event_id):
         # update member type
         if event.get('members')[user_idx].get('type') != 'admin':
             return {'error': 'you are not the admin of this event'}
-        user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
-        if user is None:
-            return {'error': 'user does not exist'}
-
         # update member type in user events
-        new_type = request.form.get('type')
+        new_type = request.get_json().get('type')
         event_at_user = {}
         event_index = None
         for idx, item in enumerate(user.get('events')):
@@ -189,10 +194,6 @@ def event_members(event_id):
         # delete member from event
         if event.get('members')[user_idx].get('type') != 'admin':
             return {'error': 'you are not the admin of this event'}
-        user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
-        if user is None:
-            return {'error': 'user does not exist'}
-
         user_at = {}
         event_at_user = {}
         for idx, item in enumerate(event.get('members')):
@@ -240,7 +241,7 @@ def event_groups(event_id):
         return jsonify(event.get('groups'))
 
     # must change to request.get_json().get()
-    group = mongo.groups.find_one({'_id': ObjectId(request.form.get('group_id'))})
+    group = mongo.groups.find_one({'_id': ObjectId(request.get_json().get('group_id'))})
     if group is None:
         return {'error': 'group does not exist'}
 

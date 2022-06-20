@@ -5,6 +5,7 @@ from flask_session import Session
 from pymongo import MongoClient
 from functions.validations import *
 from api.views import api_views
+from api.session_refresh import session_refresh
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
@@ -22,12 +23,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Auxiliary functions
-def session_refresh():
-    user_id = session.get('user').get('_id')
-    user = mongo.users.find_one({'_id': ObjectId(user_id)})
-    user['_id'] = str(user_id)
-    session['user'] = user
 
 @app.route('/', strict_slashes=False)
 @app.route('/index', methods=['GET'], strict_slashes=False)
@@ -86,6 +81,7 @@ def register():
             new_data = {}
             for item in request.form:
                 new_data[item] = request.form[item]
+            new_data['username'] = new_data['username'].lower()
             if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
                 new_data['type'] = 'user'
