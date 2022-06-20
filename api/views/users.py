@@ -54,7 +54,7 @@ def contacts():
     
     if request.method == 'POST':
         # add new contact
-        new_contact = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        new_contact = mongo.users.find_one({'username': ObjectId(request.get_json().get('username'))})
         if new_contact is None:
             return {'error': 'user does not exist'}
         keys_to_pop = ['password', 'email', 'events', 'groups']
@@ -72,7 +72,7 @@ def contacts():
     
     if request.method == 'DELETE':
         # delete contact
-        contact_to_delete = mongo.users.find_one({'_id': ObjectId(request.form['user_id'])})
+        contact_to_delete = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
         if contact_to_delete is None:
             return {'error': 'user does not exist'}
         keys_to_pop = ['password', 'email', 'events', 'groups']
