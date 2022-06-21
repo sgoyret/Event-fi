@@ -108,25 +108,32 @@
                 '<div class="add" id="add">' +
             '</div>';
             console.log(data)
-            for (let item of data) {
-                document.getElementById('add').innerHTML +=
+            if (data) {
+                for (let item of data) {
+                    document.getElementById('add').innerHTML +=
+                    '<div class="addgroup">' +
+                        '<div class="addgroupname">' + item.name + '</div>' +
+                        '<div class="addgroupbutton" id="' + item.group_id + '"><i class="bx bx-plus" ></i> Añadir </div>' +
+                    '</div>';
+                    
+                };
+                formdata['groups'] = [];
+                for (let element of document.getElementsByClassName('addgroupbutton')) {
+                    element.addEventListener("click", function() {
+                        const group_id = element.id;
+                        console.log(group_id);
+                        if (formdata.groups.includes(group_id)) {
+                        } else {
+                            formdata.groups.push(group_id)
+                        }
+                        console.log(formdata);
+                    });
+                }
+            }
+            else {
                 '<div class="addgroup">' +
-                    '<div class="addgroupname">' + item.name + '</div>' +
-                    '<div class="addgroupbutton" id="' + item.group_id + '"><i class="bx bx-plus" ></i> Añadir </div>' +
-                '</div>';
-                
-            };
-            formdata['groups'] = [];
-            for (let element of document.getElementsByClassName('addgroupbutton')) {
-                element.addEventListener("click", function() {
-                    const group_id = element.id;
-                    console.log(group_id);
-                    if (formdata.groups.includes(group_id)) {
-                    } else {
-                        formdata.groups.push(group_id)
-                    }
-                    console.log(formdata);
-                });
+                        '<div class="addgroupname">No tienes grupos</div>' +
+                    '</div>';
             }
             document.getElementById('closepopup').addEventListener("click", function() {
                 document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
@@ -152,24 +159,31 @@
                         document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
                         creationPopup()
                         }, false);
-                    for (let item of data) {
-                        document.getElementById('add').innerHTML +=
-                        '<div class="addgroup">' +
-                            '<div class="addgroupname">' + item.username + '</div>' +
-                            '<div class="addgroupbutton" id="' + item.user_id + '"> Añadir </div>' +
-                        '</div>';
+                    if (data) {
+                        for (let item of data) {
+                            document.getElementById('add').innerHTML +=
+                            '<div class="addgroup">' +
+                                '<div class="addgroupname">' + item.username + '</div>' +
+                                '<div class="addgroupbutton" id="' + item.user_id + '"> Añadir </div>' +
+                            '</div>';
+                        }
+                        formdata['members'] = [];
+                        for (let element of document.getElementsByClassName('addgroupbutton')) {
+                            element.addEventListener("click", function() {
+                                const contact_id = element.id;
+                                console.log(contact_id);
+                                if (formdata.members.includes(contact_id)) {
+                                } else {
+                                    formdata.members.push(contact_id)
+                                }
+                                console.log(formdata);
+                            });
+                        }
                     }
-                    formdata['members'] = [];
-                    for (let element of document.getElementsByClassName('addgroupbutton')) {
-                        element.addEventListener("click", function() {
-                            const contact_id = element.id;
-                            console.log(contact_id);
-                            if (formdata.members.includes(contact_id)) {
-                            } else {
-                                formdata.members.push(contact_id)
-                            }
-                            console.log(formdata);
-                        });
+                    else {
+                        '<div class="addgroup">' +
+                                '<div class="addgroupname">No tienes contactos</div>' +
+                            '</div>';
                     }
                     sendEventForm(formdata);
                 };
@@ -205,7 +219,6 @@
         document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
         // Add a click listener for create an event button
         document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
-        document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false)
         // Add a click listener for Crear button(group only) 
         document.getElementById('creationgroup').addEventListener("click", function() {
             const form = document.getElementById('groupdata');
