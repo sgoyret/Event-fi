@@ -128,6 +128,12 @@ window.addEventListener("load", function() {
                         "<div id='groupsnav'> Grupos </div>" +
                     "</div>" +
                     "<div class='popupcontent'>" +
+                        '<div class="searchcontact">' +
+                            '<input type="text" placeholder="Añadir a mis contactos" id="searchcontact">' +
+                            '<div class="searchbutton" id="addcontact">' +
+                                '<i class="bx bx-plus"></i>' +
+                            '</div>' +
+                        '</div>' +
                         "<div class='popupmembers'>" +
                         '</div>' +
                     "</div>" +
@@ -135,17 +141,19 @@ window.addEventListener("load", function() {
                 "</div>" +
                 "</div>";
                 document.getElementById('wraper').insertAdjacentHTML('afterbegin', eventpopup);
-                for (let element of eventdata.members) {
-                    const member = document.createElement('div');
-                    member.classList.add('listed');
-                    member.innerHTML = "<div class='memberavatar'> </div>" +
-                                            "<div class='membername'>" + element.name + "</div>" +
-                                            "<div class='memberrole'>" + element.type + "</div>";
-                        document.getElementsByClassName('popupmembers')[0].appendChild(member);
-                    }
-                    popupnav(eventdata.members, eventdata.groups);
-                    closepopup();
+                if (eventdata.members){
+                    for (let element of eventdata.members) {
+                        const member = document.createElement('div');
+                        member.classList.add('listed');
+                        member.innerHTML = "<div class='memberavatar'> </div>" +
+                                                "<div class='membername'>" + element.name + "</div>" +
+                                                "<div class='memberrole'>" + element.type + "</div>";
+                            document.getElementsByClassName('popupmembers')[0].appendChild(member);
+                        }
+                        popupnav(eventdata.members, eventdata.groups);
+                        closepopup();
                 };
+            };
         });
     }
 };
