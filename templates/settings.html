@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block html_head %}
+    <link rel="stylesheet" href="/static/styles/settingsstyle.css" type="text/css">
+    <script src="/static/scripts/settings.js" type="module" async></script>
+{% endblock html_head %}
+
+{% block container %}
+    <div class="create-user">
+        <form id="user-data" method='POST' action='/user/settings'>
+            <div class="choose-avatar">
+                <label for="avatar">Elige un avatar
+                    <input name="avatar" type="file" class="avatar" placeholder="{{user.avatar}}"></input>
+                </label>
+            </div>
+            <div class="names">
+                <input name="name" class="name" value="{{user.name}}" pattern="^[a-zA-Z]{1,20}$"></input>
+                <input name="last_name" class="lastname" value="{{user.last_name}}" pattern="^[a-zA-Z]{1,20}$"></input>
+            </div>
+            <input name="username" class="login" value="{{user.username}}" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
+            <input name="email" class="email" value="{{user.email}}"></input>
+            <input name="password" id="passwordchange" class="login" type="password" placeholder="New Password"></input>
+            <div class="options">
+                <div id="cancel" onclick="javascript:location.href='/user'">Cancelar</div>
+                <div id="change_pass">Cambiar Contraseña</div>
+                <button id="btn-create-user" type="submit">Aplicar Cambios</button>
+            </div>
+        </form>
+    </div>
+{% endblock container %}
