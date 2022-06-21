@@ -30,6 +30,7 @@ def index():
     """user base page"""
     # checks if session exists
     if session.get('user'):
+        print(session.get('user'))
         session_refresh()
         return render_template('index.html', session=session)
     return redirect(url_for('login'))

@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
+from api.views import session_refresh
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -44,13 +45,11 @@ def get_user(user_id):
 def contacts():
     if session.get('user') is None:
         return redirect(url_for('login'))
-
     if request.method == 'GET':
         #return all user contacts
         return jsonify(session.get('user').get('contacts'))
-
-    new_contact = mongo.users.find_one({'_id': ObjectId(session.get('user_id'))})
-    if new_contact is None:
+    user = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
+    if user is None:
         return {"error": "user not found"}
     
     if request.method == 'POST':
@@ -60,31 +59,35 @@ def contacts():
 
 
         if request.get_json().get('_id'):
-            user = mongo.users.find_one({'_id': ObjectId(request.form.get('user_id'))})
+            new_contact = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
         elif request.get_json().get('username'):
-            user = mongo.users.find_one({'username': request.form.get('username')})
-        if user is None:
-            return {"error": "user not found"}
-
-        for contact in session.get('user').get('contacts'):
-            if request.get_json.get('user_id'):
-                if contact.get('user_id') == request.get_json().get('user_id'):
-                    return {'error': 'you already have that contact'}
-            elif request.get_json.get('username'):
-                if contact.get('username') == request.get_json().get('username'):
-                    return {'error': 'you already have that contact'}
+            new_contact = mongo.users.find_one({'username': request.get_json().get('username')})
+        if new_contact is None:
+            return {"error": "target user not found"}
 
         keys_to_pop = ['password', 'email', 'events', 'groups']
         for item in keys_to_pop:
-            new_contact.pop(item)
+            if new_contact.get(item):
+                new_contact.pop(item)
         new_contact['user_id'] = str(new_contact['_id'])
+        new_contact.pop('_id')
         # add contact in session
         if session.get('user').get('contacts') is None:
             session['user']['contacts'] = []
+        for contact in session.get('user').get('contacts'):
+            if request.get_json().get('user_id'):
+                if contact.get('user_id') == request.get_json().get('user_id'):
+                    return {'error': 'you already have that contact'}
+            elif request.get_json().get('username'):
+                if contact.get('username') == request.get_json().get('username'):
+                    return {'error': 'you already have that contact'}
+        print(new_contact)
         session['user']['contacts'].append(new_contact)
         # add contact in db
         mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
                                {'$push': {'contacts': new_contact}})
+        print("hice los adds")
+        session_refresh()
         return jsonify(session['user']['contacts']), 201
     
     if request.method == 'DELETE':

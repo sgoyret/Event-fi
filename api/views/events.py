@@ -34,6 +34,7 @@ def events():
         if validate_event_creation(request.get_json()):
             print('the event dict is valid')
             new_event_data = {}
+            # form new dict with data from request item by item
             for item in request.get_json():
                 new_event_data[item] = request.get_json().get(item)
     
@@ -47,6 +48,7 @@ def events():
             }
             new_event_data['members'] = []
             new_event_data['members'].append(owner_admin) # set owner as member with type admin
+            # create event
             obj = mongo.events.insert_one(new_event_data)
             
             # update user events in session
@@ -58,10 +60,10 @@ def events():
                 'start_date': new_event_data['start_date'],
                 'end_date': new_event_data['end_date'],
                 'description': new_event_data['description'],
-                'groups': new_event_data['groups'],
                 'type': 'admin'
                 })
-            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
+            # update user events in db
+            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'events': session.get('user').get('events')}})
             
             return jsonify({'status':'created'})
 

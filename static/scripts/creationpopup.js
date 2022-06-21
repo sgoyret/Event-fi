@@ -153,7 +153,7 @@
                         document.getElementById('add').innerHTML +=
                         '<div class="addgroup">' +
                             '<div class="addgroupname">' + item.username + '</div>' +
-                            '<div class="addgroupbutton" id="' + item._id + '"> Añadir </div>' +
+                            '<div class="addgroupbutton" id="' + item.user_id + '"> Añadir </div>' +
                         '</div>';
                     }
                     formdata['contacts'] = [];
