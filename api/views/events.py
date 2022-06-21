@@ -7,6 +7,7 @@ from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
 import json
+import requests
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -36,6 +37,8 @@ def events():
             new_event_data = {}
             # form new dict with data from request item by item
             for item in request.get_json():
+                if item == 'groups' or item == 'members':
+                    continue
                 new_event_data[item] = request.get_json().get(item)
     
             new_event_data['owner'] = str(session.get('user').get('_id')) # set owner
@@ -55,7 +58,7 @@ def events():
             if session.get('user').get('events') is None:
                 session['user']['events'] = []
             session['user']['events'].append({
-                '_id': str(obj.inserted_id),
+                'event_id': str(obj.inserted_id),
                 'name': new_event_data['name'],
                 'start_date': new_event_data['start_date'],
                 'end_date': new_event_data['end_date'],
@@ -65,6 +68,16 @@ def events():
             # update user events in db
             mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'events': session.get('user').get('events')}})
             
+            # send POST request to add every group in group list to event.groups
+            for group_id in request.get_json().get('groups'):
+                requests.post('http://127.0.0.1:5001/api/events/' + str(obj.inserted_id) + '/groups', json = {'group_id': group_id})
+            
+            # send post request to add every member of member list to event.members
+            for item in request.get_json().get('members'):
+                if item.get('user_id'):
+                    requests.post('http://127.0.0.1:5001/api/events/' + str(obj.inserted_id) + '/members', json = {'user_id': item.get('user_id')})
+                if item.get('username'):
+                    requests.post('http://127.0.0.1:5001/api/events/' + str(obj.inserted_id) + '/members', json = {'username': item.get('username')})
             return jsonify({'status':'created'})
 
 @api_views.route('/api/events/<event_id>', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
