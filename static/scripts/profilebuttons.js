@@ -95,9 +95,41 @@ window.addEventListener("load", function() {
                             }
                             console.log(request.responseText);
                         };
-                    };
+                    } else {
+                        console.log('entre?')
+                        document.getElementById('wraper').removeChild(document.getElementById('minipopup'))
+                    }
                 });
             };
         });
+        for (let element of document.getElementsByClassName('manage-button-contact')) {
+            element.addEventListener("click", function() {
+                let contact_id = element.parentElement.parentElement.id
+                document.getElementById('wraper').insertAdjacentHTML('afterbegin', contactminipopup);
+                const buttons = document.getElementsByClassName('minipopup-button');
+                for (let button of buttons) {
+                    button.addEventListener("click", function() {
+                        if (button.innerHTML == "Si") {
+                            let request = new XMLHttpRequest();
+                            request.open("DELETE", "api/users/contacts")
+                            console.log(contact_id)
+                            request.setRequestHeader('Content-Type', 'application/json');
+                            request.setRequestHeader('Access-Control-Allow-Origin', '*');
+                            request.setRequestHeader('Access-Control-Allow-Headers', '*');
+                            request.send(JSON.stringify({'user_id': contact_id}));
+                            /* check request response */
+                            request.onload = () => {
+                                if (request.status == 200) {
+                                }
+                                console.log(request.responseText);
+                            };
+                        } else {
+                            console.log('entre?')
+                            document.getElementById('wraper').removeChild(document.getElementById('minipopup'))
+                        }
+                    });
+                }
+            });
+        };
     };
 });

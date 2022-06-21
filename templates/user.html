@@ -90,10 +90,11 @@
                         <i class='bx bx-plus'></i>
                     </div>
                 </div>
+                <div class="margin"> </div>
                 {% if user.contacts %}
                     {% for value in user.contacts %}
                         <li> 
-                            <div class="listcontact" id="{{value.user_id}}"> 
+                            <div class="listcontact" id="{{value._id}}"> 
                                 <div class="image"> 
                                     <div class="img"> 
                                     </div> 
