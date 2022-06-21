@@ -448,3 +448,28 @@ label {
 #eventdata {
   width: 80%;
 }
+#response {
+  max-width: 800px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30%;
+  top: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+  height: 30%;
+  background-color: #fafafa;
+  z-index: 100;
+  border: #6105e3 2px solid;
+  opacity: 1;
+  box-sizing: border-box;
+  border-radius: 3px;
+  color: black;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  align-content: space-between;
+  flex-direction: column;
+  justify-content: space-around;
+}
