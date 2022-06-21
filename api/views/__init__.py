@@ -21,3 +21,4 @@ def session_refresh():
 from api.views.groups import *
 from api.views.events import *
 from api.views.users import *
+# from api.views.locations import *

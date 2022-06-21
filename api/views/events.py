@@ -269,6 +269,9 @@ def event_groups(event_id):
         if event.get('members')[user_idx].get('type') != 'admin':
             return {'error': 'you are not the admin of this event'}
 
+        if str(group['_id']) in [g['_id'] for g in event.get('members')]:
+            return {'error': 'group is already in event'}
+
         group_at_event = {
             'group_id': str(group.get('_id')),
             'name': group.get('name'),
@@ -288,7 +291,10 @@ def event_groups(event_id):
         # add event to group
         mongo.groups.update_one({'_id': group['_id']}, {'$push': {'events': event_at_group}}, upsert=True)
         user_id_list = []
+        event_at_user = {}
         for member in group.get('members'):
+            if member.get('_id') in [m.get('_id') for m in event.get('members')]:
+                continue
             event_at_user = event_at_group
             event_at_user['type'] = 'guest'
             user_at_event = {
