@@ -136,4 +136,3 @@ def update_group_member_type(user, group, req):
     
     session_refresh()
     return {'success': 'group member updated successfully'}
-
