@@ -83,7 +83,12 @@ def single_group(group_id):
 
     if request.method == 'GET':
         # return group json object
-        return jsonify(group)
+        group_data = {}
+        for key in group:
+            group_data[key] = group[key]
+            if key == '_id':
+                group_data[key] = str(group[key])
+        return jsonify(group_data)
 
     if request.method == 'DELETE':
         # delete group
