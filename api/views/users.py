@@ -45,13 +45,13 @@ def contacts():
     if session.get('user') is None:
         return redirect(url_for('login'))
 
-    new_contact = mongo.users.find_one({'_id': ObjectId(session.get_json().get('user_id'))})
-    if new_contact is None:
-        return {"error": "user not found"}
-    
     if request.method == 'GET':
         #return all user contacts
         return jsonify(session.get('user').get('contacts'))
+
+    new_contact = mongo.users.find_one({'_id': ObjectId(session.get('user_id'))})
+    if new_contact is None:
+        return {"error": "user not found"}
     
     if request.method == 'POST':
         # add new contact

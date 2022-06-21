@@ -5,7 +5,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.session_refresh import session_refresh
+from api.views import session_refresh
 import json
 
 

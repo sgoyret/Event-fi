@@ -1,4 +1,55 @@
-    const createpopup = document.getElementById('create').addEventListener("click", function () {creationPopup()}, false);
+    document.getElementById('create').addEventListener("click", function () {creationPopup()}, false);
+
+    async function creationPopup() { 
+        const creationpopup = 
+        '<div class="popup" id="eventcreate">' +
+            '<div class="selection" id="selection">'+
+                '<div class="event picked" id="eventmake"> Crear evento </div>'+
+                '<div class="group" id="groupmake"> Crear grupo </div>'+
+            '</div>'+
+            '<div id="form">' +
+            '<form id="eventdata" method="POST">' +
+                '<input name="name" class="creation" placeholder="Titulo"></input>' +
+                '<label id="avatarlabel">' +
+                    '<i class="bx bx-camera"></i>' +
+                    '<input name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>'+
+                '</label>' +
+                '<label for="start_date">Fecha de inicio</label>' +
+                '<input type="datetime-local" name="start_date" id="start_date">' +
+                '<label for="end_date">Fecha de finalización</label>' +
+                '<input type="datetime-local" name="end_date" class="creation"></input>' +
+                '<input name="id" class="creation" placeholder="Lugar"></input>' +
+                '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
+                ' <div class="creationbutton" id="creationevent"> Crear</div>' +
+            '</form>' +
+            '</div>' + 
+            '<div id="closepopup class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
+        '</div>';
+    document.getElementById('sidebar').style.display = "none";
+    document.getElementById('wraper').insertAdjacentHTML("afterbegin", creationpopup);
+    document.getElementById('closepopup').addEventListener("click", function() {
+        document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
+        document.getElementById('sidebar').style.display = "unset";
+    });
+    // Add a click listener for create a group button
+    document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
+    // Add a click listener for create an event button
+    document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
+    document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false)
+    // Add a click listener for close button
+        /*const request = new XMLHttpRequest();
+        request.open('POST', '/api/events/');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.setRequestHeader('Access-Control-Allow-Origin', '*');
+        request.setRequestHeader('Access-Control-Allow-Headers', '*');
+        request.send(JSON.stringify(formdata));
+        request.onload = function() {
+            var data = JSON.parse(request.responseText);
+            console.log(data);
+            document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
+            document.getElementById('sidebar').style.display = "unset";
+            };*/
+        };
 
     async function eventMake() {
         const eventform =
@@ -55,19 +106,20 @@
                     '<div class="addgroupname">' + item.name + '</div>' +
                     '<div class="addgroupbutton" id="' + item.group_id + '"><i class="bx bx-plus" ></i> Añadir </div>' +
                 '</div>';
-                console.log(item.group_id)
-                document.getElementById(item.group_id).addEventListener("click", function() {
-                    try {
-                        if (formdata.groups[item.group_id]) {
-                        } else {
-                        };
-                    } catch (error) {
-                        formdata['groups'] = [];
-                        formdata['groups'].push(item.group_id);
-                        console.log(formdata.groups);
-                    }
-                });
+                
             };
+            formdata['groups'] = [];
+            for (let element of document.getElementsByClassName('addgroupbutton')) {
+                element.addEventListener("click", function() {
+                    const group_id = element.id;
+                    console.log(group_id);
+                    if (formdata.groups.includes(group_id)) {
+                    } else {
+                        formdata.groups.push(group_id)
+                    }
+                    console.log(formdata);
+                });
+            }
             document.getElementById('closepopup').addEventListener("click", function() {
                 document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
                 creationPopup()
@@ -81,18 +133,35 @@
                 request.send();
                 request.onload = function() {
                     const data = JSON.parse(request.responseText);
+                    console.log(data);
                     document.getElementById('eventcreate').innerHTML = 
                     '<div id="closepopup" class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
                     '<div class="popupheader" id=""> Añade contactos </div>' +
                     '<div class="next" id="contactsadded"> Confirmar </div>' +
                     '<div class="add" id="add">' +
                     '</div>';
+                    document.getElementById('closepopup').addEventListener("click", function() {
+                        document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
+                        creationPopup()
+                        }, false);
                     for (let item of data) {
                         document.getElementById('add').innerHTML +=
                         '<div class="addgroup">' +
                             '<div class="addgroupname">' + item.username + '</div>' +
-                            '<div class="addgroupbutton" id="' + item.contact_id + '"> Añadir </div>' +
+                            '<div class="addgroupbutton" id="' + item._id + '"> Añadir </div>' +
                         '</div>';
+                    }
+                    formdata['contacts'] = [];
+                    for (let element of document.getElementsByClassName('addgroupbutton')) {
+                        element.addEventListener("click", function() {
+                            const contact_id = element.id;
+                            console.log(contact_id);
+                            if (formdata.contacts.includes(contact_id)) {
+                            } else {
+                                formdata.contacts.push(contact_id)
+                            }
+                            console.log(formdata);
+                        });
                     }
                     sendEventForm(formdata);
                 };
@@ -114,6 +183,7 @@
                 console.log(data);
             }
             document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
+        document.getElementById('sidebar').style.display = 'unset';
         }, false);
     }
     async function groupMake() {
@@ -150,55 +220,4 @@
                 };
         });
     };
-
-    async function creationPopup() { 
-        const creationpopup = 
-        '<div class="popup" id="eventcreate">' +
-            '<div class="selection" id="selection">'+
-                '<div class="event picked" id="eventmake"> Crear evento </div>'+
-                '<div class="group" id="groupmake"> Crear grupo </div>'+
-            '</div>'+
-            '<div id="form">' +
-            '<form id="eventdata" method="POST">' +
-                '<input name="name" class="creation" placeholder="Titulo"></input>' +
-                '<label id="avatarlabel">' +
-                    '<i class="bx bx-camera"></i>' +
-                    '<input name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>'+
-                '</label>' +
-                '<label for="start_date">Fecha de inicio</label>' +
-                '<input type="datetime-local" name="start_date" id="start_date">' +
-                '<label for="end_date">Fecha de finalización</label>' +
-                '<input type="datetime-local" name="end_date" class="creation"></input>' +
-                '<input name="id" class="creation" placeholder="Lugar"></input>' +
-                '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
-                ' <div class="creationbutton" id="creationevent"> Crear</div>' +
-            '</form>' +
-            '</div>' + 
-            '<div id="closepopup class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
-        '</div>';
-    document.getElementById('sidebar').style.display = "none";
-    document.getElementById('wraper').insertAdjacentHTML("afterbegin", creationpopup);
-    document.getElementById('closepopup').addEventListener("click", function() {
-        document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-        document.getElementById('sidebar').style.display = "unset";
-    });
-    // Add a click listener for create a group button
-    document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
-    // Add a click listener for create an event button
-    document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
-    document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false)
-    // Add a click listener for close button
-        /*const request = new XMLHttpRequest();
-        request.open('POST', '/api/events/');
-        request.setRequestHeader('Content-Type', 'application/json');
-        request.setRequestHeader('Access-Control-Allow-Origin', '*');
-        request.setRequestHeader('Access-Control-Allow-Headers', '*');
-        request.send(JSON.stringify(formdata));
-        request.onload = function() {
-            var data = JSON.parse(request.responseText);
-            console.log(data);
-            document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-            document.getElementById('sidebar').style.display = "unset";
-            };*/
-        };
 // Add a click listener for create navbar button

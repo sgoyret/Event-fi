@@ -5,7 +5,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.session_refresh import session_refresh
+from api.views import session_refresh
 import json
 
 
@@ -55,12 +55,15 @@ def events():
             session['user']['events'].append({
                 '_id': str(obj.inserted_id),
                 'name': new_event_data['name'],
-                'date': new_event_data['date'],
+                'start_date': new_event_data['start_date'],
+                'end_date': new_event_data['end_date'],
+                'description': new_event_data['description'],
+                'groups': new_event_data['groups'],
                 'type': 'admin'
                 })
             mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'events': session.get('user').get('events')}}) # update user events in db
             
-            return redirect(url_for('events'))
+            return jsonify({'status':'created'})
 
 @api_views.route('/api/events/<event_id>', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def single_event(event_id):
@@ -87,6 +90,7 @@ def single_event(event_id):
 
     if request.method == 'GET':
         # return event json object
+        event['_id'] = str(event['_id'])
         return jsonify(event)
 
     if request.method == 'DELETE':

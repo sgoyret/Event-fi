@@ -5,7 +5,7 @@ from flask_session import Session
 from pymongo import MongoClient
 from functions.validations import *
 from api.views import api_views
-from api.session_refresh import session_refresh
+from api.views import session_refresh
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
