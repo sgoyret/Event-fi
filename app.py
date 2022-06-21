@@ -44,13 +44,16 @@ def login():
         return render_template('login.html')
 
     if request.method == 'POST':
+        to_validate= ['username', 'password']
+        check_response = validate_user(request.form, to_validate)
+
         for key, value in request.form.items():
             print(f'{key}: {value}')
         new_data = {}
         for item in request.form:
             new_data[item] = request.form[item]
 
-        user = mongo.users.find_one({'username': new_data['username']})
+        user = mongo.users.find_one({'username': new_data['username'].lower()})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
                 print('the password checked')
@@ -76,7 +79,8 @@ def register():
         return redirect(url_for('index'))
 
     if request.method == 'POST':
-        check_response = validate_user_creation(request.form)
+        to_validate= ['username', 'name', 'last_name', 'email', 'password']
+        check_response = validate_user(request.form, to_validate)
         if check_response is True:             
             print('the dictionary is valid')
             new_data = {}
