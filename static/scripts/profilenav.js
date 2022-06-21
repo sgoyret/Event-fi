@@ -9,11 +9,22 @@ window.addEventListener("load", function() {
         // Function that adds aesthetic to the navbar
         document.getElementById('groupsnav').addEventListener("click", function() {
                 const selected = document.getElementsByClassName('navselected');
+                const event_id = document.getElementsByClassName('popupheaderavatar')[0].id;
+                const request = new XMLHttpRequest();
+                request.open('GET', '/api/events/' + event_id + '/groups')
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.setRequestHeader('Access-Control-Allow-Origin', '*');
+                request.setRequestHeader('Access-Control-Allow-Headers', '*');
+                request.send({'event_id': event_id});
+                request.onload = function() {
+                    const data = JSON.parse(request.responseText)
+                    console.log(data)
                 console.log(selected);
                 for (let element of selected) {
                     element.classList.remove('navselected');
                 };
                 document.getElementById('groupsnav').classList.add('navselected');
+                document.getElementsByClassName('popupcontent')[0].innerHTML = ''
                 for (let element of groups) {
                     const group = document.createElement('div');
                     group.classList.add('listed');
@@ -22,6 +33,7 @@ window.addEventListener("load", function() {
                                         "</div>";
                     document.getElementsByClassName('popupcontent')[0].appendChild(group);
                 }
+            };
             });
             document.getElementById('membersnav').addEventListener("click", function () {
                 const selected = document.getElementsByClassName('navselected');
@@ -30,6 +42,7 @@ window.addEventListener("load", function() {
                     element.classList.remove('navselected');
                 };
                 document.getElementById('membersnav').classList.add('navselected');
+                document.getElementsByClassName('popupcontent')[0].innerHTML = ''
                 console.log(document.getElementById('membersnav').classList);
                 for (let element of members) {
                     const member = document.createElement('div');
@@ -48,6 +61,7 @@ window.addEventListener("load", function() {
                     element.classList.remove('navselected');
                 };
                 document.getElementById('eventsnav').classList.add('navselected');
+                document.getElementsByClassName('popupcontent')[0].innerHTML = ''
                 for (let element of events) {
                     const event = document.createElement('div');
                     event.classList.add('listed');
@@ -81,7 +95,7 @@ window.addEventListener("load", function() {
                 const eventpopup = basepopup +
                 '<div class="eventpopup">' +
                     '<div class="popupheader">' +
-                        '<div class="popupheaderavatar"> </div>' +
+                        '<div class="popupheaderavatar" id=" ' + element.id + '"> </div>' +
                         '<div class="popupheadertext">' +
                             "<div class='eventitle'>" +  eventdata.name + "</div>" +
                             //"<div class='eventimg'> <img src='https://scontent.fmvd1-1.fna.fbcdn.net/v/t1.6435-9/91138397_142569460618578_9003032990434983936_n.png?_nc_cat=103&ccb=1-7&_nc_sid=973b4a&_nc_ohc=kANVgvRdsLsAX-y7miA&_nc_ht=scontent.fmvd1-1.fna&oh=00_AT8CDHH4X_DslZ24jK7kec_aSOWS9DrvcUQ1LUHqnvR2nA&oe=62BDC452' alt=''>" + "</div>"
@@ -107,7 +121,7 @@ window.addEventListener("load", function() {
                     member.classList.add('listed');
                     member.innerHTML = "<div class='memberavatar'> </div>" +
                                             "<div class='membername'>" + element.name + "</div>" +
-                                            "<div class='memberrole'>" + element.role + "</div>";
+                                            "<div class='memberrole'>" + element.type + "</div>";
                         document.getElementsByClassName('popupmembers')[0].appendChild(member);
                     }
                     popupnav(eventdata.members, eventdata.groups);

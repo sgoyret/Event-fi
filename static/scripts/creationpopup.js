@@ -55,13 +55,18 @@
         const eventform =
         '<form id="eventdata" method="POST">' +
         '<input name="name" class="creation" placeholder="Titulo"></input>' +
-        '<input name="avatar" class="creation" placeholder="Fecha" type="file"></input>' +
-        '<input name="start_date" class="creation" placeholder="Fecha de inicio"></input>' +
-        '<input name="end_date" class="creation" placeholder="Fecha de finalización"></input>' +
+        '<label id="avatarlabel">' +
+            '<i class="bx bx-camera"></i>' +
+            '<input name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>'+
+        '</label>' +
+        '<label for="start_date">Fecha de inicio</label>' +
+        '<input type="datetime-local" name="start_date" id="start_date">' +
+        '<label for="end_date">Fecha de finalización</label>' +
+        '<input type="datetime-local" name="end_date" class="creation"></input>' +
         '<input name="id" class="creation" placeholder="Lugar"></input>' +
         '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
         ' <div class="creationbutton" id="creationevent"> Crear</div>' +
-        '</form>';
+    '</form>';
     document.getElementById('form').innerHTML = eventform;
     document.getElementById('eventmake').classList.add('picked');
     document.getElementById('groupmake').classList.remove('picked');

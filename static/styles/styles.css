@@ -270,8 +270,6 @@ body.dark .home .text{
 }
 
 .wraper > .popup > *{
-  display: flex;
-  flex-direction: column;
   justify-content: center;
 }
 input {
@@ -372,10 +370,12 @@ label {
   justify-content: space-around;
 }
 .selection {
-  width: 15%;
-    margin-bottom: 20%;
-    align-items: flex-start;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
+
 .selection > * {
     margin-right: 10px;
     width: 100%;
@@ -386,7 +386,7 @@ label {
     border-radius: 2px;
 }
 .wraper > .popup > #form {
-  width: 70%;
+  width: 90%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -445,6 +445,6 @@ label {
 .addgroupbutton {
   text-align: right;
 }
-.image, .info, .manage {
-  width: 33.33%;
+#eventdata {
+  width: 80%;
 }
