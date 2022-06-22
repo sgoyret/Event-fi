@@ -8,7 +8,8 @@
     <!---css--->
     <link rel="stylesheet" href="/static/styles/responsive_style.css" />
     <link rel="stylesheet" href="/static/styles/map.css" />
-
+    <!--js-->
+    <script type="module" src="/static/scripts/creationpopup.js" async></script>
     {% endblock html_head %}
 {% block wrapper %}
     <div id="map"></div> 
@@ -19,11 +20,15 @@
         </h2>
     </div>
         <ul class="nav-links">
-            <li>
-                <a href="#">User</a>
+            <li onclick="javascript:location.href='/user'">
+                <a href="#">
+                    <i>User</i>
+                </a>
             </li>
-            <li>
-                <a href="#">Create</a>
+            <li class=nav-link id="create">
+                <a href="#">
+                    <i>create</i>
+                </a>
             </li>
             <li>
                 <a href="#">Notifications</a>
