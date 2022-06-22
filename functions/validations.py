@@ -1,7 +1,15 @@
 import re
+import imghdr
 
 
-def validate_user_creation(values):
+def validate_image(avatar):
+    return True
+    image_types = set(['jpg', 'jpeg', 'png'])
+    if imghdr.what(avatar) not in image_types:
+        return False
+    return True
+
+def validate_user(values, to_validate):
     print("entered user validation")
     user_regex = {
         'username': '^[a-zA-Z0-9\-]{4,12}$', #username regex
@@ -11,18 +19,17 @@ def validate_user_creation(values):
         'password': '^[a-zA-Z0-9]{8,}$' # password can be anything... but it has to be something
     }
     # checking if all fields have been checked
-    for key in user_regex:
-        if key not in values:
-            return {'error': f'missing {key}'}
-
-    for key, value in values.items():
+    for key in values:
         print(f'checking key {key}')
         if key != 'avatar':
-            if key not in user_regex.keys():        
-                    return {'error': f'{key} is not in user_regex'}
-            # checking input value matches regex
-            if not re.match(user_regex[key], value):
-                    return {'error': f'{value} didnt mmatch {user_regex[key]}'}
+            if key not in to_validate:
+                return {'error': f'{key} is either extra or missing'}
+
+    for key in to_validate:
+        print(f'checking key {key}')
+        if key != 'avatar':
+            if not re.match(user_regex.get(key), values.get(key)):
+                    return {'error': f'{values.get(key)} did not match {user_regex[key]}'}
     return True
 
 
@@ -64,4 +71,7 @@ def validate_event_creation(values):
 
 
 def validate_add_user_event(values):
+    return True
+
+def validate_location_creation(values):
     return True

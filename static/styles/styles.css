@@ -270,8 +270,6 @@ body.dark .home .text{
 }
 
 .wraper > .popup > *{
-  display: flex;
-  flex-direction: column;
   justify-content: center;
 }
 input {
@@ -317,7 +315,13 @@ input {
 .wraper > .popup > .tofav:hover {
   background-color: #6205e3cf ;
 }
-.wraper > .popup > #form > form > input {
+label > input {
+  display: none;
+}
+label {
+  display: block;
+}
+.wraper > .popup > #form > form > input, label {
   width: 100%;
   height: 30px;
   border: none;
@@ -326,8 +330,6 @@ input {
   font-size: 20px;
   text-align: left;
   margin-bottom: 5px;
-  /* border-bottom: 1px solid gray; */
-  border: 1px solid gray;
 }
 .creationbutton {
   margin-top: 50px;
@@ -368,10 +370,12 @@ input {
   justify-content: space-around;
 }
 .selection {
-  width: 15%;
-    margin-bottom: 20%;
-    align-items: flex-start;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
+
 .selection > * {
     margin-right: 10px;
     width: 100%;
@@ -382,8 +386,90 @@ input {
     border-radius: 2px;
 }
 .wraper > .popup > #form {
-  width: 70%;
+  width: 90%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
+}
+.addpopup
+{
+  max-width: 800px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30%;
+  top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+  height: 90%;
+  background-color: #fafafa;
+  z-index: 10;
+  border: #6105e3 2px solid;
+  opacity: 1;
+  box-sizing: border-box;
+  border-radius: 2px;
+  color: black;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.addgroup {
+  display: flex;
+  justify-content: space-around;
+}
+.popupheader {
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+.next {
+  background-color: #6105e3;
+  width: 60%;
+  color: white;
+  border-radius: 2px;
+  position: fixed;
+  bottom: 2rem;
+  margin-bottom: 5%;
+}
+.add {
+  display: unset;
+  width: 100%;
+}
+.addgroup > * {
+  width: 35%;
+}
+.addgroupname {
+  text-align: left;
+}
+.addgroupbutton {
+  text-align: right;
+}
+#eventdata {
+  width: 80%;
+}
+#response {
+  max-width: 800px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30%;
+  top: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+  height: 30%;
+  background-color: #fafafa;
+  z-index: 100;
+  border: #6105e3 2px solid;
+  opacity: 1;
+  box-sizing: border-box;
+  border-radius: 3px;
+  color: black;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  align-content: space-between;
+  flex-direction: column;
+  justify-content: space-around;
 }

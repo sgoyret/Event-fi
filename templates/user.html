@@ -14,7 +14,10 @@
 {% endblock wrapper %}
 
 {% block header %}
-    <div class="avatar" id="{{user._id}}"></div>
+    <div class="avatar" id="{{user._id}}" style="background-image: url(/static/avatars/{{user.username}}.png); background-repeat: no-repeat; background-size: contain;">
+        <!--p>C:\Users\ojo-perezoso\Desktop\Eventify\static\avatar</p>
+        <img src="/static/avatar.jpg" width=50px height=50px alt="" srcset=""-->
+    </div>
     <div class="userinfo">
         <div class="names">{{user.name}} {{user.last_name}}</div>
         <div class="username">@{{user.username}}</div>
@@ -37,15 +40,15 @@
                 {% if user.events %}
                     {% for value in user.events %}
                         <li> 
-                            <div class="listevent" id="{{value._id}}"> 
+                            <div class="listevent" id="{{value.event_id}}"> 
                                 <div class="image"> 
-                                    <div class="img"> 
+                                    <div class="img" style="background-image: url(/static/avatars/{{value.name}}.png); background-repeat: no-repeat; background-size: contain;">
                                     </div> 
                                 </div> 
                                 <div class="info"> 
                                 <p>  {{ value.name }} </p> 
-                                <p>  {{ value.date }}  </p> 
-                                <p>  {{ value.coordinates }}  </p> 
+                                <p>  {{ value.start_date}}  </p> 
+                                <p>  {{ value.location }}  </p> 
                                 </div> 
                                 <div class="manage"> 
                                     <div class="manage-button"> 
@@ -63,9 +66,9 @@
                 {% if user.groups %}
                     {% for value in user.groups %}
                         <li> 
-                            <div class="listgroup" id="{{value._id}}"> 
+                            <div class="listgroup" id="{{value.group_id}}"> 
                                 <div class="image"> 
-                                    <div class="img"> 
+                                    <div class="img" style="background-image: url(/static/avatars/{{value.name}}.png); background-repeat: no-repeat; background-size: contain;"> 
                                     </div> 
                                 </div> 
                                 <div class="info"> 
@@ -84,28 +87,28 @@
                 {% endif %}
                 </div>
                 <div id="usercontacts" class="none">
+                <div class="searchcontact">
+                    <input type="text" placeholder="Añadir a mis contactos" id="searchcontact">
+                    <div class="searchbutton" id="addcontact">
+                        <i class='bx bx-plus'></i>
+                    </div>
+                </div>
+                <div class="margin"> </div>
                 {% if user.contacts %}
-                    {% for key, value in user.contacts.items() %}
+                    {% for value in user.contacts %}
                         <li> 
-                            <div class="listcontact"> 
+                            <div class="listcontact" id="{{value.user_id}}"> 
                                 <div class="image"> 
-                                    <div class="img"> 
-                                    </div> 
+                                    <img class="img" style="background-image: url(/static/avatars/{{value.username}}.png); background-repeat: no-repeat; background-size: contain;">
                                 </div> 
                                 <div class="info"> 
-                                <p>  {{value.name}} {{value.lastname}} </p>
+                                <p>  {{value.name}} {{value.last_name}} </p>
                                 <p>  {{value.username}}  </p>
-                                <div class="manage"> 
-                                    <div class="manage-button"> 
-                                        <button>Ver</button> 
-                                    </div> 
-                                    <div class="manage-button"> 
-                                        <button>Editar</button> 
-                                    </div> 
-                                    <div class="manage-button"> 
-                                        <button>Eliminar</button> 
-                                    </div> 
                                 </div> 
+                                <div class="manage"> 
+                                    <div class="manage-button-contact"> 
+                                        <i id="trash" class='bx bx-user-x'></i>
+                                    </div> 
                             </div> 
                         </li>
                 {% endfor %}
