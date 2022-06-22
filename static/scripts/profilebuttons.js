@@ -101,8 +101,9 @@ window.addEventListener("load", function() {
                     }
                 });
             };
-        });
+        })};
         for (let element of document.getElementsByClassName('manage-button-contact')) {
+            console.log('entre al for');
             element.addEventListener("click", function() {
                 let contact_id = element.parentElement.parentElement.id
                 document.getElementById('wraper').insertAdjacentHTML('afterbegin', contactminipopup);
@@ -131,5 +132,4 @@ window.addEventListener("load", function() {
                 }
             });
         };
-    };
 });

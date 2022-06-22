@@ -1,6 +1,3 @@
 flask_session
-<<<<<<< HEAD
-*_pycache_
-=======
 *__pycache__
->>>>>>> 053232f0e7eee79fd119c495bb5a30bd82e49c69
+*_pycache_
