@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
-from api.functions.events import add_event_member, delete_event_group
+from api.functions.events_functions import add_event_member
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
@@ -145,3 +145,11 @@ def update_group_member_type(user, group, req):
     
     session_refresh()
     return {'success': 'group member updated successfully'}
+
+def update_group_info(group, req):
+    """updates a group's info"""
+    new_group_data = {}
+    for item in req.get_json():
+        if group['item'] != req.get_json()[item]:
+            new_group_data[item] = req.get_json()[item]
+    mongo.groups.update_one({'_id': group['_id']}, {'$set': new_group_data})

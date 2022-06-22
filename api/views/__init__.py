@@ -18,7 +18,7 @@ def session_refresh():
         session['user'] = user
     else:
         pass
-from api.views.groups import *
-from api.views.events import *
-from api.views.users import *
-# from api.views.locations import *
+from api.views.groups_views import *
+from api.views.events_views import *
+from api.views.users_views import *
+# from api.views.locations_views import *

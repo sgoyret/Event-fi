@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
-from api.functions.events import *
+from api.functions.events_functions import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
 import json
@@ -48,9 +48,6 @@ def single_event(event_id):
     
     user_idx = None
     for idx, item in enumerate(event.get('members')):
-        print(f'{idx}: {item}')
-        print(session.get('user').get('user_id'))
-
         if item.get('user_id') == session.get('user').get('_id'):
             user_idx = idx
             print('found user')
@@ -63,6 +60,10 @@ def single_event(event_id):
         # return event json object
         event['_id'] = str(event['_id'])
         return jsonify(event)
+    
+    if request.method == 'PUT':
+        # update event information
+        return update_event_info(event, request)
 
     if request.method == 'DELETE':
         # delete event
@@ -108,6 +109,7 @@ def event_members(event_id):
               
     if request.method == 'DELETE':
         # delete member from event
+        print('adios')
         return delete_event_member(event, user, user_idx, request)
 
 

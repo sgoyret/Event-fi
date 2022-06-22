@@ -1,3 +1,4 @@
+from distutils.log import error
 from bson.objectid import ObjectId
 from flask import Flask, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
@@ -59,7 +60,7 @@ def login():
         for item in request.form:
             new_data[item] = request.form[item]
 
-        user = mongo.users.find_one({'username': new_data['username'].lower()})
+        user = mongo.users.find_one({'username': new_data['username']})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
                 print('the password checked')
@@ -120,7 +121,9 @@ def register():
 
                 return redirect(url_for('index'))
             else:
-                return {'error': 'the username is already in use'}
+                flash('the username is already in use', error)
+                return redirect(url_for('register'))
+        flash(f'{check_response}', error)
         return redirect(url_for('register'))
 
     if request.method == 'GET':

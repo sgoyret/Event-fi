@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
-from api.functions.groups import *
+from api.functions.groups_functions import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
 
@@ -26,7 +26,6 @@ def groups():
         # returns groups list
         user_groups = session.get('user').get('groups')
         return jsonify(user_groups)
-
 
     if request.method == 'POST':
         #create new group
@@ -59,6 +58,10 @@ def single_group(group_id):
             if key == '_id':
                 group_data[key] = str(group[key])
         return jsonify(group_data)
+
+    if request.method == 'PUT':
+        # update group information
+        return update_group_info(group, request)
 
     if request.method == 'DELETE':
         # delete group
