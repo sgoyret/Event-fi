@@ -1,0 +1,44 @@
+
+{% extends "base.html" %}
+{% block html_head %}
+    <!-- mapbox js-->
+    <script type="module" src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <script type="module" src="/static/scripts/creationpopup.js"></script>
+    <script src="/static/scripts/scripts.js" ></script>
+    <!---css--->
+    <link rel="stylesheet" href="/static/styles/responsive_style.css" />
+    <link rel="stylesheet" href="/static/styles/map.css" />
+
+    {% endblock html_head %}
+{% block wrapper %}
+    <div id="map"></div> 
+    <nav class="logo">
+        <div>
+        <h2>Eventify<br>
+        <p>Fun finder</p>
+        </h2>
+    </div>
+        <ul class="nav-links">
+            <li>
+                <a href="#">User</a>
+            </li>
+            <li>
+                <a href="#">Create</a>
+            </li>
+            <li>
+                <a href="#">Notifications</a>
+            </li>
+            <li>
+                <a href="#">info</a>
+            </li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+    <script type="module" src="/static/scripts/map.js"></script>
+    <script src="/static/scripts/responsive_script.js"></script>
+    
+{% endblock wrapper %}

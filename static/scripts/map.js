@@ -5,6 +5,7 @@ const map = new mapboxgl.Map({
     center: [-56.0797027522, -34.7892933233], // starting position [lng, lat]
     zoom: 16 // starting zoom
 });
+
 /*
 map.on('load', function() {
     // Add geolocate control to the map.
