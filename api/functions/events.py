@@ -304,3 +304,4 @@ def delete_event_group(group, event):
         return {'success': 'group removed from event'}
     else:
         return {'error': 'user not found'}
+        
