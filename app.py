@@ -117,8 +117,7 @@ def settings():
         return redirect(url_for('login'))
     if request.method == 'GET':
         # render settings template passing session for Info
-        # return render_template('settings.html', user=session['user'])
-        return jsonify(session['user'])
+        return render_template('settings.html', user=session['user'])
     if request.method == 'POST':
         # update user info
         update_data = {}
@@ -130,6 +129,9 @@ def settings():
             return redirect(url_for('user'))
         if update_data.get('password'):
             update_data['password'] = generate_password_hash(update_data['password'])
+        else:
+            update_data.pop('password')
+        print(f'data for update is : {update_data}')
         mongo.users.update_one({'_id': ObjectId(session['user']['_id'])}, {'$set': update_data})
         session_refresh()
         return redirect(url_for('user'))
