@@ -69,22 +69,28 @@ def add_new_contact(user, req):
 
 def delete_contact(req):
     """deletes a contact from the current logged user"""
+    print('going to delete contact')
     contact_to_delete = mongo.users.find_one({'_id': ObjectId(req.get_json().get('user_id'))})
     if contact_to_delete is None:
         return {'error': 'user does not exist'}
     keys_to_pop = ['password', 'email', 'groups', 'events', 'contacts']
     for item in keys_to_pop:
-        if contact_to_delete.get(item):
+        if contact_to_delete.get(item) is not None:
             contact_to_delete.pop(item)
     contact_to_delete['user_id'] = str(contact_to_delete['_id'])
     contact_to_delete.pop('_id')
+
     # remove contact in session
     if session.get('user').get('contacts'):
         print(session['user']['contacts'])
         print(contact_to_delete)
-        session['user']['contacts'].remove(contact_to_delete)
-        if len(session['user']['contacts']) == 0:
-            session['user'].pop('contacts')# if no contacts left pop contacts list
+        try:
+            session['user']['contacts'].remove(contact_to_delete)
+            if len(session['user']['contacts']) == 0:
+                session['user'].pop('contacts')# if no contacts left pop contacts list
+        except Exception as ex:
+            print(session.get('user').get('contacts'))
+            print(contact_to_delete)
     # remove contact in db
     mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
                             {'$pull': {'contacts': contact_to_delete}})
