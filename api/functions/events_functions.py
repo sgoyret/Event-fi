@@ -27,7 +27,8 @@ def add_new_event(req):
                 'username': session.get('user').get('username'),
                 'name': session.get('user').get('name'),
                 'last_name': session.get('user').get('last_name'),
-                'type': 'admin'
+                'type': 'admin',
+                'avatar': session.get('user').get('avatar')
             }
             new_event_data['members'] = []
             new_event_data['members'].append(owner_admin) # set owner as member with type admin
@@ -99,14 +100,14 @@ def add_event_member(event, user, req):
         return {'error': 'you are not the admin of this event'}
     for member in event.get('members'):
         if user.get('user_id'):
-            if member.get('user_id') == user.get('user_id'):
+            if member.get('user_id') == str(user.get('_id')):
                 return {'error': 'user is already in group'}
         if user.get('username'):
             if member.get('username') == user.get('username'):
                 return {'error': 'user is already in group'}
 
     new_user_event_data = {
-                'user_id': user.get('user_id'),
+                'user_id': str(user.get('_id')),
                 'username': user.get('username'),
                 'name': user.get('name'),
                 'last_name': user.get('last_name'),
