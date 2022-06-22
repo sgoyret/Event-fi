@@ -242,6 +242,7 @@ def add_event_group(group, event):
 def delete_event_group(group, event):
     """deletes a group and all of its members from an event"""
     user_idx = None
+    # iterate through list of members in event to find current user idx
     for idx, item in enumerate(event.get('members')):
         print(f'{idx}: {item}')
         print(session.get('user').get('_id'))
@@ -257,7 +258,7 @@ def delete_event_group(group, event):
         return {'error': 'you are not the admin of this event'}
 
     group_in_event_idx = None
-    evnet_in_group_idx = None
+    event_in_group_idx = None
     event_at_user = {
         'event_id': str(event.get('_id')),
         'name': event.get('name'),
@@ -273,9 +274,9 @@ def delete_event_group(group, event):
             break
     for idx, item in enumerate(group.get('events')):
         if str(event.get('_id')) == item.get('event_id'):
-            evnet_in_group_idx = idx
+            event_in_group_idx = idx
             break
-    print(f'group_in_event_idx: {group_in_event_idx} event_in_group_idx: {evnet_in_group_idx}')
+    print(f'group_in_event_idx: {group_in_event_idx} event_in_group_idx: {event_in_group_idx}')
 
     user_id_list = []
     for member in group.get('members'):
@@ -294,7 +295,7 @@ def delete_event_group(group, event):
     if mongo.events.update_one({'_id': event['_id']},
                                 {'$pull': {'groups': event.get('groups')[group_in_event_idx]}},False,True): # remove group from events.group
         mongo.groups.update_one({'_id': group['_id']},
-                                {'$pull': {'events': group.get('events')[evnet_in_group_idx]}},False,True) # remove event from group.events
+                                {'$pull': {'events': group.get('events')[event_in_group_idx]}},False,True) # remove event from group.events
         if group.get('events') and len(group.get('events')) == 0:
             group.pop('events')
             mongo.groups.update_one({'_id': group['_id']}, { '$unset': {'events': ""}})
@@ -304,4 +305,11 @@ def delete_event_group(group, event):
         return {'success': 'group removed from event'}
     else:
         return {'error': 'user not found'}
-        
+
+def update_event_info(event, req):
+    """updates an event's info"""
+    new_event_data = {}
+    for item in req.get_json():
+        if event['item'] != req.get_json()[item]:
+            new_event_data[item] = req.get_json()[item]
+    mongo.events.update_one({'_id': event['_id']}, {'$set': new_event_data})

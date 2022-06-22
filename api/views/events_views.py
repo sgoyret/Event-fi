@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
-from api.functions.events import *
+from api.functions.events_functions import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
 import json

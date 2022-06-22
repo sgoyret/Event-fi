@@ -1,5 +1,5 @@
 from api.views import api_views
-from api.functions.user import *
+from api.functions.user_functions import *
 """
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
