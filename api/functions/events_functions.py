@@ -27,7 +27,8 @@ def add_new_event(req):
                 'username': session.get('user').get('username'),
                 'name': session.get('user').get('name'),
                 'last_name': session.get('user').get('last_name'),
-                'type': 'admin'
+                'type': 'admin',
+                'avatar': session.get('user').get('avatar')
             }
             new_event_data['members'] = []
             new_event_data['members'].append(owner_admin) # set owner as member with type admin
@@ -50,16 +51,19 @@ def add_new_event(req):
             
             # send POST request to add every group in group list to event.groups
             for group_id in req.get_json().get('groups'):
-                # requests.post('http://127.0.0.1:5001/api/events/' + str(obj.inserted_id) + '/groups', json = {'group_id': group_id})
-                pass
+                group = mongo.groups.find_one({"_id": ObjectId(group_id)})
+                event = mongo.events.find_one({'_id': ObjectId(obj.inserted_id)})
+                add_event_group(group, event)
             # send post request to add every member of member list to event.members
             for item in req.get_json().get('members'):
                 if item.get('user_id'):
-                    #requests.post('http://127.0.0.1:5001/api/events/' + str(obj.inserted_id) + '/members', json = {'user_id': item.get('user_id')})
-                    pass
+                    user = mongo.users.find_one({'_id': ObjectId(item.get('user_id'))})
                 if item.get('username'):
-                    #requests.post('http://127.0.0.1:5001/api/events/' + str(obj.inserted_id) + '/members', json = {'username': item.get('username')})
-                    pass
+                    user = mongo.users.find_one({'username': item.get('username')})
+                if user:
+                    add_event_member(event, user, {'type': 'guest'})
+                else:
+                    return {'error': 'user not found'}
             return jsonify({'status':'created'})
 
 def delete_event(event, request):
@@ -96,29 +100,33 @@ def add_event_member(event, user, req):
         return {'error': 'you are not the admin of this event'}
     for member in event.get('members'):
         if user.get('user_id'):
-            if member.get('user_id') == user.get('user_id'):
+            if member.get('user_id') == str(user.get('_id')):
                 return {'error': 'user is already in group'}
         if user.get('username'):
             if member.get('username') == user.get('username'):
                 return {'error': 'user is already in group'}
 
-    new_user_event_data = {}
+    new_user_event_data = {
+                'user_id': str(user.get('_id')),
+                'username': user.get('username'),
+                'name': user.get('name'),
+                'last_name': user.get('last_name'),
+                'type': req.get('type'),
+                'avatar': user.get('avatar')
+            }
     for item in req:
         new_user_event_data[item] = req.get(item)
-    new_user_event_data['name'] = user.get('name')
-    new_user_event_data['last_name'] = user.get('last_name')
-    new_user_event_data['username'] = user.get('username')
-    print('adding user to event')
+    if req.get('type') is None:
+        print('adding type')
+        new_user_event_data['type'] = 'guest'
+    print(f'adding user to event data is: {new_user_event_data}')
     mongo.events.update_one({'_id': event['_id']}, {'$push': {'members': new_user_event_data}}, upsert=True) # push member to member list
-    print('added user to event')
     event_for_user = {}
     event_for_user['event_id'] = str(event['_id'])
     event_for_user['name'] = event.get('name')
-    event_for_user['date'] = event.get('date')
-    # event_for_user['start_date'] = event.get('start_date')
-    # event_for_user['end_date'] = event.get('end_date')
-    if new_user_event_data['type'] == 'admin':
-        event_for_user['type'] = 'admin'
+    event_for_user['start_date'] = event.get('start_date')
+    event_for_user['end_date'] = event.get('end_date')
+    event_for_user['type'] = new_user_event_data.get('type')
     mongo.users.update_one({'_id': user['_id']}, {'$push': {'events': event_for_user}}) # push event to user events'
     return "user added to event"
 
@@ -154,6 +162,7 @@ def update_event_member(event, user, req):
 
 def delete_event_member(event, user, user_idx, req):
     """deletes a member from an event"""
+    print('hola')
     if event.get('members')[user_idx].get('type') != 'admin':
         return {'error': 'you are not the admin of this event'}
     user_at = {}
@@ -209,9 +218,10 @@ def add_event_group(group, event):
         'location': event.get('location'),
         'avatar': event.get('avatar')
     }
-
+    print(f'adding group to event data is: {group_at_event}')
     # add group to event
     mongo.events.update_one({'_id': event['_id']}, {'$push': {'groups': group_at_event}}, upsert=True)
+    print(f'adding event to group data is : {event_at_group}')
     # add event to group
     mongo.groups.update_one({'_id': group['_id']}, {'$push': {'events': event_at_group}}, upsert=True)
     user_id_list = []
@@ -235,12 +245,12 @@ def add_event_group(group, event):
         mongo.events.update_one({'_id': event['_id']}, {'$push': {'members': user_at_event}})
     
     print('going to add the event to all the members from the group with update_many')
-    mongo_res = mongo.users.update_many({'_id': {'$in': user_id_list}}, {'$push': {'events': event_at_user}})
-    print(mongo_res)
+    mongo.users.update_many({'_id': {'$in': user_id_list}}, {'$push': {'events': event_at_user}})
     return {'success': 'group has been added', 'status': 201}
 
 def delete_event_group(group, event):
     """deletes a group and all of its members from an event"""
+    print('entered delete event group')
     user_idx = None
     # iterate through list of members in event to find current user idx
     for idx, item in enumerate(event.get('members')):
@@ -288,8 +298,13 @@ def delete_event_group(group, event):
             'type': member.get('type'),
             'avatar': member.get('avatar')
         }
+        if user_at_event.get('type') is None:
+            user_at_event['type'] = 'guest'
+        print(f'user to delete is:{user_at_event}')
         mongo.events.update_one({'_id': event['_id']}, {'$pull': {'members': user_at_event}})
         user_id_list.append(ObjectId(member['user_id']))
+        print('going to delete event from the group of members')
+        print(user_id_list)
     mongo.users.update_many({'_id': {'$in': user_id_list}}, { '$pull': {'events': event_at_user}})
 
     if mongo.events.update_one({'_id': event['_id']},
@@ -298,10 +313,10 @@ def delete_event_group(group, event):
                                 {'$pull': {'events': group.get('events')[event_in_group_idx]}},False,True) # remove event from group.events
         if group.get('events') and len(group.get('events')) == 0:
             group.pop('events')
-            mongo.groups.update_one({'_id': group['_id']}, { '$unset': {'events': ""}})
+            mongo.groups.update_one({'_id': group['_id']}, { '$unset': {'events': 1}})
         if event.get('groups') and len(event.get('groups')) == 0:
             event.pop('groups')
-            mongo.event.update_one({'_id': event['_id']}, { '$unset': {'groups': ""}})
+            mongo.event.update_one({'_id': event['_id']}, { '$unset': {'groups': 1}})
         return {'success': 'group removed from event'}
     else:
         return {'error': 'user not found'}

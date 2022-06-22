@@ -8,7 +8,9 @@ from functions.validations import *
 from api.views import api_views
 from api.views import session_refresh
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import json
+import os
 
 app = Flask(__name__)
 app.register_blueprint(api_views)
@@ -24,6 +26,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static')
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/', strict_slashes=False)
 @app.route('/index', methods=['GET'], strict_slashes=False)
@@ -54,7 +60,7 @@ def login():
         for item in request.form:
             new_data[item] = request.form[item]
 
-        user = mongo.users.find_one({'username': new_data['username'].lower()})
+        user = mongo.users.find_one({'username': new_data['username']})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
                 print('the password checked')
@@ -81,6 +87,14 @@ def register():
 
     if request.method == 'POST':
         to_validate= ['username', 'name', 'last_name', 'email', 'password']
+        if 'avatar' not in request.files:
+            return {'error': 'no avatar'}
+        avatar = request.files.get('avatar')
+        print(f'and the avatar is: {avatar}')
+        if avatar is None:
+            return {'error': 'no avatar data'}
+        if validate_image(avatar) is False:
+            return {'error': 'image is not supported'}
         check_response = validate_user(request.form, to_validate)
         if check_response is True:             
             print('the dictionary is valid')
@@ -91,11 +105,20 @@ def register():
             if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
                 new_data['type'] = 'user'
-                collection= mongo.users
-                obj = collection.insert_one(new_data)
+                obj = mongo.users.insert_one(new_data)
                 new_data.pop('password')
                 new_data['_id'] = str(obj.inserted_id)
+                
+                print(dir(avatar))
+                filename = new_data['_id']
+            
+                print(f'avatar name: {avatar.name} final filename: {filename}\nUPLOAD_FOLDER: {UPLOAD_FOLDER}')
+                avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                mongo.users.update_one({'_id': ObjectId(new_data['_id'])}, {'$set': {'avatar': f'/static/{filename}'}})
+                new_data['avatar'] = f'/static/avatars/{filename}'
                 session['user'] = new_data
+
+
                 return redirect(url_for('index'))
             else:
                 flash('the username is already in use', error)

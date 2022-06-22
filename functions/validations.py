@@ -1,5 +1,13 @@
 import re
+import imghdr
 
+
+def validate_image(avatar):
+    return True
+    image_types = set(['jpg', 'jpeg', 'png'])
+    if imghdr.what(avatar) not in image_types:
+        return False
+    return True
 
 def validate_user(values, to_validate):
     print("entered user validation")
