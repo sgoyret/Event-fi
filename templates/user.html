@@ -14,7 +14,10 @@
 {% endblock wrapper %}
 
 {% block header %}
-    <div class="avatar" id="{{user._id}}"></div>
+    <div class="avatar" id="{{user._id}}" style="background-image: url(/static/avatars/{{user.username}}.png); background-repeat: no-repeat; background-size: contain;">
+        <!--p>C:\Users\ojo-perezoso\Desktop\Eventify\static\avatar</p>
+        <img src="/static/avatar.jpg" width=50px height=50px alt="" srcset=""-->
+    </div>
     <div class="userinfo">
         <div class="names">{{user.name}} {{user.last_name}}</div>
         <div class="username">@{{user.username}}</div>
@@ -96,8 +99,7 @@
                         <li> 
                             <div class="listcontact" id="{{value.user_id}}"> 
                                 <div class="image"> 
-                                    <div class="img"> 
-                                    </div> 
+                                    <img class="img" style="background-image: url(/static/avatars/{{value.username}}.png); background-repeat: no-repeat; background-size: contain;">
                                 </div> 
                                 <div class="info"> 
                                 <p>  {{value.name}} {{value.last_name}} </p>
