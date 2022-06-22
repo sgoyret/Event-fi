@@ -1,5 +1,5 @@
     document.getElementById('create').addEventListener("click", function () {creationPopup()}, false);
-
+    
     async function creationPopup() { 
         const creationpopup = 
         '<div class="popup" id="eventcreate">' +
@@ -31,11 +31,11 @@
         document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
         document.getElementById('sidebar').style.display = "unset";
     });
+    document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false);
     // Add a click listener for create a group button
     document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
     // Add a click listener for create an event button
     document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
-    document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false)
     // Add a click listener for close button
         /*const request = new XMLHttpRequest();
         request.open('POST', '/api/events/');
@@ -70,16 +70,19 @@
     document.getElementById('form').innerHTML = eventform;
     document.getElementById('eventmake').classList.add('picked');
     document.getElementById('groupmake').classList.remove('picked');
+    document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
+    // Add a click listener for create an event button
+    document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
+    document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false)
     };
 
     async function eventForm () {
          // Add a click listener for Crear button (event only) and send data to server
-    document.getElementById('creationevent').addEventListener("click", function() {
         const formelements = document.getElementById('eventdata').getElementsByTagName('input');
         var formdata = {};
         for (let item of formelements) {
             if (item.value == '') {
-                alert('Please fill in all fields');
+                showResponse('Debes rellenar todos los campos');
                 return;
             } else {
                 formdata[item.name] = item.value;
@@ -105,25 +108,32 @@
                 '<div class="add" id="add">' +
             '</div>';
             console.log(data)
-            for (let item of data) {
-                document.getElementById('add').innerHTML +=
+            if (data) {
+                for (let item of data) {
+                    document.getElementById('add').innerHTML +=
+                    '<div class="addgroup">' +
+                        '<div class="addgroupname">' + item.name + '</div>' +
+                        '<div class="addgroupbutton" id="' + item.group_id + '"><i class="bx bx-plus" ></i> Añadir </div>' +
+                    '</div>';
+                    
+                };
+                formdata['groups'] = [];
+                for (let element of document.getElementsByClassName('addgroupbutton')) {
+                    element.addEventListener("click", function() {
+                        const group_id = element.id;
+                        console.log(group_id);
+                        if (formdata.groups.includes(group_id)) {
+                        } else {
+                            formdata.groups.push(group_id)
+                        }
+                        console.log(formdata);
+                    });
+                }
+            }
+            else {
                 '<div class="addgroup">' +
-                    '<div class="addgroupname">' + item.name + '</div>' +
-                    '<div class="addgroupbutton" id="' + item.group_id + '"><i class="bx bx-plus" ></i> Añadir </div>' +
-                '</div>';
-                
-            };
-            formdata['groups'] = [];
-            for (let element of document.getElementsByClassName('addgroupbutton')) {
-                element.addEventListener("click", function() {
-                    const group_id = element.id;
-                    console.log(group_id);
-                    if (formdata.groups.includes(group_id)) {
-                    } else {
-                        formdata.groups.push(group_id)
-                    }
-                    console.log(formdata);
-                });
+                        '<div class="addgroupname">No tienes grupos</div>' +
+                    '</div>';
             }
             document.getElementById('closepopup').addEventListener("click", function() {
                 document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
@@ -149,30 +159,36 @@
                         document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
                         creationPopup()
                         }, false);
-                    for (let item of data) {
-                        document.getElementById('add').innerHTML +=
-                        '<div class="addgroup">' +
-                            '<div class="addgroupname">' + item.username + '</div>' +
-                            '<div class="addgroupbutton" id="' + item.user_id + '"> Añadir </div>' +
-                        '</div>';
+                    if (data) {
+                        for (let item of data) {
+                            document.getElementById('add').innerHTML +=
+                            '<div class="addgroup">' +
+                                '<div class="addgroupname">' + item.username + '</div>' +
+                                '<div class="addgroupbutton" id="' + item.user_id + '"> Añadir </div>' +
+                            '</div>';
+                        }
+                        formdata['members'] = [];
+                        for (let element of document.getElementsByClassName('addgroupbutton')) {
+                            element.addEventListener("click", function() {
+                                const contact_id = element.id;
+                                console.log(contact_id);
+                                if (formdata.members.some( element => element.user_id == contact_id )){
+                                } else {
+                                    formdata['members'].push({'user_id':contact_id});
+                                }
+                                console.log(formdata);
+                            });
+                        }
                     }
-                    formdata['contacts'] = [];
-                    for (let element of document.getElementsByClassName('addgroupbutton')) {
-                        element.addEventListener("click", function() {
-                            const contact_id = element.id;
-                            console.log(contact_id);
-                            if (formdata.contacts.includes(contact_id)) {
-                            } else {
-                                formdata.contacts.push(contact_id)
-                            }
-                            console.log(formdata);
-                        });
+                    else {
+                        '<div class="addgroup">' +
+                                '<div class="addgroupname">No tienes contactos</div>' +
+                            '</div>';
                     }
                     sendEventForm(formdata);
                 };
             }, false);
         };
-    });
 };
 
     async function sendEventForm(formdata) {
@@ -200,13 +216,16 @@
         document.getElementById('form').innerHTML = groupform;
         document.getElementById('eventmake').classList.remove('picked');
         document.getElementById('groupmake').classList.add('picked');
+        document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
+        // Add a click listener for create an event button
+        document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
         // Add a click listener for Crear button(group only) 
         document.getElementById('creationgroup').addEventListener("click", function() {
             const form = document.getElementById('groupdata');
             var formdata = {};
             for (let item of form) {
                 if (item.value == '') {
-                    alert('Please fill in all fields');
+                    showResponse('Debes rellenar todos los campos');
                     return;
                 } else {
                     formdata[item.name] = item.value;
@@ -223,6 +242,29 @@
                 const data = request.responseText;
                 console.log(data);
                 };
+                showResponse();
+                document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
+            document.getElementById('sidebar').style.display = 'unset';
         });
+
     };
+
+    async function showResponse(message, ok) {
+        const responsePopup = 
+        '<div class="responsepopup" id="response">' +
+            '<p>' + message + '<p>' +
+            '<div class="status" id="status"> </div>'
+        '</div>';
+        document.getElementById('wraper').insertAdjacentHTML("afterbegin", responsePopup);
+        if (ok) {
+            document.getElementById('status').innerHTML =
+            "<i class='bx bx-check'></i>"; 
+        } else {
+            document.getElementById('status').innerHTML =
+            "<i class='bx bx-x' ></i>";
+        }
+        setTimeout(function() {
+            document.getElementById('wraper').removeChild(document.getElementById('response'));
+        }, 2000);
+    }
 // Add a click listener for create navbar button

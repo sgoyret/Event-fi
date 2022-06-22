@@ -11,11 +11,14 @@ api_views = Blueprint('api_views', __name__, template_folder='templates')
 
 # Auxiliary functions
 def session_refresh():
-    user_id = session.get('user').get('_id')
-    user = mongo.users.find_one({'_id': ObjectId(user_id)})
-    user['_id'] = str(user_id)
-    session['user'] = user
-
-from api.views.groups import *
-from api.views.events import *
-from api.views.users import *
+    if session.get('user'):
+        user_id = session.get('user').get('_id')
+        user = mongo.users.find_one({'_id': ObjectId(user_id)})
+        user['_id'] = str(user_id)
+        session['user'] = user
+    else:
+        pass
+from api.views.groups_views import *
+from api.views.events_views import *
+from api.views.users_views import *
+# from api.views.locations_views import *

@@ -1,3 +1,4 @@
+from distutils.log import error
 from bson.objectid import ObjectId
 from flask import Flask, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
@@ -44,13 +45,16 @@ def login():
         return render_template('login.html')
 
     if request.method == 'POST':
+        to_validate= ['username', 'password']
+        check_response = validate_user(request.form, to_validate)
+
         for key, value in request.form.items():
             print(f'{key}: {value}')
         new_data = {}
         for item in request.form:
             new_data[item] = request.form[item]
 
-        user = mongo.users.find_one({'username': new_data['username']})
+        user = mongo.users.find_one({'username': new_data['username'].lower()})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
                 print('the password checked')
@@ -76,7 +80,8 @@ def register():
         return redirect(url_for('index'))
 
     if request.method == 'POST':
-        check_response = validate_user_creation(request.form)
+        to_validate= ['username', 'name', 'last_name', 'email', 'password']
+        check_response = validate_user(request.form, to_validate)
         if check_response is True:             
             print('the dictionary is valid')
             new_data = {}
@@ -93,7 +98,9 @@ def register():
                 session['user'] = new_data
                 return redirect(url_for('index'))
             else:
-                return {'error': 'the username is already in use'}
+                flash('the username is already in use', error)
+                return redirect(url_for('register'))
+        flash(f'{check_response}', error)
         return redirect(url_for('register'))
 
     if request.method == 'GET':
@@ -113,8 +120,7 @@ def settings():
         return redirect(url_for('login'))
     if request.method == 'GET':
         # render settings template passing session for Info
-        # return render_template('settings.html', user=session['user'])
-        return jsonify(session['user'])
+        return render_template('settings.html', user=session['user'])
     if request.method == 'POST':
         # update user info
         update_data = {}
@@ -126,6 +132,9 @@ def settings():
             return redirect(url_for('user'))
         if update_data.get('password'):
             update_data['password'] = generate_password_hash(update_data['password'])
+        else:
+            update_data.pop('password')
+        print(f'data for update is : {update_data}')
         mongo.users.update_one({'_id': ObjectId(session['user']['_id'])}, {'$set': update_data})
         session_refresh()
         return redirect(url_for('user'))

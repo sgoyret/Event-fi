@@ -1,9 +1,11 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoiZGlla2thbiIsImEiOiJjbDFucDY1ZWcwZDg4M2xtanM1ajAxdmw0In0.qWC1IZvfYRzjMzuRqPcbwQ';
-const map = new mapboxgl.Map({
+window.addEventListener('load', function() {
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZGlla2thbiIsImEiOiJjbDFucDY1ZWcwZDg4M2xtanM1ajAxdmw0In0.qWC1IZvfYRzjMzuRqPcbwQ';
+    const map = new mapboxgl.Map({
     container: 'map', // container ID
     style: 'mapbox://styles/mapbox/light-v10', // style URL
     center: [-56.0797027522, -34.7892933233], // starting position [lng, lat]
     zoom: 16 // starting zoom
+    });
 });
 
 /*
