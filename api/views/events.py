@@ -92,9 +92,6 @@ def single_event(event_id):
     
     user_idx = None
     for idx, item in enumerate(event.get('members')):
-        print(f'{idx}: {item}')
-        print(session.get('user').get('user_id'))
-
         if item.get('user_id') == session.get('user').get('_id'):
             user_idx = idx
             print('found user')
@@ -107,6 +104,10 @@ def single_event(event_id):
         # return event json object
         event['_id'] = str(event['_id'])
         return jsonify(event)
+    
+    if request.method == 'PUT':
+        # update event information
+        return update_event_info(event, request)
 
     if request.method == 'DELETE':
         # delete event

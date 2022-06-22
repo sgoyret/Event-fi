@@ -172,9 +172,9 @@
                             element.addEventListener("click", function() {
                                 const contact_id = element.id;
                                 console.log(contact_id);
-                                if (formdata.members.includes(contact_id)) {
+                                if (formdata.members.some( element => element.user_id == contact_id )){
                                 } else {
-                                    formdata.members.push(contact_id)
+                                    formdata['members'].push({'user_id':contact_id});
                                 }
                                 console.log(formdata);
                             });

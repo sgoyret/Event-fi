@@ -27,7 +27,6 @@ def groups():
         user_groups = session.get('user').get('groups')
         return jsonify(user_groups)
 
-
     if request.method == 'POST':
         #create new group
         return add_new_group(request)
@@ -59,6 +58,10 @@ def single_group(group_id):
             if key == '_id':
                 group_data[key] = str(group[key])
         return jsonify(group_data)
+
+    if request.method == 'PUT':
+        # update group information
+        return update_group_info(group, request)
 
     if request.method == 'DELETE':
         # delete group

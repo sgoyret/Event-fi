@@ -136,3 +136,11 @@ def update_group_member_type(user, group, req):
     
     session_refresh()
     return {'success': 'group member updated successfully'}
+
+def update_group_info(group, req):
+    """updates a group's info"""
+    new_group_data = {}
+    for item in req.get_json():
+        if group['item'] != req.get_json()[item]:
+            new_group_data[item] = req.get_json()[item]
+    mongo.groups.update_one({'_id': group['_id']}, {'$set': new_group_data})

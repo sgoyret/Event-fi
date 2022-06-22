@@ -1,3 +1,4 @@
+from distutils.log import error
 from bson.objectid import ObjectId
 from flask import Flask, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
@@ -97,7 +98,9 @@ def register():
                 session['user'] = new_data
                 return redirect(url_for('index'))
             else:
-                return {'error': 'the username is already in use'}
+                flash('the username is already in use', error)
+                return redirect(url_for('register'))
+        flash(f'{check_response}', error)
         return redirect(url_for('register'))
 
     if request.method == 'GET':
