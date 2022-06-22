@@ -241,6 +241,7 @@ def add_event_group(group, event):
 
 def delete_event_group(group, event):
     """deletes a group and all of its members from an event"""
+    print('entered delete event group')
     user_idx = None
     for idx, item in enumerate(event.get('members')):
         print(f'{idx}: {item}')
@@ -304,4 +305,3 @@ def delete_event_group(group, event):
         return {'success': 'group removed from event'}
     else:
         return {'error': 'user not found'}
-        

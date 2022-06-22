@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
-from api.functions.events import add_event_member
+from api.functions.events import add_event_member, delete_event_group
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
@@ -60,12 +60,15 @@ def delete_group(group):
         mongo.users.update_one({'_id': item},
                             {'$pull': {'groups': {'name': group['name']}}},False,True) 
     # delete event
-    print('going to delete group')
+    print('for each event call delete_event_group with group to delete')
+    for e in group.get('events'):
+        event = mongo.events.find_one({'_id': ObjectId(e['event_id'])})
+        delete_event_group(group, event)
+    print('delete group')
     mongo.groups.delete_one({'_id': group['_id']})
 
     # update session
-    user_groups = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})['groups']
-    session['user']['groups'] = user_groups
+    session_refresh()
     return {'success': 'group has been deleted'}
 
 def add_group_member(user, group, req):
@@ -101,7 +104,7 @@ def add_group_member(user, group, req):
             print('did i added it?... check the database')
     return {'success': 'user added to group'}
 
-def delete_group_member(user, group, req):
+def delete_group_member(user, group):
     user_at = {}
     group_at_user = {}
     for idx, item in enumerate(group.get('members')):
@@ -114,7 +117,7 @@ def delete_group_member(user, group, req):
     print(f'user to delete: {user_at}')
     if mongo.groups.update_one({'_id': group['_id']},
                                 {'$pull': {'members': user_at}},False,True): # remove member from group
-        mongo.users.update_one({'_id': ObjectId(req.get_json().get('user_id'))},
+        mongo.users.update_one({'_id': user.get('_id')},
                                 {'$pull': {'groups': group_at_user}},False,True) # remove group from user events
         if user.get('groups') and len(user.get('groups')) == 0:
             user.pop('groups') # remove groups from user if no groups left
