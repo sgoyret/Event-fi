@@ -54,7 +54,7 @@ def login():
         for item in request.form:
             new_data[item] = request.form[item]
 
-        user = mongo.users.find_one({'username': new_data['username'].lower()})
+        user = mongo.users.find_one({'username': new_data['username']})
         if user:
             if check_password_hash(user['password'], new_data['password']): #hashed passord against plain password
                 print('the password checked')

@@ -82,11 +82,11 @@ def delete_contact(req):
         print(contact_to_delete)
         session['user']['contacts'].remove(contact_to_delete)
         if len(session['user']['contacts']) == 0:
-            session['user'].pop('contacts') # if no contacts left pop contacts list
+            session['user'].pop('contacts')# if no contacts left pop contacts list
     # remove contact in db
     mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
                             {'$pull': {'contacts': contact_to_delete}})
-    if mongo.users.find_one({ 'contacts.0': {'$exists' : False }}):
+    """if mongo.users.find_one({ 'contacts.0': {'$exists' : False }}):
         mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
-                               {'$unset': {'contacts': 1}})# if no contacts left pop contact list
+                               {'$unset': {'contacts': 1}})# if no contacts left pop contact list"""
     return {"success": "contact deleted"}

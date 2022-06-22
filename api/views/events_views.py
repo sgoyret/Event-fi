@@ -109,6 +109,7 @@ def event_members(event_id):
               
     if request.method == 'DELETE':
         # delete member from event
+        print('adios')
         return delete_event_member(event, user, user_idx, request)
 
 
