@@ -23,17 +23,24 @@ def get_user_info(user_id):
 
 def add_new_contact(user, req):
     """adds a new contact to the logged user"""
-    if req.get_json().get('username').lower() == session.get('user').get('username'):
-            return {'error': 'you can not add yourself as a contact'}
-
-    if req.get_json().get('_id'):
+    new_contact = None
+    if req.get_json().get('user_id'):
         new_contact = mongo.users.find_one({'_id': ObjectId(req.get_json().get('user_id'))})
     elif req.get_json().get('username'):
         new_contact = mongo.users.find_one({'username': req.get_json().get('username')})
+    
     if new_contact is None:
         return {"error": "target user not found"}
 
-    keys_to_pop = ['password', 'email', 'events', 'groups']
+    if new_contact.get('username').lower() == session.get('user').get('username'):
+            return {'error': 'you can not add yourself as a contact'}
+
+    if session.get('user').get('contacts'):
+        for c in session.get('user').get('contacts'):
+            if c.get('user_id') == str(user.get('_id')):
+                return {'error': 'user already in contacts'}
+
+    keys_to_pop = ['password', 'email', 'groups', 'events', 'contacts']
     for item in keys_to_pop:
         if new_contact.get(item):
             new_contact.pop(item)
@@ -63,20 +70,23 @@ def delete_contact(req):
     contact_to_delete = mongo.users.find_one({'_id': ObjectId(req.get_json().get('user_id'))})
     if contact_to_delete is None:
         return {'error': 'user does not exist'}
-    keys_to_pop = ['password', 'email', 'events', 'groups']
+    keys_to_pop = ['password', 'email', 'groups', 'events', 'contacts']
     for item in keys_to_pop:
-        contact_to_delete.pop(item)
+        if contact_to_delete.get(item):
+            contact_to_delete.pop(item)
     contact_to_delete['user_id'] = str(contact_to_delete['_id'])
+    contact_to_delete.pop('_id')
     # remove contact in session
     if session.get('user').get('contacts'):
         print(session['user']['contacts'])
+        print(contact_to_delete)
         session['user']['contacts'].remove(contact_to_delete)
         if len(session['user']['contacts']) == 0:
             session['user'].pop('contacts') # if no contacts left pop contacts list
     # remove contact in db
     mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
                             {'$pull': {'contacts': contact_to_delete}})
-    if mongo.users.find_one({{ 'contacts.0': {'$exists' : False }}}):
+    if mongo.users.find_one({ 'contacts.0': {'$exists' : False }}):
         mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
-                                {'$pull': 'contacts'})# if no contacts left pop contact list
+                               {'$unset': {'contacts': 1}})# if no contacts left pop contact list
     return {"success": "contact deleted"}

@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from flask_cors import CORS
 from pymongo import MongoClient
 from functions.validations import *
+from api.functions.events import add_event_member
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
@@ -89,10 +90,15 @@ def add_group_member(user, group, req):
     mongo.users.update_one({'_id': user['_id']}, {'$push': {f'groups': new_group_to_user}}) # push group to user groups' 
 
     if group.get('events'):
-        for event in group.get('events'):
+        for e in group.get('events'):
             # POST request api/events/<event[_id]>/members {user_id: new_user_to_group[user_id]}
             # requests.post(f'http://localhost:5001/api/events/{event.get("event_id")}/members', data={"user_id": new_user_to_group['user_id']})
+            event = mongo.events.find_one({'_id': ObjectId(e['event_id'])})
+            if event is None:
+                continue
             print(f'i should add the {event["name"]} to the {user["username"]}')
+            add_event_member(event, user, {'type': 'member'})
+            print('did i added it?... check the database')
     return {'success': 'user added to group'}
 
 def delete_group_member(user, group, req):

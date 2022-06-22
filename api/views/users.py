@@ -58,8 +58,8 @@ def contacts():
 
     user = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
     if user is None:
-        return {"error": "user not found"}
-    
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
         # add new contact
         return add_new_contact(user, request)
