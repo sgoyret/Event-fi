@@ -27,8 +27,7 @@
 
 {% block nav%}
 <div class="selection">
-    <span id="events" class="selected">Eventos</span>
-    <span id="groups">Grupos</span>
+    <span id="groups" class="selected">Grupos</span>
     <span id="contacts">Contactos</span>
 </div>
 {% endblock nav%}
@@ -36,33 +35,7 @@
 {% block container %}
     <div class="content">
         <ul class="list">
-            <div id="userevents">
-                {% if user.events %}
-                    {% for value in user.events %}
-                        <li> 
-                            <div class="listevent" id="{{value.event_id}}"> 
-                                <div class="image"> 
-                                    <div class="img" style="background-image: url(/static/avatars/{{value.name}}.png); background-repeat: no-repeat; background-size: contain;">
-                                    </div> 
-                                </div> 
-                                <div class="info"> 
-                                <p>  {{ value.name }} </p> 
-                                <p>  {{ value.start_date}}  </p> 
-                                <p>  {{ value.location }}  </p> 
-                                </div> 
-                                <div class="manage"> 
-                                    <div class="manage-button"> 
-                                        <i id="trash" class='bx bx-trash'></i>
-                                    </div> 
-                                </div> 
-                            </div> 
-                        </li>
-                {% endfor %}
-                {% else %}
-                    <li style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún evento próximamente</li>
-                {% endif %}
-                </div>
-                <div id="usergroups" class="none">
+                <div id="usergroups">
                 {% if user.groups %}
                     {% for value in user.groups %}
                         <li> 
@@ -103,7 +76,7 @@
                                 </div> 
                                 <div class="info"> 
                                 <p>  {{value.name}} {{value.last_name}} </p>
-                                <p>  {{value.username}}  </p>
+                                <p>  @{{value.username}}  </p>
                                 </div> 
                                 <div class="manage"> 
                                     <div class="manage-button-contact"> 

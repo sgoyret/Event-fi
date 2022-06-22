@@ -1,4 +1,4 @@
-    document.getElementById('create').addEventListener("click", function () {creationPopup()}, false);
+    document.getElementById('addevent').addEventListener("click", function () {creationPopup()}, false);
     
     async function creationPopup() { 
         const creationpopup = 
@@ -25,11 +25,13 @@
             '</div>' + 
             '<div id="closepopup class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
         '</div>';
-    document.getElementById('sidebar').style.display = "none";
+    document.getElementById('footer').style.display = "none";
+    document.getElementById('header').style.display = "none";
     document.getElementById('wraper').insertAdjacentHTML("afterbegin", creationpopup);
     document.getElementById('closepopup').addEventListener("click", function() {
         document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-        document.getElementById('sidebar').style.display = "unset";
+        document.getElementById('footer').style.display = "unset";
+        document.getElementById('header').style.display = "unset";
     });
     document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false);
     // Add a click listener for create a group button
@@ -204,7 +206,8 @@
                 console.log(data);
             }
             document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-        document.getElementById('sidebar').style.display = 'unset';
+        document.getElementById('footer').style.display = 'unset';
+        document.getElementById('header').style.display = "unset";
         }, false);
     }
     async function groupMake() {
@@ -242,9 +245,10 @@
                 const data = request.responseText;
                 console.log(data);
                 };
-                showResponse();
+                showResponse(JSON.parse(request.responseText).success, ok);
                 document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-            document.getElementById('sidebar').style.display = 'unset';
+            document.getElementById('footer').style.display = 'unset';
+            document.getElementById('header').style.display = "unset";
         });
 
     };

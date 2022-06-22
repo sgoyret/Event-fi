@@ -1,7 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .wraper {
@@ -22,11 +24,11 @@ body {
     margin-top: 10px;
     width: 150px;
     height: 25px;
-    font-family: 'Ubuntu', sans-serif;
-    background-color:#6205e3;
-    color: white;
+    border: 2px solid #6205e3;
+    color: black;
     border-radius: 2px;
-    border:none;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
 }
 .back{
     position: absolute;
@@ -42,7 +44,7 @@ body {
     border: none;
 }
 #events, #groups, #contacts {
-    width: 33.33%;
+    width: 50%;
     text-align: center;
     height: 100%;
     line-height: 200%;
@@ -338,4 +340,30 @@ input[type="datetime-local"] {
 .info {
     width: 40%;
     text-align: left;
+}
+.addmember input {
+    all: unset;
+}
+.addmember {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+    background-color: white;
+}
+.bx-down-arrow-alt {
+    font-size: 35px;
+    color: #5a5a5a;
+}
+.dropdownicon {
+    display: flex;
+    align-items: center;
+}
+#addtotext {
+    text-align: left;
+    margin-left: 10px;
+}
+#addsearch {
+    display: flex;
+    align-items: center;
 }
