@@ -7,6 +7,7 @@ window.addEventListener('load', function() {
     zoom: 16 // starting zoom
     });
 });
+
 /*
 map.on('load', function() {
     // Add geolocate control to the map.

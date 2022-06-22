@@ -1,4 +1,4 @@
-from distutils.log import error
+'''from distutils.log import error'''
 from bson.objectid import ObjectId
 from flask import Flask, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
@@ -39,7 +39,7 @@ def index():
     if session.get('user'):
         print(session.get('user'))
         session_refresh()
-        return render_template('index.html', session=session)
+        return render_template('responsive_index.html', session=session)
     return redirect(url_for('login'))
 
 @app.route('/login', strict_slashes=False, methods=['GET', 'POST'])
