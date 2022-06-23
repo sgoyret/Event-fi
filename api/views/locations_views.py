@@ -63,8 +63,8 @@ def locations():
 
             return {'success': f'created new group: {new_location_data.get("name")}'}
     """
-@api_views.route('/api/locations/<location_id>', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
-def single_group(location_id):
+@api_views.route('/api/locations/<location_id>', strict_slashes=False, methods=['GET'])
+def location_info(location_id):
     """route for single location, get for location info"""
     if session.get('user') is None:
        return redirect(url_for('index'))
@@ -91,7 +91,7 @@ def single_group(location_id):
 
         return location_response
 
-@api_views.route('/api/locations/<location_id>/admins', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
+@api_views.route('/api/locations/<location_id>/admins', strict_slashes=False, methods=['GET', 'POST', 'DELETE'])
 def location_admins(location_id):
     """route for single location admin management"""
     if session.get('user') is None:
@@ -120,14 +120,3 @@ def location_admins(location_id):
 
     if request.method == 'DELETE':
         return delete_location_admin(admin, location)
-
-"""
-    user_idx = None
-    for idx, item in enumerate(location.get('members')):
-        print(f'location admins: {idx}: {item}')
-        if session.get('user').get('_id') == item.get('user_id'):
-            user_idx = idx
-            break
-    if user_idx is None:
-        return {'error': 'location information only for admins'}
-"""

@@ -173,5 +173,6 @@ def map():
 def map_event():
     return render_template('map.html')
 
+
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
