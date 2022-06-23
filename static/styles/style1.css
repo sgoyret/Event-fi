@@ -14,10 +14,10 @@
 .wraper > #map {
     position: absolute;
     top: 0;
-    bottom: 0%;
+    bottom: 0;
     width: 100%;
+    z-index: -10;
 }
-
 .mapboxgl-ctrl-bottom-left,
 .mapboxgl-ctrl-bottom-right {
     display: none;
@@ -642,4 +642,16 @@ label {
 }
 .bx {
     font-size: 25px;
+}
+#loadscreen {
+  position: absolute;
+  background-color: #6105e3;
+  height: 100%;
+  width: 100%;
+  animation-name: loadscreen;
+  animation-duration: 1s;
+}
+@keyframes loadscreen {
+  from {opacity: 1;}
+  to {opacity: 0;}
 }

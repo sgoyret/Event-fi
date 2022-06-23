@@ -53,6 +53,16 @@ window.addEventListener("load", function() {
                 };
                 document.getElementById('membersnav').classList.add('navselected');
                 document.getElementsByClassName('popupcontent')[0].innerHTML = ''
+                document.getElementById('popupnav').insertAdjacentHTML("afterend",
+                '<div class="addmember" id="addmember">' +
+                    '<div class="dropdownicon" id="addfromcontacts">'+
+                        '<i class="bx bx-down-arrow-alt"></i>' +
+                        '<input type="text" placeholder="Añadir miembro" id="addtotext">' +
+                    '</div>' +
+                    '<div class="searchbutton" id="addsearch">' +
+                        '<i class="bx bx-plus"></i>' +
+                    '</div>' +
+                '</div>');
                 if (members) {
                     for (let element of members){
                         const member = document.createElement('div');
@@ -70,7 +80,7 @@ window.addEventListener("load", function() {
                              "<div class='image'>"+
                                      "<div class='img'> </div>" +
                              "</div>" +
-                            "<div class='membername'>" + element.name + "</div>" +
+                            "<div class='membername'>" + element.name + element.last_name + "</div>" +
                             "<div class='memberrole'> </div>" +
                             "</div>";
                             document.getElementById('popupcontent').appendChild(member);
@@ -91,6 +101,7 @@ window.addEventListener("load", function() {
                 };
                 document.getElementById('eventsnav').classList.add('navselected');
                 document.getElementsByClassName('popupcontent')[0].innerHTML = ''
+                document.getElementById('grouppopup').removeChild(document.getElementById('addmember'))
                     for (let element of events) {
                         const event = document.createElement('div');
                         event.classList.add('listevent');
@@ -119,7 +130,19 @@ window.addEventListener("load", function() {
             document.getElementById('wraper').removeChild(document.getElementById('behind'));
             });
     };
-
+    async function addmember(){
+        document.getElementById('addsearch').addEventListener('click', function(){
+            const group_id = document.getElementsByClassName('popupheaderavatar')[0].id;
+            const username = document.getElementById('addtotext').value;
+            const request = new XMLHttpRequest();
+            request.open('POST', '/api/groups/'+ group_id + '/members')
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify({'username': username}));
+            request.onload = function() {
+                console.log(request.response);
+            };
+        });
+    }
     async function grouppopup () {
         // Function that checks if the user clicked on a group from the list and if so, displays the group popup
         for (let element of document.getElementsByClassName('listgroup')) {
@@ -133,19 +156,19 @@ window.addEventListener("load", function() {
                     const groupdata = JSON.parse(request.response);
                     console.log(groupdata);
                     const grouppopup = basepopup +
-                    '<div class="grouppopup">' +
+                    '<div class="grouppopup" id="grouppopup">' +
                         "<div class='popupheader'>" +
-                            "<div class='popupheaderavatar'> </div>" +
+                            "<div class='popupheaderavatar' id='" + element.id + "'> </div>" +
                             "<div class='popupheadertext'>" +
                                 "<div class='grouptitle'>" +  groupdata.name + "</div>" +
                                 //"<div class='groupimg'> <img src='https://scontent.fmvd1-1.fna.fbcdn.net/v/t1.6435-9/91138397_142569460618578_9003032990434983936_n.png?_nc_cat=103&ccb=1-7&_nc_sid=973b4a&_nc_ohc=kANVgvRdsLsAX-y7miA&_nc_ht=scontent.fmvd1-1.fna&oh=00_AT8CDHH4X_DslZ24jK7kec_aSOWS9DrvcUQ1LUHqnvR2nA&oe=62BDC452' alt=''>" + "</div>" +
                                 "</div>" +
                         '</div>' +
-                        "<div class='popupnav'>" +
+                        "<div class='popupnav' id='popupnav'>" +
                             "<div id='membersnav' class='navselected'> Miembros</div>" +
                             "<div id='eventsnav'> Eventos</div>" +
                         '</div>' +
-                        '<div class="addmember">' +
+                        '<div class="addmember" id="addmember">' +
                             '<div class="dropdownicon" id="addfromcontacts">'+
                                 '<i class="bx bx-down-arrow-alt"></i>' +
                             '<input type="text" placeholder="Añadir miembro" id="addtotext">' +
@@ -162,6 +185,7 @@ window.addEventListener("load", function() {
                     document.getElementById('wraper').insertAdjacentHTML('afterbegin', grouppopup);
                     popupnav(groupdata.members, null, groupdata.events);
                     closepopup();
+                    addmember();
                     for (let element of groupdata.members){
                         const member = document.createElement('div');
                         member.classList.add('listcontact');

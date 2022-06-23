@@ -1,4 +1,4 @@
-'''from distutils.log import error'''
+from distutils.log import error
 from bson.objectid import ObjectId
 from flask import Flask, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
@@ -117,15 +117,18 @@ def register():
                 mongo.users.update_one({'_id': ObjectId(new_data['_id'])}, {'$set': {'avatar': f'/static/{filename}'}})
                 new_data['avatar'] = f'/static/avatars/{filename}'
                 session['user'] = new_data
+                print('the requesst is ')
+                for item in request.files:
+                    print(item)
 
-
+                print(request)
                 return redirect(url_for('index'))
             else:
                 flash('the username is already in use', error)
                 return redirect(url_for('register'))
         flash(f'{check_response}', error)
+        print(request)
         return redirect(url_for('register'))
-
     if request.method == 'GET':
         return render_template('register.html')
 

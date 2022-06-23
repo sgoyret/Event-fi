@@ -1,3 +1,4 @@
+window.addEventListener("load", function(){
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGlla2thbiIsImEiOiJjbDFucDY1ZWcwZDg4M2xtanM1ajAxdmw0In0.qWC1IZvfYRzjMzuRqPcbwQ';
 const map = new mapboxgl.Map({
     container: 'map', // container ID
@@ -18,6 +19,8 @@ map.on('load', function() {
       showUserHeading: true
   })
   );
+  map.resize(); 
+  /*
   var geojson = {
     type: 'FeatureCollection',
     features: []
@@ -83,4 +86,6 @@ map.on('load', function() {
               .addTo(map);
         });
     };
+});*/
+});
 });

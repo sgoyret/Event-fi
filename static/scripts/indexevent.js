@@ -5,13 +5,25 @@ async function eventpopup () {
     "<div class='closepopup' id='closepopup'>" +
         "<i class='bx bx-arrow-back'></i>" +
      '</div>';
-
-    const back = document.getElementById('wraper').innerHTML;
-    console.log(back)
+     const back = document.getElementById('wraper').innerHTML;
 for (let element of document.getElementsByClassName('listevent')) {
     element.addEventListener("click", function(evt) {
+        const container = document.getElementById('container')
+        const navbar = document.getElementById('footer')
+        container.innerHTML = 
+        '<div id="loadscreen">'+
+            '<div id="eventfilogo"> Eventfi </div>' +
+            '<div id="loading"></div>' +
+        '</div>';
+        setTimeout(function () {
+            document.getElementById('loadscreen').remove()
+        }, 500)
+        document.getElementById('map').style = 'display:unset; z-index:0;'
         if (evt.target !== this) return;
-        var request = new XMLHttpRequest();
+});
+};
+};
+        /*var request = new XMLHttpRequest();
         request.open('GET', 'api/events/' + element.id);
         request.send();
         request.onload = function() {   
@@ -62,7 +74,7 @@ for (let element of document.getElementsByClassName('listevent')) {
         };
     });
 }
-};
+};*/
 window.addEventListener("load", function() {
     eventpopup();
 });
