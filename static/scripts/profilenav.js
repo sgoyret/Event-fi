@@ -1,9 +1,4 @@
 window.addEventListener("load", function() {
-    const basepopup =  '<div class="behind" id="behind"> </div>' +
-                        '<div class="popup" id="popup">' +
-                        "<div class='closepopup' id='closepopup'>" +
-                            "<i class='bx bx-arrow-back'></i>" +
-                         '</div>';
 
     async function popupnav(members, groups, events) {
         // Function that adds aesthetic to the navbar
@@ -80,7 +75,8 @@ window.addEventListener("load", function() {
                              "<div class='image'>"+
                                      "<div class='img'> </div>" +
                              "</div>" +
-                            "<div class='membername'>" + element.name + element.last_name + "</div>" +
+                            "<div class='membername'>" + element.name + ' ' + element.last_name + "</div>" +
+                            "<div class='memberusername'> @" + element.username + "</div>" +
                             "<div class='memberrole'> </div>" +
                             "</div>";
                             document.getElementById('popupcontent').appendChild(member);
@@ -126,7 +122,7 @@ window.addEventListener("load", function() {
     async function closepopup () {
         const close = document.getElementsByClassName('closepopup')[0];
         close.addEventListener("click", function() {
-            document.getElementById('wraper').removeChild(document.getElementById('popup'));
+            document.getElementById('wraper').removeChild(document.getElementById('grouppopup'));
             document.getElementById('wraper').removeChild(document.getElementById('behind'));
             });
     };
@@ -155,8 +151,11 @@ window.addEventListener("load", function() {
                 request.onload = function() {
                     const groupdata = JSON.parse(request.response);
                     console.log(groupdata);
-                    const grouppopup = basepopup +
+                    const grouppopup =
                     '<div class="grouppopup" id="grouppopup">' +
+                        "<div class='closepopup' id='closepopup'>" +
+                            "<i class='bx bx-arrow-back'></i>" +
+                        "</div>" +
                         "<div class='popupheader'>" +
                             "<div class='popupheaderavatar' id='" + element.id + "'> </div>" +
                             "<div class='popupheadertext'>" +

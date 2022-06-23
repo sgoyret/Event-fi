@@ -1,0 +1,30 @@
+{% extends"base.html" %}
+{% block html_head %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/style1.css" type="text/css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <!--<script src="/static/scripts/markerpopups.js"></script>-->
+    <script src="/static/scripts/creationpopup.js" async></script>
+    <script src="/static/scripts/mapcontainer.js"></script>
+{% endblock html_head %}
+
+{% block wrapper %}
+<div id="map"></div>
+{%endblock wrapper%}
+    {%block header%}
+    <p> Eventfi</p>
+    {%endblock header%}
+        {%block container%}
+        {% endblock container %}
+        {% block footer %}
+        <div class="footer" id="footer">
+            <div class="icons">
+                <div class="usericon" id="usericon" onclick="javascript:location.href = '/user'"><span></span></div>
+                <div class="addnew" id="addevent"><span></span></div>
+                <div class="burguermenu"><span></span></div>
+            </div>
+        </div>
+        {% endblock footer %}
