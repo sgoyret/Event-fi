@@ -367,3 +367,27 @@ input[type="datetime-local"] {
     display: flex;
     align-items: center;
 }
+.popupcontent {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.grouppopup {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    border-radius: 2px;
+    color: black;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    right: 0;
+    left: 0;
+    flex-direction: column;
+    border: 2px solid #6205e3;
+    max-width: 800px;
+  }

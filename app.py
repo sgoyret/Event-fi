@@ -165,5 +165,13 @@ def settings():
         session_refresh()
         return redirect(url_for('user'))
 
+@app.route('/map', strict_slashes=False, methods=['GET'])
+def map():
+    return render_template('map.html')
+
+@app.route('/map/<event_id>', strict_slashes=False, methods=['GET'])
+def map_event():
+    return render_template('map.html')
+
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
