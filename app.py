@@ -39,7 +39,7 @@ def index():
     if session.get('user'):
         print(session.get('user'))
         session_refresh()
-        return render_template('responsive_index.html', session=session)
+        return render_template('index.html', user=session.get('user'))
     return redirect(url_for('login'))
 
 @app.route('/login', strict_slashes=False, methods=['GET', 'POST'])
