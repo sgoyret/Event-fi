@@ -105,6 +105,8 @@ def register():
             if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
                 new_data['type'] = 'user'
+                new_data['notifications'] = []
+                new_data['notifications'].append('Welcome to Event-fi App, Click our Icon to learn more about us!')
                 obj = mongo.users.insert_one(new_data)
                 new_data.pop('password')
                 new_data['_id'] = str(obj.inserted_id)

@@ -43,8 +43,9 @@ def add_new_group(req):
 
         print('getteame lso grupos')
         print(session.get('user').get('groups'))
-        mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
-
+        update_user = mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
+        if update_user is not None and obj is not None:
+            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$push':{'notifications': 'Has creado el grupo ' + new_group_data.get('name') + 'con éxito'}})
         return {'success': f'created new group: {new_group_data.get("name")}'}
 
 def delete_group(group):
@@ -65,9 +66,11 @@ def delete_group(group):
         event = mongo.events.find_one({'_id': ObjectId(e['event_id'])})
         delete_event_group(group, event)
     print('delete group')
-    mongo.groups.delete_one({'_id': group['_id']})
+    delete = mongo.groups.delete_one({'_id': group['_id']})
 
     # update session
+    if delete is not None:
+        mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$push':{'notifications': 'Has borrado el grupo ' + group.get('name') + 'con éxito'}})
     session_refresh()
     return {'success': 'group has been deleted'}
 
@@ -89,9 +92,11 @@ def add_group_member(user, group, req):
         'group_id': str(group.get('_id')),
         'name': group.get('name')
     }
-    mongo.groups.update_one({'_id': group['_id']}, {'$push': {'members': new_user_to_group}}) # push member to member list
-    mongo.users.update_one({'_id': user['_id']}, {'$push': {f'groups': new_group_to_user}}) # push group to user groups' 
-
+    
+    update_group = mongo.groups.update_one({'_id': group['_id']}, {'$push': {'members': new_user_to_group}}) # push member to member list
+    update_user = mongo.users.update_one({'_id': user['_id']}, {'$push': {f'groups': new_group_to_user}}) # push group to user groups' 
+    if update_group is not None and update_user is not None:
+        mongo.users.update_one({'_id': user['_id']}, {'$push':{'notifications': 'Has sido agregado al grupo ' + group.get('name') + 'con éxito'}})
     if group.get('events'):
         for e in group.get('events'):
             # POST request api/events/<event[_id]>/members {user_id: new_user_to_group[user_id]}
@@ -101,7 +106,6 @@ def add_group_member(user, group, req):
                 continue
             print(f'i should add the {event["name"]} to the {user["username"]}')
             add_event_member(event, user, {'type': 'member'})
-            print('did i added it?... check the database')
     return {'success': 'user added to group'}
 
 def delete_group_member(user, group):
@@ -117,11 +121,15 @@ def delete_group_member(user, group):
     print(f'user to delete: {user_at}')
     if mongo.groups.update_one({'_id': group['_id']},
                                 {'$pull': {'members': user_at}},False,True): # remove member from group
-        mongo.users.update_one({'_id': user.get('_id')},
+        update_user = mongo.users.update_one({'_id': user.get('_id')},
                                 {'$pull': {'groups': group_at_user}},False,True) # remove group from user events
         if user.get('groups') and len(user.get('groups')) == 0:
             user.pop('groups') # remove groups from user if no groups left
+        if update_user is not None:
+            mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$push':{'notifications': 'Has borrado a ' + user.get('username') + ' del grupo ' + group.get('name') + 'con éxito'}})
         return "user removed from group"
+    else:
+        return "user could not be removed from group"
 
 def update_group_member_type(user, group, req):
     new_type = req.get_json().get('type')
@@ -132,7 +140,7 @@ def update_group_member_type(user, group, req):
             # group_at_user = user.get('groups')[idx]
             group_index = idx
             break
-    mongo.users.update_one({'_id': user['_id']}, {'$set': {f'groups.{group_index}.type': new_type}}) # set new type to event in user groups
+    update_user = mongo.users.update_one({'_id': user['_id']}, {'$set': {f'groups.{group_index}.type': new_type}}) # set new type to event in user groups
     # update member type in group members
     # user_at = {}
     user_idx = None
@@ -141,8 +149,9 @@ def update_group_member_type(user, group, req):
             # user_at = group.get('members')[idx]
             user_idx = idx
             break
-    mongo.groups.update_one({'_id': group['_id']}, {'$set': {f'members.{user_idx}.type': new_type}}) # set new type member in group members
-    
+    update_group = mongo.groups.update_one({'_id': group['_id']}, {'$set': {f'members.{user_idx}.type': new_type}}) # set new type member in group members
+    if update_group is not None and update_user is not None:
+        mongo.users.update_one({'_id': user.get('_id')}, {'$push':{'notifications': 'Han cambiado tu tipo en el grupo ' + group.get('name') + ' a ' + new_type}})
     session_refresh()
     return {'success': 'group member updated successfully'}
 

@@ -16,7 +16,7 @@ def add_location_admin(new_admin, location):
     for member in location.get('admins'):
         if member.get('username') == new_admin.get('username'):
             return {'error': 'admin is already in location'}
-
+    # dictionary of data for admin appearing in location
     new_admin_to_location = {
         'user_id': str(new_admin.get('_id')),
         'username': new_admin.get('username'),
@@ -24,16 +24,18 @@ def add_location_admin(new_admin, location):
         'last_name': new_admin.get('last_name'),
         'avatar': new_admin.get('avatar')
     }
-
+    # dictionary of data for location appearing in user
     new_location_to_user = {
         'location_id': str(location.get('_id')),
         'name': location.get('name'),
         'avatar': location.get('avatar')
     }
-    mongo.locations.update_one({'_id': location['_id']}, {'$push': {'admins': new_admin_to_location}}) # push member to member list
-    mongo.users.update_one({'_id': new_admin['_id']}, {'$push': {f'locations': new_location_to_user}}) # push location to admin groups' 
-
-    return {'success': 'user added to location'}
+    update_location = mongo.locations.update_one({'_id': location['_id']}, {'$push': {'admins': new_admin_to_location}}) # push member to member list
+    update_user = mongo.users.update_one({'_id': new_admin['_id']}, {'$push': {f'locations': new_location_to_user}}) # push location to admin groups' 
+    if update_user is not None and update_location is not None:
+        mongo.users.update_one({'_id': new_admin.get('_id')}, {'$push':{'notifications': 'Has sido añadido como Administrador a la locación ' + location.get('name')}})
+        return {'success': 'admin added to location'}
+    
 
 def delete_location_admin(admin, location):
     """removes an admin to a location"""
@@ -60,10 +62,12 @@ def delete_location_admin(admin, location):
     print(f'user to delete: {admin_at}')
     if mongo.locations.update_one({'_id': location['_id']},
                                 {'$pull': {'admins': admin_at}},False,True): # remove admin from location
-        mongo.users.update_one({'_id': admin.get('_id')},
+        update_location = mongo.users.update_one({'_id': admin.get('_id')},
                                 {'$pull': {'locations': location_at_user}},False,True) # remove location from user
         if admin.get('locations') and len(admin.get('locations')) == 0:
             admin.pop('locations') # remove groups from user if no groups left
+        if update_location is not None:
+            mongo.users.update_one({'_id': admin.get('_id')}, {'$push':{'notifications': 'Has sido eliminado como Administrador de la locación ' + location.get('name')}})
         return {'success': 'admin removed from location'}
 """
 def delete_location(location):
