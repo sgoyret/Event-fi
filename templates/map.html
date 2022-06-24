@@ -10,9 +10,33 @@
     <script src="/static/scripts/creationpopup.js" async></script>
     <script src="/static/scripts/mapcontainer.js"></script>
     <script>
+        {% if event %}
         window.addEventListener("load", function () {
             displayEvent({{event.location.position|tojson|safe}})
         });
+        {% endif %}
+        {% if locations %}
+        const geojson = {
+            "type": "FeatureCollection",
+            "features": []
+        }
+        {% for value in locations %}
+            geojson.features.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": {{value.position.geometry.coordinates|tojson|safe}}
+                },
+                "properties": {
+                    'id' : '{{value.get("location_id")}}'
+                }
+            })
+        {% endfor %}
+        window.addEventListener("load", function () {
+            displayLocations(geojson)
+        });
+        {% endif %}
+
     </script>
 {% endblock html_head %}
 

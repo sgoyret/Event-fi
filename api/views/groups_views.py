@@ -85,6 +85,7 @@ def group_members(group_id):
     if user_idx is None:
         return {'error': 'you are not a member of this group'}
 
+    user = None
     if request.get_json().get('user_id'):
         user = mongo.users.find_one({'_id': ObjectId(request.get_json().get('user_id'))})
     elif request.get_json().get('username'):
