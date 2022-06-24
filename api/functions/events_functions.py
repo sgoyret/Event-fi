@@ -81,11 +81,17 @@ def add_new_event(req):
             if None not in update_list:
                  mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$push': {f'notifications': 'Has creado el evento {new_event_data["name"]}'}})
             # send POST request to add every group in group list to event.groups
+            if req.get_json().get('groups') is None:
+                req.get_json()['groups'] = []
+
             for group_id in req.get_json().get('groups'):
                 group = mongo.groups.find_one({"_id": ObjectId(group_id)})
                 event = mongo.events.find_one({'_id': ObjectId(obj.inserted_id)})
                 add_event_group(group, event)
             # send post request to add every member of member list to event.members
+
+            if req.get_json().get('members') is None:
+                req.get_json()['members'] = []
             for item in req.get_json().get('members'):
                 if item.get('user_id'):
                     user = mongo.users.find_one({'_id': ObjectId(item.get('user_id'))})

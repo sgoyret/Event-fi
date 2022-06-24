@@ -63,14 +63,14 @@
         request.send();
         request.onload = function (){
             const locations = JSON.parse(request.responseText)
-            console.log(locations)
-        for (let element of locations){
-            const location = document.createElement('option')
-            location.value = element.location_id
-            location.innerHTML = element.name
-            document.getElementById('location').appendChild(location)
+            console.log(locations);
+            for (let element of locations){
+                const location = document.createElement('option')
+                location.value = element.location_id
+                location.innerHTML = element.name
+                document.getElementById('location').appendChild(location)
+            }
         }
-    }      
 }
 
     async function eventMake() {

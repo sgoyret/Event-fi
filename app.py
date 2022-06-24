@@ -170,7 +170,7 @@ def settings():
 @app.route('/map', strict_slashes=False, methods=['GET'])
 def map():
     locations = mongo.locations.find()
-    return render_template('map.html', locations=locations)
+    return render_template('map.html', locations=locations, user=session.get('user'))
 
 @app.route('/map/event/<event_id>', strict_slashes=False, methods=['GET'])
 def map_event(event_id):
@@ -179,7 +179,7 @@ def map_event(event_id):
     session_refresh()
     event = mongo.events.find_one({'_id': ObjectId(event_id)})
     if event:
-        return render_template('map.html', event=event)
+        return render_template('map.html', event=event, user=session.get('user'))
     else:
         return {"error": "event not found"}
 

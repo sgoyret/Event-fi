@@ -14,7 +14,7 @@ mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net
 mongo = mongo.get_database('EVdb')
 
 # ---------LOCATION ROUTES----------
-api_views.route('/api/locations', strict_slashes=False, methods=['GET', 'POST'])
+@api_views.route('/api/locations', strict_slashes=False, methods=['GET', 'POST'])
 def locations():
     """GET and POST for locations"""
     if session.get('user') is None:

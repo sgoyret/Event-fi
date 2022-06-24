@@ -11,6 +11,7 @@ from api.views import session_refresh
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
 
+
 def add_location_admin(new_admin, location):
     """adds a new admin to a location"""
     for member in location.get('admins'):
