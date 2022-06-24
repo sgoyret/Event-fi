@@ -1,58 +1,19 @@
-window.addEventListener("load", function(){
+async function displayEvent(geojson) {
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGlla2thbiIsImEiOiJjbDFucDY1ZWcwZDg4M2xtanM1ajAxdmw0In0.qWC1IZvfYRzjMzuRqPcbwQ';
+console.log(geojson)
 const map = new mapboxgl.Map({
     container: 'map', // container ID
-    style: 'mapbox://styles/mapbox/dark-v10', // style URL
-    center: [-56.0797027522, -34.7892933233], // starting position [lng, lat]
+    style: 'mapbox://styles/mapbox/light-v10', // style URL
+    center: [geojson.geometry.coordinates[0], geojson.geometry.coordinates[1]], // starting position [lng, lat]
     zoom: 16 // starting zoom
 });
 map.on('load', function() {
-    // Add geolocate control to the map.
-  map.addControl(
-      new mapboxgl.GeolocateControl({
-          positionOptions: {
-              enableHighAccuracy: true
-      },
-  // When active the map will receive updates to the device's location as it changes.
-      trackUserLocation: true,
-  // Draw an arrow next to the location dot to indicate which direction the device is heading.
-      showUserHeading: true
-  })
-  );
-  map.resize(); 
-  /*
-  var geojson = {
-    type: 'FeatureCollection',
-    features: []
-  };
-  var request = new XMLHttpRequest();
-  request.open('GET', 'http://192.168.1.21:5000/events/');
-  request.setRequestHeader('Content-Type', 'application/json');
-  request.setRequestHeader('Access-Control-Allow-Origin', '*');
-  request.setRequestHeader('Access-Control-Allow-Headers', '*');
-  request.send();
-    request.onload = function(_callback) {
-        var data = JSON.parse(request.responseText);
-        for (let i = 0; i < data.length; i++) {
-            const coordinates = data[i].coordinates.split(',');
-            geojson.features.push({
-                type: 'Feature',
-                geometry: {
-                    type: 'Point',
-                    
-                    coordinates: [parseFloat(coordinates[0]), parseFloat(coordinates[1])]
-                },
-                properties: {
-                    id: data[i]._id
-                }
-            });
-        };
-        geojson.features.forEach(function(marker) {
+  map.resize();
           // create a HTML element for each feature
-          var el = document.createElement('div');
+          const el = document.createElement('div');
           el.classList.add('marker');
-          el.addEventListener("click", function() {
-            var request = new XMLHttpRequest();
+          /*el.addEventListener("click", function() {
+           var request = new XMLHttpRequest();
             request.open('GET','127.0.0.1:5000/events/' + marker.properties.id);
             request.setRequestHeader('Content-Type', 'application/json');
             request.setRequestHeader('Access-Control-Allow-Origin', '*');
@@ -79,13 +40,23 @@ map.on('load', function() {
                     new_div.remove();
                 });
             };
-          });
+          });*/
           // make a marker for each feature and add it to the map
           new mapboxgl.Marker(el)
-            .setLngLat(marker.geometry.coordinates)
+            .setLngLat(geojson.geometry.coordinates)
               .addTo(map);
         });
-    };
-});*/
-});
-});
+}
+/*
+    // Add geolocate control to the map.
+  map.addControl(
+      new mapboxgl.GeolocateControl({
+          positionOptions: {
+              enableHighAccuracy: true
+      },
+  // When active the map will receive updates to the device's location as it changes.
+      trackUserLocation: true,
+  // Draw an arrow next to the location dot to indicate which direction the device is heading.
+      showUserHeading: true
+  })
+  ); */

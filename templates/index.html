@@ -3,31 +3,32 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles/style1.css" type="text/css">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="/static/styles/styles_index.css" type="text/css">
     <!--<script src="/static/scripts/markerpopups.js"></script>-->
     <script src="/static/scripts/creationpopup.js" async></script>
+    <script></script>
 {% endblock html_head %}
 
 {% block wrapper %}
 {%endblock wrapper%}
     {%block header%}
-    <p> Eventfi</p>
     {%endblock header%}
+    {%block scroll%}
+    <div class="postheader">
+        <div class="welcome"> Eventos para ti</div>
+        <div class="filterbar">
+            <p>Filtros</p>
+            <i class='bx bx-slider-alt' ></i>
+        </div>
+    </div>
+    {%endblock scroll%}
         {%block container%}
-        <div class="content">
-            <div class="welcome"> Eventos para ti</div>
-            <div class="filterbar">
-                <p>Filtros</p>
-                <i class='bx bx-slider-alt' ></i>
-            </div>
             <ul class="list">
                 <div id="userevents">
                     {% if user.events %}
                         {% for value in user.events %}
                             <li> 
-                                <div class="listevent" id="{{value.event_id}}" onclick="javascript:location.href = /map/{{value.event_id}}">
+                                <div class="listevent" id="{{value.event_id}}" onclick="javascript:location.href = '/map/event/{{value.event_id}}'">
                                     <div class="image"> 
                                         <div class="img" style="background-image: url(/static/avatars/{{value.name}}.png); background-repeat: no-repeat; background-size: contain;">
                                         </div> 
@@ -39,7 +40,7 @@
                                     </div> 
                                     <div class="manage"> 
                                         <div class="manage-button"> 
-                                            <i id="trash" class='bx bx-trash'></i>
+                                            <i class='bx bx-right-arrow-alt'></i>
                                         </div> 
                                     </div> 
                                 </div> 
@@ -55,8 +56,11 @@
         <div class="footer" id="footer">
             <div class="icons">
                 <div class="usericon" id="usericon" onclick="javascript:location.href = '/user'"><span></span></div>
-                <div class="addnew" id="addevent"><span></span></div>
-                <div class="burguermenu"><span></span></div>
+                {% if user.type == 'admin' or user.type == 'sudo' %}
+                    <div class="addnew" id="addevent"><span></span></div>
+                {% endif %}
+                <div class="burguermenu" onclick="javascript:location.href = '/map'"><span></span></div>
+                <div class="notifications" id="notifications"><span></span></div>
             </div>
         </div>
         {% endblock footer %}

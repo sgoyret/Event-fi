@@ -3,15 +3,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles/style1.css" type="text/css">
+    <link rel="stylesheet" href="/static/styles/styles_map.css" type="text/css">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
     <!--<script src="/static/scripts/markerpopups.js"></script>-->
     <script src="/static/scripts/creationpopup.js" async></script>
     <script src="/static/scripts/mapcontainer.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            displayEvent({{event.location.position|tojson|safe}})
+        });
+    </script>
 {% endblock html_head %}
 
 {% block wrapper %}
+<div class="back">
+    <i class='bx bx-arrow-back' onclick="javascript:location.href ='/index'"></i>
+</div>
 <div id="map"></div>
 {%endblock wrapper%}
     {%block header%}
@@ -23,8 +31,11 @@
         <div class="footer" id="footer">
             <div class="icons">
                 <div class="usericon" id="usericon" onclick="javascript:location.href = '/user'"><span></span></div>
-                <div class="addnew" id="addevent"><span></span></div>
-                <div class="burguermenu"><span></span></div>
+                {% if user.type == 'admin' or user.type == 'sudo' %}
+                    <div class="addnew" id="addevent"><span></span></div>
+                {% endif %}
+                <div class="burguermenu" onclick="javascript:location.href = '/map'"><span></span></div>
+                <div class="notifications" id="notifications"><span></span></div>
             </div>
         </div>
         {% endblock footer %}

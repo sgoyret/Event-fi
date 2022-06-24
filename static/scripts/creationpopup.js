@@ -1,4 +1,5 @@
-    document.getElementById('addevent').addEventListener("click", function () {creationPopup()}, false);
+    document.getElementById('addevent').addEventListener("click", function () {creationPopup()
+        console.log(document.getElementById('location').options[document.getElementById('location').selectedIndex].value)}, false);
     
     async function creationPopup() { 
         const creationpopup = 
@@ -18,7 +19,9 @@
                 '<input type="datetime-local" name="start_date" id="start_date">' +
                 '<label for="end_date">Fecha de finalización</label>' +
                 '<input type="datetime-local" name="end_date" class="creation"></input>' +
-                '<input name="location" class="creation" placeholder="Lugar"></input>' +
+                '<select id="location" class>' +
+                    '<option value> Lugar </option>' +
+                '</select>' +
                 '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
                 ' <div class="creationbutton" id="creationevent"> Crear</div>' +
             '</form>' +
@@ -33,6 +36,7 @@
         document.getElementById('footer').style.display = "unset";
         document.getElementById('header').style.display = "unset";
     });
+    getLocations();
     document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false);
     // Add a click listener for create a group button
     document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
@@ -53,6 +57,22 @@
             };*/
         };
 
+    async function getLocations() {
+        const request = new XMLHttpRequest();
+        request.open('GET', '/api/locations');
+        request.send();
+        request.onload = function (){
+            const locations = JSON.parse(request.responseText)
+            console.log(locations)
+        for (let element of locations){
+            const location = document.createElement('option')
+            location.value = element.location_id
+            location.innerHTML = element.name
+            document.getElementById('location').appendChild(location)
+        }
+    }      
+}
+
     async function eventMake() {
         const eventform =
         '<form id="eventdata" method="POST">' +
@@ -65,7 +85,7 @@
         '<input type="datetime-local" name="start_date" id="start_date">' +
         '<label for="end_date">Fecha de finalización</label>' +
         '<input type="datetime-local" name="end_date" class="creation"></input>' +
-        '<input name="location" class="creation" placeholder="Lugar"></input>' +
+        '<input name="id" class="creation" placeholder="Lugar"></input>' +
         '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
         ' <div class="creationbutton" id="creationevent"> Crear</div>' +
     '</form>';
@@ -82,14 +102,16 @@
          // Add a click listener for Crear button (event only) and send data to server
         const formelements = document.getElementById('eventdata').getElementsByTagName('input');
         var formdata = {};
+        const location = document.getElementById('location').options[document.getElementById('location').selectedIndex].value
         for (let item of formelements) {
-            if (item.value == '') {
+            if (item.value == '' || !location) {
                 showResponse('Debes rellenar todos los campos');
                 return;
             } else {
                 formdata[item.name] = item.value;
             }
         }
+        formdata['location'] = location
         console.log(formdata)
         document.getElementById('eventcreate').removeChild(document.getElementById('form'));
         document.getElementById('eventcreate').removeChild(document.getElementById('selection'));
