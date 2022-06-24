@@ -79,7 +79,7 @@ def add_new_event(req):
             update_user = mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'events': session.get('user').get('events')}})
             update_list = [obj, update_user, update_location]
             if None not in update_list:
-                 mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$push': {'notifications': 'Has creado el evento ' + new_event_data['name']}})
+                 mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$push': {f'notifications': 'Has creado el evento {new_event_data["name"]}'}})
             # send POST request to add every group in group list to event.groups
             for group_id in req.get_json().get('groups'):
                 group = mongo.groups.find_one({"_id": ObjectId(group_id)})
@@ -379,7 +379,7 @@ def delete_event_group(group, event):
     # sacar el evento de todos los miembros del grupo
     update_users = mongo.users.update_many({'_id': {'$in': user_id_list}}, { '$pull': {'events': event_at_user}})
     if update_users is not None:
-        mongo.users.update_many({'_id': {'$in': user_id_list}}, { '$push': {'notifications': 'Has sido eliminado del evento ' + event['name'] + ' mediante el grupo ' + group['name']}})
+        mongo.users.update_many({'_id': {'$in': user_id_list}}, { '$push': {'message': 'Has sido eliminado del evento ' + event['name'] + ' mediante el grupo ' + group['name']}})
         update_list.append(update_users)
     if mongo.events.update_one({'_id': event['_id']},
                                 {'$pull': {'groups': event.get('groups')[group_in_event_idx]}},False,True): # remove group from events.group
