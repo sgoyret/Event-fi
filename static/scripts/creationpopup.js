@@ -18,7 +18,7 @@
                 '<input type="datetime-local" name="start_date" id="start_date">' +
                 '<label for="end_date">Fecha de finalización</label>' +
                 '<input type="datetime-local" name="end_date" class="creation"></input>' +
-                '<input name="id" class="creation" placeholder="Lugar"></input>' +
+                '<input name="location" class="creation" placeholder="Lugar"></input>' +
                 '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
                 ' <div class="creationbutton" id="creationevent"> Crear</div>' +
             '</form>' +
@@ -65,7 +65,7 @@
         '<input type="datetime-local" name="start_date" id="start_date">' +
         '<label for="end_date">Fecha de finalización</label>' +
         '<input type="datetime-local" name="end_date" class="creation"></input>' +
-        '<input name="id" class="creation" placeholder="Lugar"></input>' +
+        '<input name="location" class="creation" placeholder="Lugar"></input>' +
         '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
         ' <div class="creationbutton" id="creationevent"> Crear</div>' +
     '</form>';

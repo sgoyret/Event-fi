@@ -39,7 +39,7 @@ def delete_location_admin(admin, location):
     """removes an admin to a location"""
     
     am_admin = False
-    for member in location.get('members'):
+    for member in location.get('admins'):
         if member.get('user_id') == session.get('user').get('_id'):
             am_admin = True
         if member.get('user_id') == str(admin.get('_id')):
@@ -65,9 +65,9 @@ def delete_location_admin(admin, location):
         if admin.get('locations') and len(admin.get('locations')) == 0:
             admin.pop('locations') # remove groups from user if no groups left
         return {'success': 'admin removed from location'}
-
+"""
 def delete_location(location):
-    """deletes a location and removes it from its admins"""
+    ""deletes a location and removes it from its admins""
     print('entered delete')
     if session.get('user').get('_id') != location.get('owner'):
         return {'error': 'you are not the owner of the group'}
@@ -90,3 +90,4 @@ def delete_location(location):
     # update session
     session_refresh()
     return {'success': 'location has been deleted'}
+"""

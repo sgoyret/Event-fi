@@ -15,12 +15,29 @@ def add_new_event(req):
     if validate_event_creation(req.get_json()):
             print('the event dict is valid')
             new_event_data = {}
+            new_event_location = {}
             # form new dict with data from request item by item
+            print('\n\n\n')
             for item in req.get_json():
+                print(f'checking for item in request: {item} - {req.get_json().get(item)}')
                 if item == 'groups' or item == 'members':
                     continue
+                elif item == 'location':
+                    location = mongo.locations.find_one({'_id': ObjectId(req.get_json().get('location'))})
+                    print(f'\n\ngoing to add location to event with this location: {location}')
+                    if location is None:
+                        return {'error': 'location does not exist'}
+                    new_event_location = {
+                        'location_id': str(location.get('_id')),
+                        'name': location.get('name'),
+                        'avatar': location.get('avatar'),
+                        'position': location.get('position')
+                    }
+                    print('\n\n\nthis is what im going to put in location')
+                    print(new_event_location)
                 new_event_data[item] = req.get_json().get(item)
-    
+
+            new_event_data['location'] = new_event_location
             new_event_data['owner'] = str(session.get('user').get('_id')) # set owner
             owner_admin = {
                 'user_id': new_event_data['owner'],
@@ -33,8 +50,18 @@ def add_new_event(req):
             new_event_data['members'] = []
             new_event_data['members'].append(owner_admin) # set owner as member with type admin
             # create event
+            print(f'new event data with location included\n{new_event_data}')
             obj = mongo.events.insert_one(new_event_data)
             
+            # add event to loaction
+            event_to_location = {
+                'event_id': str(obj.inserted_id),
+                'name': new_event_data.get('name'),
+                'avatar': new_event_data.get('avatar'),
+                'start_date': new_event_data.get('start_date'),
+                'end_date': new_event_data.get('end_date')
+            }
+            mongo.locations.update_one({'_id': ObjectId(new_event_location['location_id'])}, {'$push': {'events': event_to_location}})
             # update user events in session
             if session.get('user').get('events') is None:
                 session['user']['events'] = []
@@ -66,7 +93,7 @@ def add_new_event(req):
                     return {'error': 'user not found'}
             return jsonify({'status':'created'})
 
-def delete_event(event, request):
+def delete_event(event):
     """deletes an event"""
     if event.get('owner') != str(session.get('user').get('_id')):
         return {'error': 'you are not the owner of the event'}
@@ -76,6 +103,17 @@ def delete_event(event, request):
     for item in id_list:
         mongo.users.update_one({'_id': item},
                                 {'$pull': {'events': {'name': event['name']}}},False,True) # remove event from user events
+    # deletes event from location
+    event_at_location = {
+        'event_id': event.geT('_id'),
+        'name': event.get('name'),
+        'avatar': event.get('avatar'),
+        'start_date': event.get('start_date'),
+        'end_date': event.get('end_date')
+    }
+    mongo.locations.update_one({'_id': ObjectId(event.get('location'))}, {'$pull': {'events': event_at_location}})
+
+    # deletes event
     mongo.events.delete_one({'_id': event['_id']})
     
     # update session
