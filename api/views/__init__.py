@@ -17,7 +17,8 @@ def session_refresh():
         user['_id'] = str(user_id)
         session['user'] = user
     else:
-        pass
+        return redirect(url_for('login'))
+
 from api.views.groups_views import *
 from api.views.events_views import *
 from api.views.users_views import *
