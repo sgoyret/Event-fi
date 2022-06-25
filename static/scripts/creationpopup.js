@@ -1,33 +1,56 @@
     document.getElementById('addevent').addEventListener("click", function () {creationPopup()
         console.log(document.getElementById('location').options[document.getElementById('location').selectedIndex].value)}, false);
     
-    async function creationPopup() { 
-        const creationpopup = 
-        '<div class="popup" id="eventcreate">' +
-            '<div class="selection" id="selection">'+
-                '<div class="event picked" id="eventmake"> Crear evento </div>'+
-                '<div class="group" id="groupmake"> Crear grupo </div>'+
-            '</div>'+
-            '<div id="form">' +
-            '<form id="eventdata" method="POST">' +
-                '<input name="name" class="creation" placeholder="Titulo"></input>' +
-                '<label id="avatarlabel">' +
-                    '<i class="bx bx-camera"></i>' +
-                    '<input name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>'+
-                '</label>' +
-                '<label for="start_date">Fecha de inicio</label>' +
-                '<input type="datetime-local" name="start_date" id="start_date">' +
-                '<label for="end_date">Fecha de finalización</label>' +
-                '<input type="datetime-local" name="end_date" class="creation"></input>' +
-                '<select id="location" class>' +
-                    '<option value> Lugar </option>' +
-                '</select>' +
-                '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
-                ' <div class="creationbutton" id="creationevent"> Crear</div>' +
-            '</form>' +
-            '</div>' + 
-            '<div id="closepopup class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
-        '</div>';
+    async function creationPopup(formdata) { 
+        var creationpopup = ''
+        if (!formdata) {
+            creationpopup = 
+            '<div class="popup" id="eventcreate">' +
+                '<div id="form">' +
+                '<form id="eventdata" method="POST" autocomplete="off">' +
+                    '<input name="name" class="creation" placeholder="Titulo"></input>' +
+                    '<label id="avatarlabel">' +
+                        '<i class="bx bx-camera"></i>' +
+                        '<input name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>'+
+                    '</label>' +
+                    '<label for="start_date">Fecha de inicio</label>' +
+                    '<input type="datetime-local" name="start_date" id="start_date">' +
+                    '<label for="end_date">Fecha de finalización</label>' +
+                    '<input type="datetime-local" name="end_date" class="creation"></input>' +
+                    '<select id="location" class>' +
+                        '<option value> Lugar </option>' +
+                    '</select>' +
+                    '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
+                    ' <div class="creationbutton" id="creationevent"> Crear</div>' +
+                '</form>' +
+                '</div>' + 
+                '<div id="closepopup class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
+            '</div>';
+        } else {
+            console.log(formdata)
+            creationpopup =
+            '<div class="popup" id="eventcreate">' +
+                '<div id="form">' +
+                '<form id="eventdata" method="POST">' +
+                    '<input name="name" class="creation" placeholder="Titulo" value=' + formdata.name + '></input>' +
+                    '<label id="avatarlabel">' +
+                        '<i class="bx bx-camera"></i>' +
+                        '<input name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>'+
+                    '</label>' +
+                    '<label for="start_date">Fecha de inicio</label>' +
+                    '<input type="datetime-local" name="start_date" id="start_date" value=' + formdata.start_date + '></input>' +
+                    '<label for="end_date">Fecha de finalización</label>' +
+                    '<input type="datetime-local" name="end_date" class="creation" value=' + formdata.end_date + '></input>' +
+                    '<select id="location" class>' +
+                        '<option value> Lugar </option>' +
+                    '</select>' +
+                    '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;" value=' + formdata.description +'></input>' +
+                    ' <div class="creationbutton" id="creationevent"> Crear</div>' +
+                '</form>' +
+                '</div>' +
+                '<div id="closepopup class="closepopup">'+"<i id=closepopup class='closepopup bx bx-arrow-back'></i>" + '</div>' +
+            '</div>';
+            }
     document.getElementById('footer').style.display = "none";
     document.getElementById('header').style.display = "none";
     document.getElementById('wraper').insertAdjacentHTML("afterbegin", creationpopup);
@@ -39,9 +62,7 @@
     getLocations();
     document.getElementById('creationevent').addEventListener("click", function() {eventForm()}, false);
     // Add a click listener for create a group button
-    document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
     // Add a click listener for create an event button
-    document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
     // Add a click listener for close button
         /*const request = new XMLHttpRequest();
         request.open('POST', '/api/events/');
@@ -114,7 +135,6 @@
         formdata['location'] = location
         console.log(formdata)
         document.getElementById('eventcreate').removeChild(document.getElementById('form'));
-        document.getElementById('eventcreate').removeChild(document.getElementById('selection'));
         // Now ask to the user if he wants to add members or a group in this same popup'
         document.getElementById('eventcreate').classList.replace('popup', 'addpopup');
         var request = new XMLHttpRequest();
@@ -132,7 +152,7 @@
                 '<div class="add" id="add">' +
             '</div>';
             console.log(data)
-            if (data) {
+            if (data.length > 0) {
                 for (let item of data) {
                     document.getElementById('add').innerHTML +=
                     '<div class="addgroup">' +
@@ -147,8 +167,14 @@
                         const group_id = element.id;
                         console.log(group_id);
                         if (formdata.groups.includes(group_id)) {
+                            formdata.groups.splice(formdata.groups.indexOf(group_id), 1);
+                            element.classList.remove('picked');
+                            element.innerHTML = '<i class="bx bx-plus"></i> Añadir';
                         } else {
                             formdata.groups.push(group_id)
+                            element.classList.add('picked');
+                            element.innerHTML = '<i class="bx bx-minus"></i>' +
+                                                'Quitar';
                         }
                         console.log(formdata);
                     });
@@ -161,7 +187,7 @@
             }
             document.getElementById('closepopup').addEventListener("click", function() {
                 document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-                creationPopup()
+                creationPopup(formdata)
                 }, false);
             document.getElementById('groupsadded').addEventListener("click", function() {
                 const request = new XMLHttpRequest();
@@ -181,14 +207,14 @@
                     '</div>';
                     document.getElementById('closepopup').addEventListener("click", function() {
                         document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-                        creationPopup()
+                        creationPopup(formdata)
                         }, false);
                     if (data) {
                         for (let item of data) {
                             document.getElementById('add').innerHTML +=
                             '<div class="addgroup">' +
                                 '<div class="addgroupname">' + item.username + '</div>' +
-                                '<div class="addgroupbutton" id="' + item.user_id + '"> Añadir </div>' +
+                                '<div class="addgroupbutton" id="' + item.user_id + '"><i class="bx bx-plus"></i>Añadir </div>' +
                             '</div>';
                         }
                         formdata['members'] = [];
@@ -197,8 +223,14 @@
                                 const contact_id = element.id;
                                 console.log(contact_id);
                                 if (formdata.members.some( element => element.user_id == contact_id )){
+                                    formdata.members.splice(formdata.members.indexOf(contact_id), 1);
+                                    element.classList.remove('picked');
+                                    element.innerHTML = '<i class="bx bx-plus"></i> Añadir';
                                 } else {
-                                    formdata['members'].push({'user_id':contact_id});
+                                    formdata.members.push({user_id: contact_id, role: 'member'})
+                                    element.classList.add('picked');
+                                    element.innerHTML = '<i class="bx bx-minus"></i>' +
+                                                        'Quitar';
                                 }
                                 console.log(formdata);
                             });
@@ -232,48 +264,6 @@
         document.getElementById('header').style.display = "unset";
         }, false);
     }
-    async function groupMake() {
-        const groupform = 
-        '<form id="groupdata" method="POST">' +
-            '<input name="name" class="creation" placeholder="Nombre"></input>' +
-            '<div class="creationbutton" id="creationgroup"> Crear</div>' +
-        '</form>';
-        document.getElementById('form').innerHTML = groupform;
-        document.getElementById('eventmake').classList.remove('picked');
-        document.getElementById('groupmake').classList.add('picked');
-        document.getElementById('groupmake').addEventListener("click", function () {groupMake()}, false);
-        // Add a click listener for create an event button
-        document.getElementById('eventmake').addEventListener("click", function() {eventMake()}, false);
-        // Add a click listener for Crear button(group only) 
-        document.getElementById('creationgroup').addEventListener("click", function() {
-            const form = document.getElementById('groupdata');
-            var formdata = {};
-            for (let item of form) {
-                if (item.value == '') {
-                    showResponse('Debes rellenar todos los campos');
-                    return;
-                } else {
-                    formdata[item.name] = item.value;
-                }
-            }
-            console.log(formdata);
-            const request = new XMLHttpRequest();
-            request.open('POST', '/api/groups');
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.setRequestHeader('Access-Control-Allow-Origin', '*');
-            request.setRequestHeader('Access-Control-Allow-Headers', '*');
-            request.send(JSON.stringify(formdata));
-            request.onload = function() {
-                const data = request.responseText;
-                console.log(data);
-                };
-                showResponse(JSON.parse(request.responseText).success, ok);
-                document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
-            document.getElementById('footer').style.display = 'unset';
-            document.getElementById('header').style.display = "unset";
-        });
-
-    };
 
     async function showResponse(message, ok) {
         const responsePopup = 

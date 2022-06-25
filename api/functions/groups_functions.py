@@ -62,9 +62,10 @@ def delete_group(group):
                             {'$pull': {'groups': {'name': group['name']}}},False,True) 
     # delete event
     print('for each event call delete_event_group with group to delete')
-    for e in group.get('events'):
-        event = mongo.events.find_one({'_id': ObjectId(e['event_id'])})
-        delete_event_group(group, event)
+    if group.get('events'):
+        for e in group.get('events'):
+            event = mongo.events.find_one({'_id': ObjectId(e['event_id'])})
+            delete_event_group(group, event)
     print('delete group')
     delete = mongo.groups.delete_one({'_id': group['_id']})
 

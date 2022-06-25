@@ -9,6 +9,7 @@
     <!--<script src="/static/scripts/markerpopups.js"></script>-->
     <script src="/static/scripts/creationpopup.js" async></script>
     <script src="/static/scripts/mapcontainer.js"></script>
+    <script src="/static/scripts/loadingscreen.js"></script>
     <script>
         {% if event %}
         window.addEventListener("load", function () {
@@ -41,6 +42,10 @@
 {% endblock html_head %}
 
 {% block wrapper %}
+<div class="loadscreen" id="loadscreen">
+    <div id="logo"> Event-fi</div>
+    <div id="loading">Cargando...</div>
+</div>
 <div class="back">
     <i class='bx bx-arrow-back' onclick="javascript:location.href ='/index'"></i>
 </div>
@@ -55,9 +60,7 @@
         <div class="footer" id="footer">
             <div class="icons">
                 <div class="usericon" id="usericon" onclick="javascript:location.href = '/user'"><span></span></div>
-                {% if user.type == 'admin' or user.type == 'sudo' %}
-                    <div class="addnew" id="addevent"><span></span></div>
-                {% endif %}
+                <div class="home" onclick="javascript:location.href= '/'"><span></span></div>
                 <div class="burguermenu" onclick="javascript:location.href = '/map'"><span></span></div>
                 <div class="notifications" id="notifications"><span></span></div>
             </div>

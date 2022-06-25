@@ -15,7 +15,7 @@
     {%endblock header%}
     {%block scroll%}
     <div class="postheader">
-        <div class="welcome"> Eventos para ti</div>
+        <div class="welcome">Eventos para ti</div>
         <div class="filterbar">
             <p>Filtros</p>
             <i class='bx bx-slider-alt' ></i>
@@ -23,6 +23,13 @@
     </div>
     {%endblock scroll%}
         {%block container%}
+        {% if user.type == 'admin' or user.type == 'sudo' %}
+        <div id="addevent" class="create">
+            <i class='bx bx-plus'></i>
+            <div style="width: 40%;"> Crear nuevo evento...</div>
+            <div></div>
+        </div>
+        {% endif %}
             <ul class="list">
                 <div id="userevents">
                     {% if user.events %}
@@ -56,9 +63,7 @@
         <div class="footer" id="footer">
             <div class="icons">
                 <div class="usericon" id="usericon" onclick="javascript:location.href = '/user'"><span></span></div>
-                {% if user.type == 'admin' or user.type == 'sudo' %}
-                    <div class="addnew" id="addevent"><span></span></div>
-                {% endif %}
+                <div class="home" onclick="javascript:location.href= '/'"><span></span></div>
                 <div class="burguermenu" onclick="javascript:location.href = '/map'"><span></span></div>
                 <div class="notifications" id="notifications"><span></span></div>
             </div>

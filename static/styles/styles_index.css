@@ -62,16 +62,14 @@
 .wraper > .popupnone {
     display: none;
 }
-#create {
-    font-family: 'Ubuntu', sans-serif;
-    border-radius: 10px;
-    border: #350A70 2px solid;
-    width: 20%;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
+.create {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-bottom: 10px;
 }
 .close {
     position: absolute;
@@ -84,20 +82,20 @@
     cursor: pointer;
 }
 .addnew {
-    width: 25%;
-    background-image: url(../img/bxs-plus-circle.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  width: 20%;
+  background-image: url(../img/bxs-plus-circle.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .usericon {
-    width: 25%;
-    background-image: url(../img/bxs-user-circle.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  width: 20%;
+  background-image: url(../img/bxs-user-circle.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .icons {
     display: flex;
@@ -106,22 +104,29 @@
     width: 100%;
     height: 100%;
 }
-
 .burguermenu {
-    width: 25%;
-    background-image: url(../img/bxs-map.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
-}
-.notifications {
-  width: 25%;
-  background-image: url(../img/bxs-bell.svg);
+  width: 20%;
+  background-image: url(../img/bxs-map.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
   filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+}
+.home {
+width: 20%;
+background-image: url(../img/bxs-home.svg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+}
+.notifications {
+width: 20%;
+background-image: url(../img/bxs-bell.svg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .marker {
     background-image: url(../img/mapbox-icon.png);
@@ -581,7 +586,12 @@ option, select {
   text-align: left;
 }
 .addgroupbutton {
-  text-align: right;
+  display: flex;
+  text-align: center;
+  /* width: 30%; */
+  height: 50%;
+  justify-content: center;
+  align-self: center;
 }
 #eventdata {
   width: 80%;
@@ -681,4 +691,7 @@ option, select {
 .postheader {
 background-color: #f1f1f1;
 padding-bottom: 20px;
+}
+.info {
+  width: 40%;
 }

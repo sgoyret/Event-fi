@@ -79,7 +79,7 @@ display: none;
     cursor: pointer;
 }
 .addnew {
-    width: 25%;
+    width: 20%;
     background-image: url(../img/bxs-plus-circle.svg);
     background-repeat: no-repeat;
     background-position: center;
@@ -87,7 +87,7 @@ display: none;
     filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .usericon {
-    width: 25%;
+    width: 20%;
     background-image: url(../img/bxs-user-circle.svg);
     background-repeat: no-repeat;
     background-position: center;
@@ -103,15 +103,23 @@ display: none;
 }
 
 .burguermenu {
-    width: 25%;
+    width: 20%;
     background-image: url(../img/bxs-map.svg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
     filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
+.home {
+  width: 20%;
+  background-image: url(../img/bxs-home.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+}
 .notifications {
-  width: 25%;
+  width: 20%;
   background-image: url(../img/bxs-bell.svg);
   background-repeat: no-repeat;
   background-position: center;
@@ -644,8 +652,20 @@ label {
   background-color: #6105e3;
   height: 100%;
   width: 100%;
+  animation-delay: 1s;
   animation-name: loadscreen;
   animation-duration: 1s;
+  z-index: 99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+}
+#logo {
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
 }
 @keyframes loadscreen {
   from {opacity: 1;}

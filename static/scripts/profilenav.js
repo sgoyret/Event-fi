@@ -1,5 +1,5 @@
 window.addEventListener("load", function() {
-
+    groupMake();
     async function popupnav(members, groups, events) {
         // Function that adds aesthetic to the navbar
         if (groups) {
@@ -153,6 +153,7 @@ window.addEventListener("load", function() {
             });
     };
     async function addmember(){
+        console.log("hola")
         document.getElementById('addsearch').addEventListener('click', function(){
             console.log("hola")
             const group_id = document.getElementsByClassName('popupheaderavatar')[0].id;
@@ -163,9 +164,64 @@ window.addEventListener("load", function() {
             request.send(JSON.stringify({'username': username}));
             request.onload = function() {
                 console.log(request.response);
+                const response = JSON.parse(request.response);
+                if (response.status == 'success') {
+                    const member = document.createElement('div');
+                    member.classList.add('listcontact');
+                    member.innerHTML = "<div class='image'>"+
+                                            "<div class='img'> </div>" +
+                                        "</div>" +
+                                        "<div class='membername'>" + response.name + "</div>" +
+                                        "<div class='memberrole'> </div>" +
+                                        "</div>";
+                    document.getElementsByClassName('popupcontent')[0].appendChild(member);
+                }
             };
         });
     }
+    async function showResponse(message, ok) {
+        const responsePopup = 
+        '<div class="responsepopup" id="response">' +
+            '<p>' + message + '<p>' +
+            '<div class="status" id="status"> </div>'
+        '</div>';
+        document.getElementById('wraper').insertAdjacentHTML("afterbegin", responsePopup);
+        if (ok) {
+            document.getElementById('status').innerHTML =
+            "<i class='bx bx-check'></i>"; 
+        } else {
+            document.getElementById('status').innerHTML =
+            "<i class='bx bx-x' ></i>";
+        }
+        setTimeout(function() {
+            document.getElementById('wraper').removeChild(document.getElementById('response'));
+        }, 2000);
+    }
+    async function groupMake() {
+        const groupform = 
+        '<form id="groupdata" method="POST">' +
+            '<input name="name" class="creation" placeholder="Nombre"></input>' +
+            '<div class="creationbutton" id="creationgroup"> Crear</div>' +
+        '</form>';
+        document.getElementById('addgroup').addEventListener("click", function() {
+            const groupname = document.getElementById('addgrouptext').value;
+                if (groupname == '') {
+                    showResponse('Debes rellenar todos los campos');
+                    return;
+                }
+            const request = new XMLHttpRequest();
+            request.open('POST', '/api/groups');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.setRequestHeader('Access-Control-Allow-Origin', '*');
+            request.setRequestHeader('Access-Control-Allow-Headers', '*');
+            request.send(JSON.stringify({'name': groupname}));
+            request.onload = function() {
+                const data = request.responseText;
+                console.log(data);
+                };
+                showResponse('Grupo creado', 'ok');
+        });
+    };
     async function grouppopup () {
         // Function that checks if the user clicked on a group from the list and if so, displays the group popup
         for (let element of document.getElementsByClassName('listgroup')) {
@@ -249,6 +305,7 @@ window.addEventListener("load", function() {
         document.getElementById('usercontacts').classList.add('none');
         document.getElementsByClassName('content')[0].id = 'groupscontent';
         this.classList.add('selected');
+        groupMake();
     });
     this.document.querySelector('#contacts').addEventListener("click", function() {
         const selected = document.getElementsByClassName('selected')
@@ -267,6 +324,24 @@ window.addEventListener("load", function() {
             request.send(JSON.stringify({username: username}));
             request.onload = function() {
                 console.log(request.response);
+                const contact = JSON.parse(request.response);
+                const contactlist = document.createElement('div');
+                contactlist.classList.add('listcontact');
+                contactlist.id = contact.id;
+                contactlist.innerHTML =
+                "<div class='image'>"+
+                    "<div class='img'> </div>" +
+                "</div>" +
+                "<div class='info'>" +
+                "<p>" + contact.name + ' ' + contact.last_name + "</p>" +
+                "<p>@" + contact.username + "</p>" +
+                "</div>" +
+                "<div class='manage'>" +
+                    "<div class='manage-button-contact'>" +
+                    "<i  id='trash' class='bx bx-user-x'></i>" +
+                    "</div>" +
+                "</div>";
+                document.getElementById('usercontacts').appendChild(contactlist);
             };
         });
     });

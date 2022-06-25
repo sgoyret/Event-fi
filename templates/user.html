@@ -37,6 +37,19 @@
     <div class="content">
         <ul class="list">
                 <div id="usergroups">
+                    {% if user.type == 'admin' or user.type == 'sudo' %}
+                    <div class="addgroup">
+                        <label id="avatarlabel">
+                            <i class="bx bx-camera"></i> 
+                            <input name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>
+                        </label>
+                        <input type="text" placeholder="Añadir grupo" id="addgrouptext">
+                        <div class="searchbutton" id="addgroup">
+                            <i class='bx bx-plus'></i>
+                        </div>
+                    </div>
+                    <div class="margin"></div>
+                    {% endif %}
                 {% if user.groups %}
                     {% for value in user.groups %}
                         <li> 

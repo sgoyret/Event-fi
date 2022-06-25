@@ -65,7 +65,7 @@ def add_new_contact(user, req):
     session_refresh()
     # return redirect(url_for('user'))
     # must redirect to /user in the front
-    return jsonify(session['user']['contacts']), 201
+    return jsonify(new_contact), 201
 
 def delete_contact(req):
     """deletes a contact from the current logged user"""
