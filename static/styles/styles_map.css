@@ -104,6 +104,7 @@ display: none;
 
 .burguermenu {
     width: 20%;
+    height: 80%;
     background-image: url(../img/bxs-map.svg);
     background-repeat: no-repeat;
     background-position: center;
