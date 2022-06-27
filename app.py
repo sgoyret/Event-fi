@@ -81,6 +81,7 @@ def logout():
 
 @app.route('/register', methods=['POST', 'GET'], strict_slashes=False)
 def register():
+    import base64
     """create user account"""
     if session.get('user'):
         return redirect(url_for('index'))
@@ -89,8 +90,11 @@ def register():
         to_validate= ['username', 'name', 'last_name', 'email', 'password']
         if 'avatar' not in request.files:
             return {'error': 'no avatar'}
-        avatar = request.files.get('avatar')
-        print(f'and the avatar is: {avatar}')
+        print(request.form)
+        for key, value in request.form.items():
+            print(f"{key}: {value}")
+        avatar = request.form.get('avatar_content')
+        print(f'content del avatar: {avatar}')
         if avatar is None:
             return {'error': 'no avatar data'}
         if validate_image(avatar) is False:
@@ -111,13 +115,20 @@ def register():
                 new_data.pop('password')
                 new_data['_id'] = str(obj.inserted_id)
                 
-                print(dir(avatar))
+
                 filename = new_data['_id']
             
-                print(f'avatar name: {avatar.name} final filename: {filename}\nUPLOAD_FOLDER: {UPLOAD_FOLDER}')
-                avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                mongo.users.update_one({'_id': ObjectId(new_data['_id'])}, {'$set': {'avatar': f'/static/{filename}'}})
+                # print(f'avatar name: {avatar.name} final filename: {filename}\nUPLOAD_FOLDER: {UPLOAD_FOLDER}')
+                print("going to open file")
+                print(avatar)
+                # print(avatar.split(','))
+                # image_data = base64.b64decode(avatar.split(',')[1].encode())
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', filename), 'w+') as file:
+                    print("going to wrtie file")
+                    file.write(avatar)
                 new_data['avatar'] = f'/static/avatars/{filename}'
+                mongo.users.update_one({'_id': ObjectId(new_data['_id'])}, {'$set': {'avatar': new_data['avatar']}})
+                
                 session['user'] = new_data
                 print('the requesst is ')
                 for item in request.files:
@@ -139,6 +150,24 @@ def user():
     if session.get('user') is None:
         return redirect(url_for('login'))
     session_refresh()
+    try:
+        print('voy a intentar abir el avatar')
+        print('avatar: ' + session.get('user')['avatar'])
+        print('base dir: ' + BASE_DIR)
+        print('upload folder: ' + UPLOAD_FOLDER)
+        with open(os.path.join(UPLOAD_FOLDER, 'avatars', session.get('user').get('_id'))) as avt:
+            print('pude abrir el avatar')
+            session['user']['avatar'] = avt.read()
+        if session.get('user').get('contacts'):
+            contacts_with_avatar = []
+            for idx, c in enumerate(session.get('user').get('contacts')):
+                contacts_with_avatar.append(c)
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
+                    print('pude abrir el avatar')
+                    contacts_with_avatar[idx]['avatar'] = avt.read()
+            session['user']['contacts'] = contacts_with_avatar
+    except Exception as ex:
+        raise(ex)
     return render_template('user.html', user=session['user'])
 
 @app.route('/user/settings', methods=['GET', 'POST'], strict_slashes=False)

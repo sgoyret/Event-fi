@@ -63,13 +63,14 @@
     display: none;
 }
 .create {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    cursor: pointer;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding-bottom: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+  padding-right: 5px;
+  padding-left: 5px;
+  background-color: #f1f1f1;
+  padding-bottom: 10px;
 }
 .close {
     position: absolute;
@@ -671,6 +672,7 @@ option, select {
   background-color: #6105e3;
   height: 100%;
   width: 100%;
+  animation-delay: 1s;
   animation-name: loadscreen;
   animation-duration: 1s;
 }
@@ -694,4 +696,16 @@ padding-bottom: 20px;
 }
 .info {
   width: 40%;
+}
+.logo {
+  width: 40%;
+  background-image: url(/static/img/event-fi-logo\ 1\ \(Traced\).svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+}
+.list {
+  height: 60%;
+  overflow-y: scroll;
 }

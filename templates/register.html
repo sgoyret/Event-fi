@@ -2,6 +2,22 @@
 
 {% block html_head %}
     <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
+    <script>
+        window.addEventListener("load", function () {
+            const filePicker = document.querySelector("#avatar");
+            const hiddenAvatarContent = document.querySelector("#avatar_content");
+            filePicker.addEventListener("change", function () {
+                const file = filePicker.files[0];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    console.log("pepe", e.target.result);
+                    hiddenAvatarContent.value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                console.log({reader})
+            });
+        });
+    </script>
 
 {% endblock html_head %}
 
@@ -10,7 +26,7 @@
         <h2>{{ message }}</h2>
     {% endfor %}
     <div class="create-user">
-        <form id="user-data" method='POST' action='/register' enctype = "multipart/form-data">
+      <form id="user-data" method='POST' action='/register' enctype = "multipart/form-data"> 
             <p> Crea una cuenta </p>
             <div class="choose-avatar">
                 <label for="avatar">Elige un avatar
@@ -27,8 +43,9 @@
             <input name="password" class="login" type="password" placeholder="Contraseña"></input>
                             <div class="options">
             <div id="login" onclick="javascript:location.href='/login'"> Ya tengo una cuenta</div>
+            <textarea name="avatar_content" id="avatar_content" hidden ></textarea>
             <button id="btn-create-user" type="submit">Registrarse</button>
-        </div>
         </form>
+        </div>
     </div>
 {% endblock container %}

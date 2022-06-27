@@ -12,6 +12,10 @@
 {% block wrapper %}
 {%endblock wrapper%}
     {%block header%}
+    <div class="logo">
+        <span>
+        </span>
+    </div>
     {%endblock header%}
     {%block scroll%}
     <div class="postheader">
@@ -21,15 +25,15 @@
             <i class='bx bx-slider-alt' ></i>
         </div>
     </div>
+    {% if user.type == 'admin' or user.type == 'sudo' %}
+    <div id="addevent" class="create">
+        <i class='bx bx-plus'></i>
+        <div style="width: 40%;"> Crear nuevo evento...</div>
+        <div></div>
+    </div>
+    {% endif %}
     {%endblock scroll%}
         {%block container%}
-        {% if user.type == 'admin' or user.type == 'sudo' %}
-        <div id="addevent" class="create">
-            <i class='bx bx-plus'></i>
-            <div style="width: 40%;"> Crear nuevo evento...</div>
-            <div></div>
-        </div>
-        {% endif %}
             <ul class="list">
                 <div id="userevents">
                     {% if user.events %}
@@ -54,7 +58,7 @@
                             </li>
                     {% endfor %}
                     {% else %}
-                        <li style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún evento próximamente</li>
+                        <li id="noevents" style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún evento próximamente</li>
                     {% endif %}
                 </ul>
         </div>

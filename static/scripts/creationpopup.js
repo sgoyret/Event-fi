@@ -256,12 +256,33 @@
             request.setRequestHeader('Access-Control-Allow-Headers', '*');
             request.send(JSON.stringify(formdata));
             request.onload = function() {
-                const data = JSON.parse(request.responseText);
+                const data = request.responseText;
                 console.log(data);
             }
             document.getElementById('wraper').removeChild(document.getElementById('eventcreate'));
         document.getElementById('footer').style.display = 'unset';
         document.getElementById('header').style.display = "unset";
+        const listevent = document.createElement('div');
+        console.log(JSON.parse(request.responseText))
+        listevent.id = request.responseText.id ;
+        listevent.className = 'listevent';
+        listevent.innerHTML =
+        "<div class='image'>" +
+            "<img src='/images/event.png'>" +
+        "</div>" +
+        "<div class='info'>" +
+            "<p>" + formdata.name + "</p>" +
+            "<p>" + formdata.start_date + "</p>" +
+        "</div>" +
+        "<div class='manage'>" +
+            "<div class='manage-button'>" +
+                "<i class='bx bx-right-arrow-alt'></i>" +
+            "</div>" +
+        "</div>";
+        if (document.getElementById('noevents')) {
+        document.getElementById('noevents').remove();
+    }
+        document.getElementById('userevents').appendChild(listevent);
         }, false);
     }
 

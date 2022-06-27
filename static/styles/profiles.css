@@ -395,7 +395,6 @@ input[type="datetime-local"] {
     /* right: 0; */
     /* left: 0; */
     /* border: 2px solid #6205e3; */
-    max-width: 800px;
     z-index: 9;
   }
   input {

@@ -15,10 +15,11 @@
 {% endblock wrapper %}
 
 {% block header %}
-    <div class="avatar" id="{{user._id}}" style="background-image: url(/static/avatars/{{user.username}}.png); background-repeat: no-repeat; background-size: contain;">
-        <!--p>C:\Users\ojo-perezoso\Desktop\Eventify\static\avatar</p>
-        <img src="/static/avatar.jpg" width=50px height=50px alt="" srcset=""-->
-    </div>
+    
+        <div class="avatar" id="{{user._id}}" style="background-image: url('{{user.avatar}}'); background-repeat: no-repeat; background-size: contain;">
+            <!--p>C:\Users\ojo-perezoso\Desktop\Eventify\static\avatar</p>
+            <img src="/static/avatar.jpg" width=50px height=50px alt="" srcset=""-->
+        </div>
     <div class="userinfo">
         <div class="names">{{user.name}} {{user.last_name}}</div>
         <div class="username">@{{user.username}}</div>
@@ -55,7 +56,7 @@
                         <li> 
                             <div class="listgroup" id="{{value.group_id}}"> 
                                 <div class="image"> 
-                                    <div class="img" style="background-image: url(/static/avatars/{{value.name}}.png); background-repeat: no-repeat; background-size: contain;"> 
+                                    <div class="img" style="background-image: url({{value.avatar}}); background-repeat: no-repeat; background-size: contain;"> 
                                     </div> 
                                 </div> 
                                 <div class="info"> 
@@ -70,7 +71,7 @@
                         </li>
                 {% endfor %}
                 {% else %}
-                    <li style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún grupo</li>
+                    <li id="nogroups" style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún grupo</li>
                 {% endif %}
                 </div>
                 <div id="usercontacts" class="none">
@@ -86,7 +87,7 @@
                         <li> 
                             <div class="listcontact" id="{{value.user_id}}"> 
                                 <div class="image"> 
-                                    <img class="img" style="background-image: url(/static/avatars/{{value.username}}.png); background-repeat: no-repeat; background-size: contain;">
+                                    <img class="img" style="background-image: url({{value.avatar}}); background-repeat: no-repeat; background-size: contain;">
                                 </div> 
                                 <div class="info"> 
                                 <p>  {{value.name}} {{value.last_name}} </p>
@@ -100,7 +101,7 @@
                         </li>
                 {% endfor %}
                 {% else %}
-                    <li style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún contacto</li>
+                    <li id="nocontacts" style="text-align: center; margin-top: 30px; display:block;"> Parece que no tienes ningún contacto</li>
                 {% endif %}
                 </div>
         </ul>

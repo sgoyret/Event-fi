@@ -7,13 +7,13 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
     <!--<script src="/static/scripts/markerpopups.js"></script>-->
-    <script src="/static/scripts/creationpopup.js" async></script>
     <script src="/static/scripts/mapcontainer.js"></script>
     <script src="/static/scripts/loadingscreen.js"></script>
+    <script src="/static/scripts/eventpopup.js"></script>
     <script>
         {% if event %}
-        window.addEventListener("load", function () {
-            displayEvent({{event.location.position|tojson|safe}})
+        window.addEventListener("DOMContentLoaded", function () {
+            displayEvent({{event.location.position|tojson|safe}}, "{{event._id|safe}}")
         });
         {% endif %}
         {% if locations %}

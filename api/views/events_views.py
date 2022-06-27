@@ -42,7 +42,9 @@ def single_event(event_id):
     if not session.get('user'):
         return redirect(url_for('login'))
 
+    print(event_id)
     event = mongo.events.find_one({'_id': ObjectId(event_id)})
+    print(event)
     if event is None:
         return {'error': 'event does not exist'}
     

@@ -72,7 +72,7 @@
                     '</div>' +
                 "<div class='popupcontent'>" +
                 "</div>" +
-                "<div class='closepopup' id='closepopup'> +
+                "<div class='closepopup' id='closepopup'>" +
                     "<i class='bx bx-arrow-back'></i>" +    
                 "</div>" +
             "</div>";

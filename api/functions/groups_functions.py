@@ -86,6 +86,7 @@ def add_group_member(user, group, req):
     for item in req.get_json():
         new_user_to_group[item] = req.get_json()[item]
     new_user_to_group['username'] = str(user.get('username'))
+    new_user_to_group['user_id'] = str(user.get('_id'))
     new_user_to_group['name'] = str(user.get('name'))
     new_user_to_group['last_name'] = str(user.get('last_name'))
 
@@ -107,7 +108,7 @@ def add_group_member(user, group, req):
                 continue
             print(f'i should add the {event["name"]} to the {user["username"]}')
             add_event_member(event, user, {'type': 'member'})
-    return {'success': 'user added to group'}
+    return {'success': 'user added to group', 'user_id':str(user.get('_id'))}
 
 def delete_group_member(user, group):
     user_at = {}
