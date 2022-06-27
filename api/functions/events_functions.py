@@ -101,7 +101,7 @@ def add_new_event(req):
                     add_event_member(event, user, {'type': 'guest'})
                 else:
                     return {'error': 'user not found'}
-            return jsonify({'status':'created'})
+            return jsonify({'status':'created event', 'event_id': str(obj.inserted_id)})
 
 def delete_event(event):
     """deletes an event"""

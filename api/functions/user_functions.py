@@ -40,7 +40,7 @@ def add_new_contact(user, req):
             if c.get('user_id') == str(user.get('_id')):
                 return {'error': 'user already in contacts'}
 
-    keys_to_pop = ['password', 'email', 'groups', 'events', 'contacts']
+    keys_to_pop = ['password', 'email', 'groups', 'events', 'contacts', 'notifications']
     for item in keys_to_pop:
         if new_contact.get(item):
             new_contact.pop(item)
@@ -73,7 +73,7 @@ def delete_contact(req):
     contact_to_delete = mongo.users.find_one({'_id': ObjectId(req.get_json().get('user_id'))})
     if contact_to_delete is None:
         return {'error': 'user does not exist'}
-    keys_to_pop = ['password', 'email', 'groups', 'events', 'contacts']
+    keys_to_pop = ['password', 'email', 'groups', 'events', 'contacts', 'notifications']
     for item in keys_to_pop:
         if contact_to_delete.get(item) is not None:
             contact_to_delete.pop(item)
