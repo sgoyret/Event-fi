@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"/>
+    <!--<script src="/static/scripts/creationuser.js" type="module" async></script>-->
+    {% block html_head %}
+    {% endblock html_head %}
+    <title>eventify</title>
+</head>
+<body>
+    <div class="wraper" id="wraper" style="width: 100%; height:100%;">
+        {% block wrapper %}
+        {% endblock wrapper %}
+        <div class="header" id="header">
+            {% block header %}
+            {% endblock header %}
+        </div>
+        {% block scroll %}
+        {% endblock scroll %}
+        {% block nav %}
+        {% endblock nav %}
+        <div class="container" id="container">
+            {% block container %}
+            {% endblock container %}
+        </div>
+            {% block footer %}
+            {% endblock footer %}
+    </div>
+</body>
+</html>

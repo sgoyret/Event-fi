@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block html_head %}
+    <link rel="stylesheet" href="/static/styles/loginstyle.css" type="text/css">
+{% endblock html_head %}
+
+{% block container %}
+<div class="create-user">
+    <form id="user-data" method='POST' action='/login'>
+        <p> ¡Hola de nuevo!</p>
+        <p> Inicia sesión para continuar </p>
+        <input name="username" class="login" placeholder="Usuario o email" pattern="^[a-zA-Z0-9\-]{4,12}$"></input>
+        <input name="password" class="login" type='password' placeholder="Contraseña" pattern='^[a-zA-Z0-9]+$'></input>
+        <p class="passreset"> Olvidé mi contraseña </p>
+        <div class="options">
+            <div id="login" onclick="javascript:location.href='/register'"> No tengo una cuenta</div>
+            <button id="btn-create-user">Ingresar</button>
+        </div>
+</div>
+{% endblock container %}
