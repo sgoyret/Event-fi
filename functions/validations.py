@@ -21,13 +21,13 @@ def validate_user(values, to_validate):
     # checking if all fields have been checked
     for key in values:
         print(f'checking key {key}')
-        if key != 'avatar':
+        if key != 'avatar_content':
             if key not in to_validate:
                 return {'error': f'{key} is either extra or missing'}
 
     for key in to_validate:
         print(f'checking key {key}')
-        if key != 'avatar':
+        if key != 'avatar_content':
             if not re.match(user_regex.get(key), values.get(key)):
                     return {'error': f'{values.get(key)} did not match {user_regex[key]}'}
     return True
@@ -56,7 +56,7 @@ def validate_event_creation(values):
     
     for key, value in values.items():
         print(f'checking key {key}')
-        if key == 'avatar':
+        if key == 'avatar_content':
             pass
         if key == 'latitude' or key == 'longitude':
             if values[key] > 180 or values[key] < -180:

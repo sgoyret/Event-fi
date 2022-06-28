@@ -1,7 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .wraper {
@@ -12,7 +14,7 @@ body {
 }
 
 .header {
-    height: 30%;
+    height: 40%;
     background-color: #f1f1f1;
     display: flex;
     justify-content: space-around;
@@ -22,18 +24,27 @@ body {
     margin-top: 10px;
     width: 150px;
     height: 25px;
-    font-family: 'Ubuntu', sans-serif;
-    background-color:#6205e3;
-    color: white;
+    border: 2px solid #6205e3;
+    color: black;
     border-radius: 2px;
-    border:none;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
 }
-.back{
+.upicons{
     position: absolute;
     color: #6205e3;
-    font-size:30px;
-    left: 10px;
+    font-size: 30px;
     top: 10px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+.bx-arrow-back {
+    margin-left: 10px;
+}
+.bx-log-out-circle{
+    margin-right: 10px;
 }
 .selected, .navselected{
     background-color: #6205e3;
@@ -42,7 +53,7 @@ body {
     border: none;
 }
 #events, #groups, #contacts {
-    width: 33.33%;
+    width: 50%;
     text-align: center;
     height: 100%;
     line-height: 200%;
@@ -231,7 +242,7 @@ ul, li {
     color: white;
   }
 .container {
-    height: 65%;
+    height: 55%;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -335,7 +346,84 @@ input[type="datetime-local"] {
     width: 160px;
     /* More styles here */
 }
-.info {
+.info{
     width: 40%;
     text-align: left;
 }
+.addmember input {
+    all: unset;
+}
+.addmember {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+    background-color: white;
+}
+.bx-down-arrow-alt {
+    font-size: 35px;
+    color: #5a5a5a;
+}
+.dropdownicon {
+    display: flex;
+    align-items: center;
+}
+#addtotext {
+    text-align: left;
+    margin-left: 10px;
+}
+#addsearch {
+    display: flex;
+    align-items: center;
+}
+.popupcontent {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.grouppopup {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    border-radius: 2px;
+    color: black;
+    text-align: center;
+    /* top: 5%; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    /* right: 0; */
+    /* left: 0; */
+    /* border: 2px solid #6205e3; */
+    z-index: 9;
+  }
+  input {
+    all: unset;
+  }
+  .addgroup {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    position: fixed;
+    background-color: white;
+    height: 30px;
+  }
+  #addgrouptext {
+    width: 50%;
+  }
+  .bx-camera {
+    font-size: 35px;
+    color: #5a5a5a;
+    }
+  label > input {
+    display: none;
+  }
+  label {
+    display: block;
+  }
+  .image, #avatarlabel {
+    width: 20%;
+  }

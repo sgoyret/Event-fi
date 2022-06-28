@@ -37,9 +37,9 @@ def index():
     """user base page"""
     # checks if session exists
     if session.get('user'):
-        print(session.get('user'))
+        # print(session.get('user'))
         session_refresh()
-        return render_template('index.html', session=session)
+        return render_template('index.html', user=session.get('user'))
     return redirect(url_for('login'))
 
 @app.route('/login', strict_slashes=False, methods=['GET', 'POST'])
@@ -89,8 +89,7 @@ def register():
         to_validate= ['username', 'name', 'last_name', 'email', 'password']
         if 'avatar' not in request.files:
             return {'error': 'no avatar'}
-        avatar = request.files.get('avatar')
-        print(f'and the avatar is: {avatar}')
+        avatar = request.form.get('avatar_content')
         if avatar is None:
             return {'error': 'no avatar data'}
         if validate_image(avatar) is False:
@@ -100,24 +99,38 @@ def register():
             print('the dictionary is valid')
             new_data = {}
             for item in request.form:
-                new_data[item] = request.form[item]
+                print("hola")
+                if item == 'avatar_content' or item == 'avatar':
+                    print("me saltee el avatar content")
+                    continue
+                else:
+                    new_data[item] = request.form[item]
             new_data['username'] = new_data['username'].lower()
             if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
                 new_data['type'] = 'user'
+                new_data['notifications'] = []
+                new_data['notifications'].append('Welcome to Event-fi App, Click our Icon to learn more about us!')
+                print("popie el avatar convent")
+                print(new_data)
                 obj = mongo.users.insert_one(new_data)
                 new_data.pop('password')
                 new_data['_id'] = str(obj.inserted_id)
                 
-                print(dir(avatar))
+
                 filename = new_data['_id']
             
-                print(f'avatar name: {avatar.name} final filename: {filename}\nUPLOAD_FOLDER: {UPLOAD_FOLDER}')
-                avatar.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                mongo.users.update_one({'_id': ObjectId(new_data['_id'])}, {'$set': {'avatar': f'/static/{filename}'}})
-                new_data['avatar'] = f'/static/avatars/{filename}'
+                # print(f'avatar name: {avatar.name} final filename: {filename}\nUPLOAD_FOLDER: {UPLOAD_FOLDER}')
+                print("going to open file")
+                # print(avatar.split(','))
+                # image_data = base64.b64decode(avatar.split(',')[1].encode())
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', new_data['_id']), 'w+') as file:
+                    print("going to wrtie file")
+                    file.write(avatar)
+                new_data['avatar'] = f'/static/avatars/{new_data["_id"]}'
+                mongo.users.update_one({'_id': ObjectId(new_data['_id'])}, {'$set': {'avatar': new_data['avatar']}})
+                
                 session['user'] = new_data
-
 
                 return redirect(url_for('index'))
             else:
@@ -125,7 +138,6 @@ def register():
                 return redirect(url_for('register'))
         flash(f'{check_response}', error)
         return redirect(url_for('register'))
-
     if request.method == 'GET':
         return render_template('register.html')
 
@@ -134,6 +146,20 @@ def user():
     if session.get('user') is None:
         return redirect(url_for('login'))
     session_refresh()
+    try:
+        with open(os.path.join(UPLOAD_FOLDER, 'avatars', session.get('user').get('_id'))) as avt:
+            print('pude abrir el avatar')
+            session['user']['avatar'] = avt.read()
+        if session.get('user').get('contacts'):
+            contacts_with_avatar = []
+            for idx, c in enumerate(session.get('user').get('contacts')):
+                contacts_with_avatar.append(c)
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
+                    print('pude abrir el avatar')
+                    contacts_with_avatar[idx]['avatar'] = avt.read()
+            session['user']['contacts'] = contacts_with_avatar
+    except Exception as ex:
+        raise(ex)
     return render_template('user.html', user=session['user'])
 
 @app.route('/user/settings', methods=['GET', 'POST'], strict_slashes=False)
@@ -161,6 +187,30 @@ def settings():
         mongo.users.update_one({'_id': ObjectId(session['user']['_id'])}, {'$set': update_data})
         session_refresh()
         return redirect(url_for('user'))
+
+@app.route('/map', strict_slashes=False, methods=['GET'])
+def map():
+    location_query = mongo.locations.find()
+    locations = []
+    for l in location_query:
+        if l.get('_id'):
+            l['location_id'] = str(l['_id'])
+            l.pop('_id')
+        locations.append(l)
+
+    return render_template('map.html', locations=locations, event=[], user=session.get('user'))
+
+@app.route('/map/event/<event_id>', strict_slashes=False, methods=['GET'])
+def map_event(event_id):
+    if session.get('user') is None:
+        return redirect(url_for('login'))
+    session_refresh()
+    event = mongo.events.find_one({'_id': ObjectId(event_id)})
+    print(event)
+    if event:
+        return render_template('map.html', locations=[],  event=event, user=session.get('user'))
+    else:
+        return {"error": "event not found"}
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)

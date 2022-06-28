@@ -1,5 +1,5 @@
 // Profile buttons for deleting, editing and adding events and groups( if admin), or leaving an event if normal user.
-function groups_redirect () {
+async function groups_redirect () {
     // Displays the group page when redirected from dashboard
     const selected = document.getElementsByClassName('selected');
     console.log(selected);
@@ -10,6 +10,19 @@ function groups_redirect () {
     document.getElementById('userevents').classList.add('none');
     document.getElementById('usercontacts').classList.add('none');
     document.getElementById('groups').classList.add('selected');
+};
+
+async function contacts_redirect () {
+    console.log('hola')
+    // Displays the contact page when redirected from dashboard
+    const selected = document.getElementsByClassName('selected');
+    console.log(selected);
+    for (let element of selected) {
+        element.classList.remove('selected');
+    };
+    document.getElementById('usercontacts').classList.remove('none');
+    document.getElementById('usergroups;').classList.add('none');
+    document.getElementById('contacts').classList.add('selected');
 };
 
 window.addEventListener("load", function() {
@@ -92,6 +105,7 @@ window.addEventListener("load", function() {
                         request.onload = () => {
                             if (request.status == 200) {
                                 console.log("you have been removed from the event");
+                                document.location.href = '/user';
                             }
                             console.log(request.responseText);
                         };
@@ -101,8 +115,9 @@ window.addEventListener("load", function() {
                     }
                 });
             };
-        });
+        })};
         for (let element of document.getElementsByClassName('manage-button-contact')) {
+            console.log('entre al for');
             element.addEventListener("click", function() {
                 let contact_id = element.parentElement.parentElement.id
                 document.getElementById('wraper').insertAdjacentHTML('afterbegin', contactminipopup);
@@ -122,14 +137,15 @@ window.addEventListener("load", function() {
                                 if (request.status == 200) {
                                 }
                                 console.log(request.responseText);
+                                document.getElementById('wraper').removeChild(document.getElementById('minipopup'))
+                                document.getElementById(contact_id).remove()
                             };
                         } else {
-                            console.log('entre?')
                             document.getElementById('wraper').removeChild(document.getElementById('minipopup'))
                         }
+                        
                     });
                 }
             });
         };
-    };
 });
