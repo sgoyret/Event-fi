@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scrpt to initialize server with dependencies to deploy our app
+# scrpt to initialize server with dependencies to deploy our app event-fi
 
 # isntall packages needed
 sudo pip install Flask flask_session flask_cors flask_pymongo pymongo pymongo[srv] gunicorn
