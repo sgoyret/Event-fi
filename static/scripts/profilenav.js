@@ -203,24 +203,26 @@ window.addEventListener("load", function() {
             '<input name="name" class="creation" placeholder="Nombre"></input>' +
             '<div class="creationbutton" id="creationgroup"> Crear</div>' +
         '</form>';
-        document.getElementById('addgroup').addEventListener("click", function() {
-            const groupname = document.getElementById('addgrouptext').value;
-                if (groupname == '') {
-                    showResponse('Debes rellenar todos los campos');
-                    return;
-                }
-            const request = new XMLHttpRequest();
-            request.open('POST', '/api/groups');
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.setRequestHeader('Access-Control-Allow-Origin', '*');
-            request.setRequestHeader('Access-Control-Allow-Headers', '*');
-            request.send(JSON.stringify({'name': groupname}));
-            request.onload = function() {
-                const data = request.responseText;
-                console.log(data);
-                };
-                showResponse('Grupo creado', 'ok');
-        });
+        if (document.getElementById('addgroup')) {
+            document.getElementById('addgroup').addEventListener("click", function() {
+                const groupname = document.getElementById('addgrouptext').value;
+                    if (groupname == '') {
+                        showResponse('Debes rellenar todos los campos');
+                        return;
+                    }
+                const request = new XMLHttpRequest();
+                request.open('POST', '/api/groups');
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.setRequestHeader('Access-Control-Allow-Origin', '*');
+                request.setRequestHeader('Access-Control-Allow-Headers', '*');
+                request.send(JSON.stringify({'name': groupname}));
+                request.onload = function() {
+                    const data = request.responseText;
+                    console.log(data);
+                    };
+                    showResponse('Grupo creado', 'ok');
+            });
+        };
     };
     async function grouppopup () {
         // Function that checks if the user clicked on a group from the list and if so, displays the group popup
@@ -330,7 +332,7 @@ window.addEventListener("load", function() {
                 contactlist.id = contact.id;
                 contactlist.innerHTML =
                 "<div class='image'>"+
-                    "<div class='img'> </div>" +
+                    "<div class='img' style='background-image: url("+ contact.avatar_content + ")> </div>" +
                 "</div>" +
                 "<div class='info'>" +
                 "<p>" + contact.name + ' ' + contact.last_name + "</p>" +
