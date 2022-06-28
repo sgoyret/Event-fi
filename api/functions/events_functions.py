@@ -1,4 +1,3 @@
-from turtle import update
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
@@ -112,7 +111,7 @@ def add_new_event(req):
                 if item.get('username'):
                     user = mongo.users.find_one({'username': item.get('username')})
                 if user:
-                    add_event_member(event, user, {'type': 'guest'})
+                    add_event_member(req.get_json(), user, {'type': 'guest'})
                 else:
                     return {'error': 'user not found'}
             return jsonify({'status':'created event', 'event_id': str(obj.inserted_id)})

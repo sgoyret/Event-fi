@@ -6,6 +6,8 @@ from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
+from app import UPLOAD_FOLDER
+import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
@@ -45,6 +47,8 @@ def add_new_contact(user, req):
         if new_contact.get(item):
             new_contact.pop(item)
     new_contact['user_id'] = str(new_contact['_id'])
+    with open (os.path.join(UPLOAD_FOLDER, 'avatars', new_contact['user_id'])) as f:
+        new_contact['avatar'] = f.read()
     new_contact.pop('_id')
     # add contact in session
     if session.get('user').get('contacts') is None:

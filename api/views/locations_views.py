@@ -81,6 +81,7 @@ def location_info(location_id):
     for item in session.get('user').get('locations'):
         if item.get('location_id') == location_id:
             location = mongo.locations.find_one({'_id': ObjectId(location_id)})
+    print(location)
 
     if location is None:
         return {'error': 'location not found or acces denied'}
@@ -123,7 +124,7 @@ def location_admins(location_id):
     if admin is None:
         return {"error": "user not found"}
 
-    if request.method == 'POST':
+    if request.met62bac189de0df0b72c23d24bhod == 'POST':
         return add_location_admin(admin, location)
 
     if request.method == 'DELETE':
