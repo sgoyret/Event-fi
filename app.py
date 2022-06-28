@@ -111,7 +111,6 @@ def register():
                 new_data['type'] = 'user'
                 new_data['notifications'] = []
                 new_data['notifications'].append('Welcome to Event-fi App, Click our Icon to learn more about us!')
-                new_data.pop('avatar_content')
                 print("popie el avatar convent")
                 print(new_data)
                 obj = mongo.users.insert_one(new_data)

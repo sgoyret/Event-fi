@@ -84,7 +84,7 @@
         request.send();
         request.onload = function (){
             const locations = JSON.parse(request.responseText)
-            console.log(locations);
+            console.log(locations)      
             for (let element of locations){
                 const location = document.createElement('option')
                 location.value = element.location_id
@@ -152,7 +152,7 @@
                 '<div class="add" id="add">' +
             '</div>';
             console.log(data)
-            if (data.length > 0) {
+            if (data) {
                 for (let item of data) {
                     document.getElementById('add').innerHTML +=
                     '<div class="addgroup">' +

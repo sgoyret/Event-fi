@@ -60,9 +60,9 @@ def contacts():
             contacts_with_avatar = []
             for idx, c in enumerate(session.get('user').get('contacts')):
                 contacts_with_avatar.append(c)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
-                    print('pude abrir el avatar')
-                    contacts_with_avatar[idx]['avatar'] = avt.read()
+#                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
+  #                  print('pude abrir el avatar')
+ #                   contacts_with_avatar[idx]['avatar'] = avt.read()
         return jsonify(contacts_with_avatar)
 
     user = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
