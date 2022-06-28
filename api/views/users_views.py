@@ -1,5 +1,5 @@
 import os
-from app import UPLOAD_FOLDER
+# from app import UPLOAD_FOLDER
 from api.views import api_views
 from api.functions.user_functions import *
 """
