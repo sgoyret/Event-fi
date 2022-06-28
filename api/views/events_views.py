@@ -9,6 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
 import json
 import requests
+from app import UPLOAD_FOLDER
+import os
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -25,12 +27,15 @@ def events():
         # returns events list
         # session['user']['events'] = {'id1': {'avatar':'', 'title':'Graduation', 'location':'Holberton School', 'date': '20/06/2022'},
         #                              'id2': {'avatar':'', 'title':'First job', 'location':'A very good company', 'date': '01/07/2022'}}
-        user_events = session.get('user').get('events')
-        if user_events:
-            return jsonify(user_events)
-        else:
-            return 'no current events'
-    
+        user_events = []
+        if session.get('user').get('events'):
+            for idx, e in enumerate(session.get('user').get('events')):
+                user_events.append(e)
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
+                    print('pude abrir el avatar')
+                    user_events[idx]['avatar'] = avt.read()
+        return jsonify(user_events)
+        
     if request.method == 'POST':
         # create new event
         return add_new_event(request)

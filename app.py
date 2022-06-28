@@ -39,6 +39,16 @@ def index():
     if session.get('user'):
         # print(session.get('user'))
         session_refresh()
+        if session.get('user').get('events'):
+            for e in session.get('user').get('events'):
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', e.get('event_id')), 'r') as file:
+                        print("going to read file")
+                        e['avatar'] = file.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user'), 'r') as file:
+                        print("going to read file")
+                        e['avatar'] = file.read()
         return render_template('index.html', user=session.get('user'))
     return redirect(url_for('login'))
 
@@ -111,7 +121,6 @@ def register():
                 new_data['type'] = 'user'
                 new_data['notifications'] = []
                 new_data['notifications'].append('Welcome to Event-fi App, Click our Icon to learn more about us!')
-                new_data.pop('avatar_content')
                 print("popie el avatar convent")
                 print(new_data)
                 obj = mongo.users.insert_one(new_data)
@@ -155,9 +164,14 @@ def user():
             contacts_with_avatar = []
             for idx, c in enumerate(session.get('user').get('contacts')):
                 contacts_with_avatar.append(c)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
-                    print('pude abrir el avatar')
-                    contacts_with_avatar[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        contacts_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        contacts_with_avatar[idx]['avatar'] = avt.read()
             session['user']['contacts'] = contacts_with_avatar
     except Exception as ex:
         raise(ex)

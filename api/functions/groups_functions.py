@@ -6,6 +6,8 @@ from functions.validations import *
 from api.functions.events_functions import add_event_member, delete_event_group
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
+import os
+from app import UPLOAD_FOLDER
 from api.views import session_refresh
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -17,6 +19,13 @@ def add_new_group(req):
     if validate_group_creation(req.get_json()):
         print('the group dict is valid')
         new_group_data = {}
+        if 'avatar' not in request.files:
+            return {'error': 'no avatar'}
+        avatar = request.form.get('avatar_content')
+        if avatar is None:
+            return {'error': 'no avatar data'}
+        if validate_image(avatar) is False:
+            return {'error': 'image is not supported'}
         for item in req.get_json():
             new_group_data[item] = req.get_json()[item]
 
@@ -32,6 +41,12 @@ def add_new_group(req):
         new_group_data['members'].append(creator_info) # set owner as member with type admin
         obj = mongo.groups.insert_one(new_group_data)
         
+        with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id), 'w+')) as file:
+            print("going to wrtie file")
+            file.write(avatar)
+        new_group_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
+        mongo.groups.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_group_data['avatar']}})
+
         # update user groups in session
         if session.get('user').get('groups') is None:
             session['user']['groups'] = []

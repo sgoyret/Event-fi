@@ -7,6 +7,8 @@ from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
+from app import UPLOAD_FOLDER
+import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
@@ -15,13 +17,19 @@ def add_new_event(req):
     """adds a new event"""
     if validate_event_creation(req.get_json()):
             print('the event dict is valid')
+            print(f"\n\nand the magic request is: {req.get_json()}\n\n")
             new_event_data = {}
             new_event_location = {}
+            avatar = req.get_json().get('avatar_content')
+            if avatar is None:
+                return {'error': 'no avatar data'}
+            if validate_image(avatar) is False:
+                return {'error': 'image is not supported'}
             # form new dict with data from request item by item
             print('\n\n\n')
             for item in req.get_json():
                 print(f'checking for item in request: {item} - {req.get_json().get(item)}')
-                if item == 'groups' or item == 'members':
+                if item == 'groups' or item == 'members' or item == 'avatar_content':
                     continue
                 elif item == 'location':
                     location = mongo.locations.find_one({'_id': ObjectId(req.get_json().get('location'))})
@@ -55,6 +63,12 @@ def add_new_event(req):
             print(f'new event data with location included\n{new_event_data}')
             obj = mongo.events.insert_one(new_event_data)
             
+            with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id)), 'w+') as file:
+                print("going to wrtie file")
+                file.write(avatar)
+            new_event_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
+            mongo.events.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_event_data['avatar']}})
+
             # add event to loaction
             event_to_location = {
                 'event_id': str(obj.inserted_id),
