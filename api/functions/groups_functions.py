@@ -7,11 +7,12 @@ from api.functions.events_functions import add_event_member, delete_event_group
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import os
-from app import UPLOAD_FOLDER
+from api import UPLOAD_FOLDER
 from api.views import session_refresh
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
+
 
 def add_new_group(req):
     """adds a new group to the database"""

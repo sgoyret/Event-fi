@@ -7,6 +7,7 @@ from api.functions.events_functions import add_event_member
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
+import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
