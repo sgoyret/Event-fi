@@ -7,7 +7,9 @@ from functions.validations import *
 from api.functions.location_functions import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
+from app import UPLOAD_FOLDER
 import json
+import os
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -22,8 +24,13 @@ def locations():
     
     if request.method == 'GET':
         # returns location list
-        user_locations = session.get('user').get('locations')
-        print(user_locations)
+        user_locations = []
+        if session.get('user').get('locations'):
+            for idx, l in enumerate(session.get('user').get('locations')):
+                user_locations.append(l)
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', l.get('location_id'))) as avt:
+                    print('pude abrir el avatar')
+                    user_locations[idx]['avatar'] = avt.read()
         return jsonify(user_locations)
 
     """

@@ -9,6 +9,7 @@ from functions.validations import *
 from api.functions.groups_functions import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
+from app import UPLOAD_FOLDER
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -24,7 +25,13 @@ def groups():
 
     if request.method == 'GET':
         # returns groups list
-        user_groups = session.get('user').get('groups')
+        user_groups = []
+        if session.get('user').get('groups'):
+            for idx, g in enumerate(session.get('user').get('groups')):
+                user_groups.append(g)
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
+                    print('pude abrir el avatar')
+                    user_groups[idx]['avatar'] = avt.read()
         return jsonify(user_groups)
 
     if request.method == 'POST':

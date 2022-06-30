@@ -7,6 +7,7 @@ from api.functions.events_functions import add_event_member
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
+import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
@@ -60,7 +61,6 @@ def delete_location_admin(admin, location):
         if item.get('location_id') == str(admin['_id']):
             location_at_user = admin.get('locations')[idx]
 
-    print(f'user to delete: {admin_at}')
     if mongo.locations.update_one({'_id': location['_id']},
                                 {'$pull': {'admins': admin_at}},False,True): # remove admin from location
         update_location = mongo.users.update_one({'_id': admin.get('_id')},

@@ -12,8 +12,7 @@ body {
 }
 
 .wraper > .container {
-    border-radius: 5px;
-    width: 85%;
+    width: 90%;
     text-align: center;
     margin: auto;
     font-family: 'Poppins', sans-serif;
@@ -27,6 +26,30 @@ body {
     top: 25%;
     max-width: 500px;
 }
+.wraper {
+    background-color: #6205e3;
+}
+.header {
+    color: white;
+    font-family: 'Poppins';
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    font-size: 25px;
+    top: 10px;
+}
+.logo {
+    background-image: url(../img/event-fi-logo\ 1\ \(Traced\).svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+    height: 50px;
+    width: 50px;
+    align-self: center;
+}
+
 .wraper > .header > .welcome {
     margin-left: 10%;
     font-size: 20px;
@@ -59,13 +82,24 @@ label > input {
 }
 .wraper > .container > .create-user > #user-data > input {
     display: block;
-    width: 60%;
-    margin: .5rem auto .5rem auto;
+    width: 80%;
+    max-width: 500px;
+    margin: 0.5rem auto 0.5rem auto;
     border-radius: 2px;
     background-color: #4f00bd;
     height: 2rem;
     border: #27005b 1px solid;
     text-align: left;
+  }
+  #avatarlab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4f00bd;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 2px;
+    height: 2rem;
   }
   .names {
     display: inline;
@@ -74,8 +108,11 @@ label > input {
     text-align: center;
     justify-content: center;
   }
+  ::placeholder {
+    color: #f1f1f1;
+  }
   .wraper > .container > .create-user > #user-data > .names > input {
-    width: 29.5%;
+    width: 39%;
     /* margin: 0.5rem auto 0.5rem auto; */
     border-radius: 2px;
     background-color: #4f00bd;

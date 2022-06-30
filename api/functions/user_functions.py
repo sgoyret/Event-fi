@@ -6,7 +6,7 @@ from functions.validations import *
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from api.views import session_refresh
-from app import UPLOAD_FOLDER
+from api import UPLOAD_FOLDER
 import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -47,8 +47,6 @@ def add_new_contact(user, req):
         if new_contact.get(item):
             new_contact.pop(item)
     new_contact['user_id'] = str(new_contact['_id'])
-    with open (os.path.join(UPLOAD_FOLDER, 'avatars', new_contact['user_id'])) as f:
-        new_contact['avatar'] = f.read()
     new_contact.pop('_id')
     # add contact in session
     if session.get('user').get('contacts') is None:
@@ -60,12 +58,10 @@ def add_new_contact(user, req):
         elif req.get_json().get('username'):
             if contact.get('username') == req.get_json().get('username'):
                 return {'error': 'you already have that contact'}
-    print(new_contact)
     session['user']['contacts'].append(new_contact)
     # add contact in db
     mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
                             {'$push': {'contacts': new_contact}})
-    print("hice los adds")
     session_refresh()
     # return redirect(url_for('user'))
     # must redirect to /user in the front
@@ -73,7 +69,6 @@ def add_new_contact(user, req):
 
 def delete_contact(req):
     """deletes a contact from the current logged user"""
-    print('going to delete contact')
     contact_to_delete = mongo.users.find_one({'_id': ObjectId(req.get_json().get('user_id'))})
     if contact_to_delete is None:
         return {'error': 'user does not exist'}
@@ -86,15 +81,12 @@ def delete_contact(req):
 
     # remove contact in session
     if session.get('user').get('contacts'):
-        print(session['user']['contacts'])
-        print(contact_to_delete)
         try:
             session['user']['contacts'].remove(contact_to_delete)
             if len(session['user']['contacts']) == 0:
                 session['user'].pop('contacts')# if no contacts left pop contacts list
         except Exception as ex:
-            print(session.get('user').get('contacts'))
-            print(contact_to_delete)
+            print(ex)
     # remove contact in db
     mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
                             {'$pull': {'contacts': contact_to_delete}})
