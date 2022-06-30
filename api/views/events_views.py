@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
 import json
 import requests
-from app import UPLOAD_FOLDER
+from api import UPLOAD_FOLDER
 import os
 
 

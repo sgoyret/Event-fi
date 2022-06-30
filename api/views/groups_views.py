@@ -9,7 +9,7 @@ from functions.validations import *
 from api.functions.groups_functions import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.views import session_refresh
-from app import UPLOAD_FOLDER
+from api import UPLOAD_FOLDER
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
