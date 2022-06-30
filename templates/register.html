@@ -29,12 +29,12 @@
       <form id="user-data" method='POST' action='/register' enctype = "multipart/form-data"> 
             <p> Crea una cuenta </p>
             <div class="choose-avatar">
-                <label for="avatar">Elige un avatar
-                    <input name="avatar" type="file" class="avatar"></input>
+                <label for="avatar" id="avatarlab">Elige un avatar
+                    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg, image/png"></input>
+                    <i class='bx bxs-camera'></i>
                 </label>
             </div>
             <div class="names">
-                <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg, image/png"></input>
                 <input name="name" class="name" placeholder="Nombre" pattern="^[a-zA-Z]{1,20}$"></input>
                 <input name="last_name" class="lastname" placeholder="Apellido" pattern="^[a-zA-Z]{1,20}$"></input>
             </div>
