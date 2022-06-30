@@ -116,6 +116,8 @@ body {
     border-bottom: 1px solid #f1f1f1;
 }
 .avatar img {
+    vertical-align: middle;
+    
     height: 100%;
     width: 100%;
 }
