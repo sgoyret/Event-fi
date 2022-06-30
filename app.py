@@ -109,9 +109,7 @@ def register():
             print('the dictionary is valid')
             new_data = {}
             for item in request.form:
-                print("hola")
                 if item == 'avatar_content' or item == 'avatar':
-                    print("me saltee el avatar content")
                     continue
                 else:
                     new_data[item] = request.form[item]
@@ -121,8 +119,6 @@ def register():
                 new_data['type'] = 'user'
                 new_data['notifications'] = []
                 new_data['notifications'].append('Welcome to Event-fi App, Click our Icon to learn more about us!')
-                print("popie el avatar convent")
-                print(new_data)
                 obj = mongo.users.insert_one(new_data)
                 new_data.pop('password')
                 new_data['_id'] = str(obj.inserted_id)
@@ -131,7 +127,6 @@ def register():
                 filename = new_data['_id']
             
                 # print(f'avatar name: {avatar.name} final filename: {filename}\nUPLOAD_FOLDER: {UPLOAD_FOLDER}')
-                print("going to open file")
                 # print(avatar.split(','))
                 # image_data = base64.b64decode(avatar.split(',')[1].encode())
                 with open(os.path.join(UPLOAD_FOLDER, 'avatars', new_data['_id']), 'w+') as file:
@@ -198,7 +193,6 @@ def settings():
             update_data['password'] = generate_password_hash(update_data['password'])
         else:
             update_data.pop('password')
-        print(f'data for update is : {update_data}')
         mongo.users.update_one({'_id': ObjectId(session['user']['_id'])}, {'$set': update_data})
         session_refresh()
         return redirect(url_for('user'))
@@ -221,7 +215,6 @@ def map_event(event_id):
         return redirect(url_for('login'))
     session_refresh()
     event = mongo.events.find_one({'_id': ObjectId(event_id)})
-    print(event)
     if event:
         return render_template('map.html', locations=[],  event=event, user=session.get('user'))
     else:

@@ -16,9 +16,7 @@ mongo = mongo.get_database('EVdb')
 
 def add_new_group(req):
     """adds a new group to the database"""
-    print(f'entered with {req.get_json()}')
     if validate_group_creation(req.get_json()):
-        print('the group dict is valid')
         new_group_data = {}
         if 'avatar' not in request.files:
             return {'error': 'no avatar'}
@@ -43,7 +41,6 @@ def add_new_group(req):
         obj = mongo.groups.insert_one(new_group_data)
         
         with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id), 'w+')) as file:
-            print("going to wrtie file")
             file.write(avatar)
         new_group_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
         mongo.groups.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_group_data['avatar']}})
@@ -57,8 +54,6 @@ def add_new_group(req):
             'type': 'admin'
             })
 
-        print('getteame lso grupos')
-        print(session.get('user').get('groups'))
         update_user = mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$set': {'groups': session.get('user').get('groups')}})# update user groups in db
         if update_user is not None and obj is not None:
             mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$push':{'notifications': 'Has creado el grupo ' + new_group_data.get('name') + 'con éxito'}})
@@ -66,7 +61,6 @@ def add_new_group(req):
 
 def delete_group(group):
     """returns the info of a group"""
-    print('entered delete')
     if session.get('user').get('_id') != group.get('owner'):
         return {'error': 'you are not the owner of the group'}
     id_list = []
@@ -77,12 +71,11 @@ def delete_group(group):
         mongo.users.update_one({'_id': item},
                             {'$pull': {'groups': {'name': group['name']}}},False,True) 
     # delete event
-    print('for each event call delete_event_group with group to delete')
     if group.get('events'):
         for e in group.get('events'):
             event = mongo.events.find_one({'_id': ObjectId(e['event_id'])})
             delete_event_group(group, event)
-    print('delete group')
+
     delete = mongo.groups.delete_one({'_id': group['_id']})
 
     # update session
@@ -122,7 +115,6 @@ def add_group_member(user, group, req):
             event = mongo.events.find_one({'_id': ObjectId(e['event_id'])})
             if event is None:
                 continue
-            print(f'i should add the {event["name"]} to the {user["username"]}')
             add_event_member(event, user, {'type': 'member'})
     return {'success': 'user added to group', 'user_id':str(user.get('_id'))}
 
@@ -136,7 +128,6 @@ def delete_group_member(user, group):
         if item.get('group_id') == str(group['_id']):
             group_at_user = user.get('group')[idx]
 
-    print(f'user to delete: {user_at}')
     if mongo.groups.update_one({'_id': group['_id']},
                                 {'$pull': {'members': user_at}},False,True): # remove member from group
         update_user = mongo.users.update_one({'_id': user.get('_id')},

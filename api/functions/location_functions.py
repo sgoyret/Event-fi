@@ -61,7 +61,6 @@ def delete_location_admin(admin, location):
         if item.get('location_id') == str(admin['_id']):
             location_at_user = admin.get('locations')[idx]
 
-    print(f'user to delete: {admin_at}')
     if mongo.locations.update_one({'_id': location['_id']},
                                 {'$pull': {'admins': admin_at}},False,True): # remove admin from location
         update_location = mongo.users.update_one({'_id': admin.get('_id')},
