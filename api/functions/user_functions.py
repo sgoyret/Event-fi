@@ -47,8 +47,6 @@ def add_new_contact(user, req):
         if new_contact.get(item):
             new_contact.pop(item)
     new_contact['user_id'] = str(new_contact['_id'])
-    with open (os.path.join(UPLOAD_FOLDER, 'avatars', new_contact['user_id'])) as f:
-        new_contact['avatar'] = f.read()
     new_contact.pop('_id')
     # add contact in session
     if session.get('user').get('contacts') is None:
