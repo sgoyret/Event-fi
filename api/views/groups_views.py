@@ -24,9 +24,12 @@ def groups():
         if session.get('user').get('groups'):
             for idx, g in enumerate(session.get('user').get('groups')):
                 user_groups.append(g)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
-                    print('pude abrir el avatar')
-                    user_groups[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('_id'))) as avt:
+                        print('pude abrir el avatar')
+                        user_groups[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    print(ex)
         return jsonify(user_groups)
 
     if request.method == 'POST':

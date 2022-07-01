@@ -26,9 +26,12 @@ def events():
         if session.get('user').get('events'):
             for idx, e in enumerate(session.get('user').get('events')):
                 user_events.append(e)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
-                    print('pude abrir el avatar')
-                    user_events[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', e.get('_id'))) as avt:
+                        print('pude abrir el avatar')
+                        user_events[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    print(ex)
         return jsonify(user_events)
         
     if request.method == 'POST':

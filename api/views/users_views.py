@@ -1,4 +1,5 @@
 import os
+from flask import request
 from api import UPLOAD_FOLDER
 from api.views import api_views
 from api.functions.user_functions import *

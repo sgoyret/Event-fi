@@ -24,9 +24,12 @@ def locations():
         if session.get('user').get('locations'):
             for idx, l in enumerate(session.get('user').get('locations')):
                 user_locations.append(l)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', l.get('location_id'))) as avt:
-                    print('pude abrir el avatar')
-                    user_locations[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', l.get('location_id'))) as avt:
+                        print('pude abrir el avatar')
+                        user_locations[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    print(ex)
         return jsonify(user_locations)
 
     """
