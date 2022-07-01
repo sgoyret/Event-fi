@@ -1,11 +1,8 @@
 from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import request, session
 from pymongo import MongoClient
 from functions.validations import *
 from api.functions.events_functions import add_event_member, delete_event_group
-from werkzeug.security import generate_password_hash, check_password_hash
-import json
 import os
 from api import UPLOAD_FOLDER
 from api.views import session_refresh
