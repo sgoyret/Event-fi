@@ -120,7 +120,7 @@ body {
 
 .listevent::after, .listcontact::after, .listgroup::after {
     content: "";
-    width: 70%;
+    width: 95%;
     height: 1px;
     background: lightslategray;
     position: absolute;
