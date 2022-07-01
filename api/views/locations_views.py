@@ -124,7 +124,7 @@ def location_admins(location_id):
     if admin is None:
         return {"error": "user not found"}
 
-    if request.met62bac189de0df0b72c23d24bhod == 'POST':
+    if request.method == 'POST':
         return add_location_admin(admin, location)
 
     if request.method == 'DELETE':

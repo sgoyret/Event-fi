@@ -667,9 +667,10 @@ option, select {
     font-family:"Poppins", sans-serif;;
 }
 .image {
-    background-color: #6105e3;
+    background-size: cover;
     height: 75px;
     width: 75px;
+    border: 2px solid darkslategray;
     border-radius: 50%;
 }
 .bx {

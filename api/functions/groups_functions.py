@@ -18,8 +18,6 @@ def add_new_group(req):
     """adds a new group to the database"""
     if validate_group_creation(req.get_json()):
         new_group_data = {}
-        if 'avatar' not in request.files:
-            return {'error': 'no avatar'}
         avatar = request.form.get('avatar_content')
         if avatar is None:
             return {'error': 'no avatar data'}
@@ -39,11 +37,14 @@ def add_new_group(req):
         new_group_data['members'] = []
         new_group_data['members'].append(creator_info) # set owner as member with type admin
         obj = mongo.groups.insert_one(new_group_data)
-        
-        with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id), 'w+')) as file:
-            file.write(avatar)
-        new_group_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
-        mongo.groups.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_group_data['avatar']}})
+        print('going to write the avatar into the system')
+        try:
+            with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id), 'w+')) as file:
+                file.write(avatar)
+                new_group_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
+                mongo.groups.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_group_data['avatar']}})
+        except Exception as ex:
+            print(ex)
 
         # update user groups in session
         if session.get('user').get('groups') is None:
