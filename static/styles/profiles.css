@@ -81,10 +81,11 @@ body {
     display: unset;
 }
 .img {
-    background-color: #6205e3;
     height: 75px;
     width: 75px;
+    border: 2px solid darkslategray;
     border-radius: 50%;
+
 }
 .info > p {
     margin: 0;
@@ -107,17 +108,28 @@ body {
 }
 
 .listevent, .listcontact, .listgroup {
+    position: relative;
     padding-top: 15px;
     padding-bottom: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    border-bottom: 1px solid #f1f1f1;
+    
+}
+
+.listevent::after, .listcontact::after, .listgroup::after {
+    content: "";
+    width: 70%;
+    height: 1px;
+    background: lightslategray;
+    position: absolute;
+    bottom: 0;
+    margin: auto;
 }
 .avatar img {
     vertical-align: middle;
-    
+    background-size: contain;
     height: 100%;
     width: 100%;
 }
@@ -426,6 +438,6 @@ input[type="datetime-local"] {
   label {
     display: block;
   }
-  .image, #avatarlabel {
+  .image,  #avatarlabel {
     width: 20%;
   }
