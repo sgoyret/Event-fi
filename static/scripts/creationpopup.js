@@ -148,7 +148,6 @@ async function eventForm() {
         }
 
     formdata['location'] = location
-    console.log(document.getElementById("avatar_content"))
     formdata['avatar_content'] = avatar_content
     console.log(formdata)
     // Now ask to the user if he wants to add members or a group in this same popup'

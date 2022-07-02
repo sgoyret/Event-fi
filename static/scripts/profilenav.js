@@ -153,9 +153,7 @@ window.addEventListener("load", function() {
             });
     };
     async function addmember(){
-        console.log("hola")
         document.getElementById('addsearch').addEventListener('click', function(){
-            console.log("hola")
             const group_id = document.getElementsByClassName('popupheaderavatar')[0].id;
             const username = document.getElementById('addtotext').value;
             const request = new XMLHttpRequest();
@@ -198,29 +196,68 @@ window.addEventListener("load", function() {
         }, 2000);
     }
     async function groupMake() {
-        const groupform = 
-        '<form id="groupdata" method="POST">' +
-            '<input name="name" class="creation" placeholder="Nombre"></input>' +
-            '<div class="creationbutton" id="creationgroup"> Crear</div>' +
-        '</form>';
+        const groupform =
+        '<div class="popup" id="groupform">' +
+            '<form id="groupdata" method="POST">' +
+                '<div class="groupavatar">' +
+                    '<p>Avatar</p>' +
+                    '<label for="avatar">' +
+                        '<i class="bx bx-camera"></i>' +
+                        '<input type="file" id="avatar" name="avatar" accept="image/*" />' +
+                    '</label>' +
+                '<input name="name" class="creation" placeholder="Nombre"></input>' +
+                '<input name="avatar_content" id="avatar_content" style="display: none;"></input>' +
+                '<div class="creationbutton" id="creationgroup"> Crear</div>' +
+            '</form>' +
+            '<div class="closepopup" id="closepopup">' +
+                '<i class="bx bx-arrow-back"></i>' +
+            '</div>' +
+        '</div>';
+        // When the user clicks on Crear nuevo grupo, next popup shows up...
         if (document.getElementById('addgroup')) {
             document.getElementById('addgroup').addEventListener("click", function() {
-                const groupname = document.getElementById('addgrouptext').value;
-                    if (groupname == '') {
-                        showResponse('Debes rellenar todos los campos');
-                        return;
-                    }
-                const request = new XMLHttpRequest();
-                request.open('POST', '/api/groups');
-                request.setRequestHeader('Content-Type', 'application/json');
-                request.setRequestHeader('Access-Control-Allow-Origin', '*');
-                request.setRequestHeader('Access-Control-Allow-Headers', '*');
-                request.send(JSON.stringify({'name': groupname}));
-                request.onload = function() {
-                    const data = request.responseText;
-                    console.log(data);
+                document.getElementById('wraper').insertAdjacentHTML("afterbegin", groupform);
+                const filePicker = document.querySelector("#avatar");
+                const hiddenAvatarContent = document.querySelector("#avatar_content");
+                filePicker.addEventListener("change", function () {
+                    console.log("cambiaste eh")
+                    const file = filePicker.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        hiddenAvatarContent.value = e.target.result;
+                        console.log(hiddenAvatarContent.value)
                     };
-                    showResponse('Grupo creado', 'ok');
+                    reader.readAsDataURL(file);
+                });
+                document.getElementById('closepopup').addEventListener("click", function() {
+                    document.getElementById('groupform').remove();
+                });
+                document.getElementById('creationgroup').addEventListener("click", function() {
+                    const form = document.getElementById('groupdata');
+                    const formdata = {};
+                    const formelements = document.getElementById('groupdata').getElementsByTagName('input');
+                    for (let item of formelements) {
+                        if (item.value == '' || !location) {
+                            showResponse('Debes rellenar todos los campos');
+                            return;
+                        } else {
+                            formdata[item.name] = item.value;
+                        }
+                    }
+                    console.log(formdata);
+                    const request = new XMLHttpRequest();
+                    request.open('POST', '/api/groups');
+                    request.setRequestHeader('Content-Type', 'application/json');
+                    request.setRequestHeader('Access-Control-Allow-Origin', '*');
+                    request.setRequestHeader('Access-Control-Allow-Headers', '*');
+                    request.send(JSON.stringify({'name': formdata.name, 
+                                'avatar_content': formdata.avatar_content}));
+                    request.onload = function() {
+                        const data = request.responseText;
+                        console.log(data);
+                        };
+                        showResponse('Grupo creado', 'ok');
+                });
             });
         };
     };
