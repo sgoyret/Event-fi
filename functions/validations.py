@@ -36,7 +36,7 @@ def validate_user(values, to_validate):
 def validate_group_creation(values):
     print("entered group validation")
     group_regex = {
-        'groupname': '^[a-zA-Z0-9\-]{4,12}$', #groupname regex
+        'name': '^[a-zA-Z0-9\-]{4,12}$', #groupname regex
         'description': '^[a-zA-Z0-9\-]{0,50}$', #description regex
     }
     

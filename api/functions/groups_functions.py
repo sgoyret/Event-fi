@@ -36,12 +36,12 @@ def add_new_group(req):
         obj = mongo.groups.insert_one(new_group_data)
         print('going to write the avatar into the system')
         try:
-            with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id), 'w+')) as file:
+            with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id)), 'w+') as file:
                 file.write(avatar)
                 new_group_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
                 mongo.groups.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_group_data['avatar']}})
         except Exception as ex:
-            print(ex)
+            raise ex
 
         # update user groups in session
         if session.get('user').get('groups') is None:
@@ -49,7 +49,7 @@ def add_new_group(req):
         session['user']['groups'].append({
             'group_id': str(obj.inserted_id),
             'name': new_group_data['name'],
-            'avatar': new_group_data['avatar'],
+            'avatar': f'/static/avatars/{str(obj.inserted_id)}',
             'type': 'admin'
             })
 

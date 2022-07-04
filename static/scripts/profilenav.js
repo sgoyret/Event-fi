@@ -237,7 +237,7 @@ window.addEventListener("load", function() {
                     const formdata = {};
                     const formelements = document.getElementById('groupdata').getElementsByTagName('input');
                     for (let item of formelements) {
-                        if (item.value == '' || !location) {
+                        if (item.value == '') {
                             showResponse('Debes rellenar todos los campos');
                             return;
                         } else {
