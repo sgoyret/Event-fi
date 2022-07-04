@@ -425,6 +425,9 @@ input[type="datetime-local"] {
     background-color: white;
     height: 30px;
   }
+  .addgroup > p {
+    width: 80%;
+  }
   #addgrouptext {
     width: 50%;
   }

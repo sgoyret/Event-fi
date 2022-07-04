@@ -87,12 +87,14 @@ display: none;
     filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .usericon {
-    width: 20%;
-    background-image: url(../img/bxs-user-circle.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  width: 20%;
+  background-image: url(../img/bxs-user-circle.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  height: 80%;
+  align-self: center;
 }
 .icons {
     display: flex;
@@ -101,31 +103,35 @@ display: none;
     width: 100%;
     height: 100%;
 }
-
 .burguermenu {
-    width: 20%;
-    height: 80%;
-    background-image: url(../img/bxs-map.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  width: 20%;
+  background-image: url(../img/bxs-map.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  height: 80%;
+  align-self: center;
 }
 .home {
-  width: 20%;
-  background-image: url(../img/bxs-home.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+width: 20%;
+background-image: url(../img/bxs-home.svg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+height: 80%;
+align-self: center;
 }
 .notifications {
-  width: 20%;
-  background-image: url(../img/bxs-bell.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+width: 20%;
+background-image: url(../img/bxs-bell.svg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+height: 80%;
+align-self: center;
 }
 .marker {
     background-image: url(../img/mapbox-icon.png);

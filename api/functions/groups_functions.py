@@ -15,7 +15,7 @@ def add_new_group(req):
     """adds a new group to the database"""
     if validate_group_creation(req.get_json()):
         new_group_data = {}
-        avatar = request.form.get('avatar_content')
+        avatar = request.get_json().get('avatar_content')
         if avatar is None:
             return {'error': 'no avatar data'}
         if validate_image(avatar) is False:
@@ -49,6 +49,7 @@ def add_new_group(req):
         session['user']['groups'].append({
             'group_id': str(obj.inserted_id),
             'name': new_group_data['name'],
+            'avatar': new_group_data['avatar'],
             'type': 'admin'
             })
 
@@ -99,6 +100,7 @@ def add_group_member(user, group, req):
 
     new_group_to_user = {
         'group_id': str(group.get('_id')),
+        'avatar': group.get('avatar'),
         'name': group.get('name')
     }
     

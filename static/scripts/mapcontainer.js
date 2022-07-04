@@ -255,6 +255,47 @@ map.on('load', function() {
         el.classList.add('marker');
         el.style = "background-color: white"
         el.id = element.properties.id;
+        el.addEventListener("click", function(){
+            var request = new XMLHttpRequest();
+            request.open('GET','/api/locations/' + el.id);
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.setRequestHeader('Access-Control-Allow-Origin', '*');
+            request.setRequestHeader('Access-Control-Allow-Headers', '*');
+            request.send();
+            request.onload = function() {
+                var data = JSON.parse(request.responseText);
+                console.log(data);
+                const element = document.getElementById('wraper');
+                const locationpopup =
+                '<div class="popup" id="popup">' +
+                    '<div class="eventpopup">' +
+                        '<div class="popupheader">' +
+                            '<div class="popupheaderavatar" id=' + data._id +'> </div>' +
+                            '<div class="popupheadertext">' +
+                                "<div class='eventitle'>" + data.name + "</div>" +
+                                //"<div class='eventimg'> <img src='https://scontent.fmvd1-1.fna.fbcdn.net/v/t1.6435-9/91138397_142569460618578_9003032990434983936_n.png?_nc_cat=103&ccb=1-7&_nc_sid=973b4a&_nc_ohc=kANVgvRdsLsAX-y7miA&_nc_ht=scontent.fmvd1-1.fna&oh=00_AT8CDHH4X_DslZ24jK7kec_aSOWS9DrvcUQ1LUHqnvR2nA&oe=62BDC452' alt=''>" + "</div>"
+                                "<div class='eventlocation'></div>" +
+                            "</div>" +
+                        "</div>" +
+                        "<div class='popupnav'>" +
+                            "<div id='events' class='navselected'> Eventos</div>" +
+                            "<div id='groupsnav'></div>" +
+                        "</div>" +
+                        "<div class='popupcontent'>" +
+                            "<div class='popupmembers'>" +
+                        '</div>' +
+                    "</div>" +
+                        '<div class="closepopup" id="closepopup">' + 
+                        "<i class='bx bx-arrow-back'></i>" +
+                    '</div>' +
+                '</div>' +
+            "</div>";
+                document.getElementsByClassName('back')[0].style.display = 'none';
+                element.insertAdjacentHTML('afterbegin', locationpopup);
+                const membersnav = document.getElementById('membersnav');
+                const groupsnav = document.getElementById('groupsnav');
+            }
+        })
         console.log(element.geometry.coordinates)
         new mapboxgl.Marker(el).setLngLat(element.geometry.coordinates).addTo(map);
     }   

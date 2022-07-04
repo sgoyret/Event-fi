@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # scrpt to initialize server with dependencies to deploy our app event-fi
-
+sudo apt-get update
+sudo apt-get -y install python3-pip
 # isntall packages needed
 sudo pip install Flask flask_session flask_cors flask_pymongo pymongo pymongo[srv] gunicorn
 
@@ -9,7 +10,7 @@ sudo touch /etc/systemd/system/event-fi.service
 sudo mkdir /var/log/gunicorn
 sudo touch /var/log/gunicorn/stdout
 sudo touch /var/log/gunicorn/stderr
-echo -e "[Unit]\nDescription=Gunicorn instance for event-fi app\nAfter=network.target\n\n[Service]\nUser=root\nGroup=www-data\nWorkingDirectory=/home/ubuntu/Eventify\nExecStart=/usr/local/bin/gunicorn --access-logfile '/var/log/gunicorn/stdout' --log-file '/var/log/gunicorn/stderr' --capture-output --log-level debug -b localhost:8000 app:app\nRestart=always\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/event-fi.service
+echo -e "[Unit]\nDescription=Gunicorn instance for event-fi app\nAfter=network.target\n\n[Service]\nUser=root\nGroup=www-data\nWorkingDirectory=/home/ubuntu/Event-fi\nExecStart=/usr/local/bin/gunicorn --access-logfile '/var/log/gunicorn/stdout' --log-file '/var/log/gunicorn/stderr' --capture-output --log-level debug -b localhost:8000 app:app\nRestart=always\n\n[Install]\nWantedBy=multi-user.target" | sudo tee /etc/systemd/system/event-fi.service
 
 # enable service
 sudo systemctl daemon-reload
@@ -18,7 +19,7 @@ sudo systemctl enable event-fi.service
 
 # isntall nginx as web server to route ip to localhost:8000
 sudo apt-get update
-sudo apt-get upgrade
+sudo apt-get -y upgrade
 sudo apt-get -y install nginx
 sudo systemctl start nginx
 sudo systemctl enable nginx
