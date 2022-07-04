@@ -15,7 +15,7 @@ def add_new_group(req):
     """adds a new group to the database"""
     if validate_group_creation(req.get_json()):
         new_group_data = {}
-        avatar = request.form.get('avatar_content')
+        avatar = request.get_json().get('avatar_content')
         if avatar is None:
             return {'error': 'no avatar data'}
         if validate_image(avatar) is False:
