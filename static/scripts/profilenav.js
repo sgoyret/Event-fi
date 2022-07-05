@@ -197,11 +197,9 @@ window.addEventListener("load", function() {
     }
     async function groupMake() {
         const groupform =
-        '<div class="popup" id="groupform">' +
+        '<div id="groupform">' +
             '<form id="groupdata" method="POST">' +
-                '<div class="groupavatar">' +
-                    '<p>Avatar</p>' +
-                    '<label for="avatar">' +
+                    '<label id="groupavatar" for="avatar">' +
                         '<i class="bx bx-camera"></i>' +
                         '<input type="file" id="avatar" name="avatar" accept="image/*" />' +
                     '</label>' +
@@ -220,7 +218,6 @@ window.addEventListener("load", function() {
                 const filePicker = document.querySelector("#avatar");
                 const hiddenAvatarContent = document.querySelector("#avatar_content");
                 filePicker.addEventListener("change", function () {
-                    console.log("cambiaste eh")
                     const file = filePicker.files[0];
                     const reader = new FileReader();
                     reader.onload = function (e) {
@@ -237,7 +234,7 @@ window.addEventListener("load", function() {
                     const formdata = {};
                     const formelements = document.getElementById('groupdata').getElementsByTagName('input');
                     for (let item of formelements) {
-                        if (item.value == '' || !location) {
+                        if (item.value == '') {
                             showResponse('Debes rellenar todos los campos');
                             return;
                         } else {
