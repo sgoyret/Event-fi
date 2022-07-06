@@ -153,9 +153,7 @@ window.addEventListener("load", function() {
             });
     };
     async function addmember(){
-        console.log("hola")
         document.getElementById('addsearch').addEventListener('click', function(){
-            console.log("hola")
             const group_id = document.getElementsByClassName('popupheaderavatar')[0].id;
             const username = document.getElementById('addtotext').value;
             const request = new XMLHttpRequest();
@@ -198,29 +196,68 @@ window.addEventListener("load", function() {
         }, 2000);
     }
     async function groupMake() {
-        const groupform = 
-        '<form id="groupdata" method="POST">' +
-            '<input name="name" class="creation" placeholder="Nombre"></input>' +
-            '<div class="creationbutton" id="creationgroup"> Crear</div>' +
-        '</form>';
-        document.getElementById('addgroup').addEventListener("click", function() {
-            const groupname = document.getElementById('addgrouptext').value;
-                if (groupname == '') {
-                    showResponse('Debes rellenar todos los campos');
-                    return;
-                }
-            const request = new XMLHttpRequest();
-            request.open('POST', '/api/groups');
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.setRequestHeader('Access-Control-Allow-Origin', '*');
-            request.setRequestHeader('Access-Control-Allow-Headers', '*');
-            request.send(JSON.stringify({'name': groupname}));
-            request.onload = function() {
-                const data = request.responseText;
-                console.log(data);
-                };
-                showResponse('Grupo creado', 'ok');
-        });
+        const groupform =
+        '<div id="groupform">' +
+            '<form id="groupdata" method="POST">' +
+                    '<label id="groupavatar" for="avatar">' +
+                        '<i class="bx bx-camera"></i>' +
+                        '<input type="file" id="avatar" name="avatar" accept="image/*" />' +
+                    '</label>' +
+                '<input name="name" class="creation" placeholder="Nombre"></input>' +
+                '<input name="avatar_content" id="avatar_content" style="display: none;"></input>' +
+                '<div class="creationbutton" id="creationgroup"> Crear</div>' +
+            '</form>' +
+            '<div class="closepopup" id="closepopup">' +
+                '<i class="bx bx-arrow-back"></i>' +
+            '</div>' +
+        '</div>';
+        // When the user clicks on Crear nuevo grupo, next popup shows up...
+        if (document.getElementById('addgroup')) {
+            document.getElementById('addgroup').addEventListener("click", function() {
+                document.getElementById('wraper').insertAdjacentHTML("afterbegin", groupform);
+                const filePicker = document.querySelector("#avatar");
+                const hiddenAvatarContent = document.querySelector("#avatar_content");
+                filePicker.addEventListener("change", function () {
+                    const file = filePicker.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        hiddenAvatarContent.value = e.target.result;
+                        console.log(hiddenAvatarContent.value)
+                    };
+                    reader.readAsDataURL(file);
+                });
+                document.getElementById('closepopup').addEventListener("click", function() {
+                    document.getElementById('groupform').remove();
+                });
+                document.getElementById('creationgroup').addEventListener("click", function() {
+                    const form = document.getElementById('groupdata');
+                    const formdata = {};
+                    const formelements = document.getElementById('groupdata').getElementsByTagName('input');
+                    for (let item of formelements) {
+                        console.log(item.value)
+                        if (item.value == '') {
+                            showResponse('Debes rellenar todos los campos');
+                            return;
+                        } else {
+                            formdata[item.name] = item.value;
+                        }
+                    }
+                    console.log(formdata);
+                    const request = new XMLHttpRequest();
+                    request.open('POST', '/api/groups');
+                    request.setRequestHeader('Content-Type', 'application/json');
+                    request.setRequestHeader('Access-Control-Allow-Origin', '*');
+                    request.setRequestHeader('Access-Control-Allow-Headers', '*');
+                    request.send(JSON.stringify({'name': formdata.name, 
+                                'avatar_content': formdata.avatar_content}));
+                    request.onload = function() {
+                        const data = request.responseText;
+                        console.log(data);
+                        };
+                        showResponse('Grupo creado', 'ok');
+                });
+            });
+        };
     };
     async function grouppopup () {
         // Function that checks if the user clicked on a group from the list and if so, displays the group popup
@@ -325,26 +362,63 @@ window.addEventListener("load", function() {
             request.onload = function() {
                 console.log(request.response);
                 const contact = JSON.parse(request.response);
+                console.log(contact.error);
+                if (contact.error) {
+                    return;
+                } else {
                 const contactlist = document.createElement('div');
+                const deletecontact = document.createElement('div');
+                deletecontact.innerHTML = 
+                "<div class='manage'>" +
+                "<div class='manage-button-contact'>" +
+                "<i  id='trash' class='bx bx-user-x'></i>" +
+                "</div>" +
+                "</div>";
                 contactlist.classList.add('listcontact');
-                contactlist.id = contact.id;
+                contactlist.id = contact.user_id;
                 contactlist.innerHTML =
-                "<div class='image'>"+
-                    "<div class='img'> </div>" +
+                "<div clasavatar_contents='image'>"+
+                    "<div class='img' style='background-image: url("+ contact.avatar + ")'> </div>" +
                 "</div>" +
                 "<div class='info'>" +
-                "<p>" + contact.name + ' ' + contact.last_name + "</p>" +
-                "<p>@" + contact.username + "</p>" +
-                "</div>" +
-                "<div class='manage'>" +
-                    "<div class='manage-button-contact'>" +
-                    "<i  id='trash' class='bx bx-user-x'></i>" +
-                    "</div>" +
+                    "<p>" + contact.name + ' ' + contact.last_name + "</p>" +
+                    "<p>@" + contact.username + "</p>" +
                 "</div>";
+                if (document.getElementById('nocontacts')) {
+                    document.getElementById('nocontacts').remove();
+                }
                 document.getElementById('usercontacts').appendChild(contactlist);
+                deletecontact.addEventListener("click", function() {
+                    const contactminipopup =
+                    '<div class="minipopup" id="minipopup">' +
+                                '<p>¿Quieres eliminar este contacto?</p>' +
+                                '<div class="minipopupbtn">' +
+                                    '<button class="minipopup-button">Si</button>' +
+                                    '<button class="minipopup-button">No</button>' +
+                                '</div>' +
+                    '</div>';
+                    document.getElementById('wraper').insertAdjacentHTML('afterbegin', contactminipopup);
+                    for (let button of document.getElementsByClassName('minipopup-button')) {
+                        button.addEventListener("click", function() {
+                            if (this.innerHTML == 'Si') {            
+                            const request = new XMLHttpRequest();
+                            request.open('DELETE', '/api/users/contacts/');
+                            request.setRequestHeader('Content-Type', 'application/json');
+                            request.send(JSON.stringify({'user_id': contact.user_id}));
+                            request.onload = function() {
+                            console.log(request.response);
+                            document.getElementById('minipoup').remove();
+                            };
+                        } else {
+                            document.getElementById('minipopup').remove();
+                        }  
+                        });
+                    }
+                });
+                contactlist.appendChild(deletecontact);
             };
-        });
+        };
     });
-
+});
     grouppopup();
 });

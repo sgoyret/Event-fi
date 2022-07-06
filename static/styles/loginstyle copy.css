@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.wraper {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+}
+
+.wraper > .container {
+    width: 90%;
+    text-align: center;
+    margin: auto;
+    font-family: 'Poppins', sans-serif;
+    background-color: #6205e3;
+    color: white;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 25%;
+    max-width: 500px;
+}
+.wraper {
+    background-color: #6205e3;
+}
+.header {
+    color: white;
+    font-family: 'Poppins';
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    font-size: 25px;
+    top: 10px;
+}
+.logo {
+    background-image: url(../img/event-fi-logo\ 1\ \(Traced\).svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+    height: 50px;
+    width: 50px;
+    align-self: center;
+}
+
+.wraper > .header > .welcome {
+    margin-left: 10%;
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 10px
+}
+input {
+    all: unset;
+}
+.options {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 1.5rem;
+}
+.wraper > .container > #user-data {
+    display: flex;
+    flex-direction: column;
+}
+label > .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+label > input {
+    display: none;
+}
+.wraper > .container > .create-user > #user-data > input {
+    display: block;
+    width: 80%;
+    max-width: 500px;
+    margin: 0.5rem auto 0.5rem auto;
+    border-radius: 2px;
+    background-color: #4f00bd;
+    height: 2rem;
+    border: #27005b 1px solid;
+    text-align: left;
+  }
+  #avatarlab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4f00bd;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 2px;
+    height: 2rem;
+  }
+  .names {
+    display: inline;
+    width: 60%;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+  ::placeholder {
+    color: #f1f1f1;
+  }
+  .wraper > .container > .create-user > #user-data > .names > input {
+    width: 39%;
+    /* margin: 0.5rem auto 0.5rem auto; */
+    border-radius: 2px;
+    background-color: #4f00bd;
+    height: 2rem;
+    border: #27005b 1px solid;
+    margin-top: 10px;
+    text-align: left;
+  }
+button {
+    all: unset;
+}
+
+ #btn-create-user {
+    width: 30%;
+    border-radius: 2px;
+    background-color: #4f00bd;
+    color: white;
+    cursor: pointer;
+    height: 100%;
+}
+
+.passreset {
+    font-size: 12px;
+}
+
+#login {
+    cursor: pointer;
+}

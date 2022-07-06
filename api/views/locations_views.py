@@ -1,13 +1,11 @@
 from api.views import api_views
 from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import session, request, redirect, url_for, jsonify
 from pymongo import MongoClient
 from functions.validations import *
 from api.functions.location_functions import *
-from werkzeug.security import generate_password_hash, check_password_hash
-from api.views import session_refresh
-import json
+from api import UPLOAD_FOLDER
+import os
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -22,7 +20,16 @@ def locations():
     
     if request.method == 'GET':
         # returns location list
-        user_locations = session.get('user').get('locations')
+        user_locations = []
+        if session.get('user').get('locations'):
+            for idx, l in enumerate(session.get('user').get('locations')):
+                user_locations.append(l)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', l.get('location_id'))) as avt:
+                        print('pude abrir el avatar')
+                        user_locations[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    print(ex)
         return jsonify(user_locations)
 
     """
@@ -73,6 +80,7 @@ def location_info(location_id):
     for item in session.get('user').get('locations'):
         if item.get('location_id') == location_id:
             location = mongo.locations.find_one({'_id': ObjectId(location_id)})
+    print(location)
 
     if location is None:
         return {'error': 'location not found or acces denied'}

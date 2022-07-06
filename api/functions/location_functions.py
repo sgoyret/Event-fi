@@ -1,11 +1,6 @@
-from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import session
 from pymongo import MongoClient
 from functions.validations import *
-from api.functions.events_functions import add_event_member
-from werkzeug.security import generate_password_hash, check_password_hash
-import json
 from api.views import session_refresh
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -60,7 +55,6 @@ def delete_location_admin(admin, location):
         if item.get('location_id') == str(admin['_id']):
             location_at_user = admin.get('locations')[idx]
 
-    print(f'user to delete: {admin_at}')
     if mongo.locations.update_one({'_id': location['_id']},
                                 {'$pull': {'admins': admin_at}},False,True): # remove admin from location
         update_location = mongo.users.update_one({'_id': admin.get('_id')},

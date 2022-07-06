@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/static/styles/styles_index.css" type="text/css">
     <!--<script src="/static/scripts/markerpopups.js"></script>-->
     <script src="/static/scripts/creationpopup.js" async></script>
-    <script></script>
+    <script src="/static/scripts/notificationspopup.js" async></script>
 {% endblock html_head %}
 
 {% block wrapper %}
@@ -40,9 +40,7 @@
                         {% for value in user.events %}
                             <li> 
                                 <div class="listevent" id="{{value.event_id}}" onclick="javascript:location.href = '/map/event/{{value.event_id}}'">
-                                    <div class="image"> 
-                                        <div class="img" style="background-image: url(/static/avatars/{{value.name}}.png); background-repeat: no-repeat; background-size: contain;">
-                                        </div> 
+                                    <div class="image" style="background-image: url({{value.avatar}})"> 
                                     </div> 
                                     <div class="info"> 
                                     <p>  {{ value.name }} </p> 

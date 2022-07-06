@@ -1,8 +1,8 @@
 import os
-from app import UPLOAD_FOLDER
+from flask import request
+from api import UPLOAD_FOLDER
 from api.views import api_views
 from api.functions.user_functions import *
-"""
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
 from flask_cors import CORS
@@ -15,7 +15,6 @@ from api.views import session_refresh
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
-"""
 # ---------USER ROUTES----------
 """
 @api_views.route('/api/users', methods=['GET'], strict_slashes=False)
@@ -56,13 +55,18 @@ def contacts():
         return redirect(url_for('login'))
     if request.method == 'GET':
         #return all user contacts
+        contacts_with_avatar = []
         if session.get('user').get('contacts'):
-            contacts_with_avatar = []
             for idx, c in enumerate(session.get('user').get('contacts')):
                 contacts_with_avatar.append(c)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
-                    print('pude abrir el avatar')
-                    contacts_with_avatar[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        contacts_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        contacts_with_avatar[idx]['avatar'] = avt.read()
         return jsonify(contacts_with_avatar)
 
     user = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
@@ -85,9 +89,10 @@ def get_notifications():
 
     if request.method == 'GET':
         """Refresh the usr session with updated notifications"""
-        session_refresh()
-
-    if request.method == 'DELETE':
-        """removes all the notifications from the user"""
-        mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$pull': {'notifications': session.get('user').get('notifications')}})
-
+        user_notifications = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))}).get('notifications')
+        if request.get_json().get('checking') and user_notifications:
+            return {'status': 'Hay notificaciones'}
+        elif user_notifications is None:
+            return {'status': 'No hay notificaciones'}
+        mongo.users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {'$pull': {'notifications': user_notifications}})
+        return jsonify(user_notifications)

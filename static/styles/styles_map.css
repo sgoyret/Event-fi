@@ -87,12 +87,14 @@ display: none;
     filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
 }
 .usericon {
-    width: 20%;
-    background-image: url(../img/bxs-user-circle.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  width: 20%;
+  background-image: url(../img/bxs-user-circle.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  height: 80%;
+  align-self: center;
 }
 .icons {
     display: flex;
@@ -101,30 +103,35 @@ display: none;
     width: 100%;
     height: 100%;
 }
-
 .burguermenu {
-    width: 20%;
-    background-image: url(../img/bxs-map.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  width: 20%;
+  background-image: url(../img/bxs-map.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  height: 80%;
+  align-self: center;
 }
 .home {
-  width: 20%;
-  background-image: url(../img/bxs-home.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+width: 20%;
+background-image: url(../img/bxs-home.svg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+height: 80%;
+align-self: center;
 }
 .notifications {
-  width: 20%;
-  background-image: url(../img/bxs-bell.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+width: 20%;
+background-image: url(../img/bxs-bell.svg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+height: 80%;
+align-self: center;
 }
 .marker {
     background-image: url(../img/mapbox-icon.png);
@@ -573,6 +580,7 @@ label {
 height: 100px;
 border-radius: 50%;
 background-color: white;
+background-size: cover;
 border: 2px solid #6205e3;
 }
 .navselected {
@@ -589,6 +597,26 @@ border: 2px solid #6205e3;
   justify-content: space-around;
   align-items: center;
   width: 100%;
+}
+.member {
+  position: relative;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+.memberavatar {
+  height: 75px;
+    width: 75px;
+    background-size: cover;
+    border: 2px solid darkslategray;
+    border-radius: 50%;
+}
+.memberinfo {
+    width: 40%;
+    text-align: left;
 }
 #membersnav, #groupsnav, #eventsnav {
   width: 50%;

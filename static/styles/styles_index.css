@@ -97,6 +97,8 @@
   background-position: center;
   background-size: contain;
   filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  height: 80%;
+  align-self: center;
 }
 .icons {
     display: flex;
@@ -112,6 +114,8 @@
   background-position: center;
   background-size: contain;
   filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+  height: 80%;
+  align-self: center;
 }
 .home {
 width: 20%;
@@ -120,6 +124,8 @@ background-repeat: no-repeat;
 background-position: center;
 background-size: contain;
 filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+height: 80%;
+align-self: center;
 }
 .notifications {
 width: 20%;
@@ -128,6 +134,8 @@ background-repeat: no-repeat;
 background-position: center;
 background-size: contain;
 filter: invert(100%) sepia(1%) saturate(7462%) hue-rotate(197deg) brightness(129%) contrast(96%);
+height: 80%;
+align-self: center;
 }
 .marker {
     background-image: url(../img/mapbox-icon.png);
@@ -659,9 +667,10 @@ option, select {
     font-family:"Poppins", sans-serif;;
 }
 .image {
-    background-color: #6105e3;
+    background-size: cover;
     height: 75px;
     width: 75px;
+    border: 2px solid darkslategray;
     border-radius: 50%;
 }
 .bx {

@@ -1,14 +1,10 @@
-import json
-import requests
 from api.views import api_views
 from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import session, request, redirect, url_for, jsonify
 from pymongo import MongoClient
 from functions.validations import *
 from api.functions.groups_functions import *
-from werkzeug.security import generate_password_hash, check_password_hash
-from api.views import session_refresh
+from api import UPLOAD_FOLDER
 
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -24,7 +20,16 @@ def groups():
 
     if request.method == 'GET':
         # returns groups list
-        user_groups = session.get('user').get('groups')
+        user_groups = []
+        if session.get('user').get('groups'):
+            for idx, g in enumerate(session.get('user').get('groups')):
+                user_groups.append(g)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('_id'))) as avt:
+                        print('pude abrir el avatar')
+                        user_groups[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    print(ex)
         return jsonify(user_groups)
 
     if request.method == 'POST':

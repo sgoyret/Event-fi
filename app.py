@@ -37,8 +37,18 @@ def index():
     """user base page"""
     # checks if session exists
     if session.get('user'):
-        print(session.get('user'))
+        # print(session.get('user'))
         session_refresh()
+        if session.get('user').get('events'):
+            for e in session.get('user').get('events'):
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', e.get('event_id')), 'r') as file:
+                        print("going to read file")
+                        e['avatar'] = file.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user'), 'r') as file:
+                        print("going to read file")
+                        e['avatar'] = file.read()
         return render_template('index.html', user=session.get('user'))
     return redirect(url_for('login'))
 
@@ -81,7 +91,6 @@ def logout():
 
 @app.route('/register', methods=['POST', 'GET'], strict_slashes=False)
 def register():
-    import base64
     """create user account"""
     if session.get('user'):
         return redirect(url_for('index'))
@@ -90,11 +99,7 @@ def register():
         to_validate= ['username', 'name', 'last_name', 'email', 'password']
         if 'avatar' not in request.files:
             return {'error': 'no avatar'}
-        print(request.form)
-        for key, value in request.form.items():
-            print(f"{key}: {value}")
         avatar = request.form.get('avatar_content')
-        print(f'content del avatar: {avatar}')
         if avatar is None:
             return {'error': 'no avatar data'}
         if validate_image(avatar) is False:
@@ -104,7 +109,10 @@ def register():
             print('the dictionary is valid')
             new_data = {}
             for item in request.form:
-                new_data[item] = request.form[item]
+                if item == 'avatar_content' or item == 'avatar':
+                    continue
+                else:
+                    new_data[item] = request.form[item]
             new_data['username'] = new_data['username'].lower()
             if mongo.users.find_one({'username': new_data['username']}) is None:
                 new_data['password'] = generate_password_hash(new_data['password'])
@@ -119,28 +127,21 @@ def register():
                 filename = new_data['_id']
             
                 # print(f'avatar name: {avatar.name} final filename: {filename}\nUPLOAD_FOLDER: {UPLOAD_FOLDER}')
-                print("going to open file")
-                print(avatar)
                 # print(avatar.split(','))
                 # image_data = base64.b64decode(avatar.split(',')[1].encode())
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', filename), 'w+') as file:
+                with open(os.path.join(UPLOAD_FOLDER, 'avatars', new_data['_id']), 'w+') as file:
                     print("going to wrtie file")
                     file.write(avatar)
-                new_data['avatar'] = f'/static/avatars/{filename}'
+                new_data['avatar'] = f'/static/avatars/{new_data["_id"]}'
                 mongo.users.update_one({'_id': ObjectId(new_data['_id'])}, {'$set': {'avatar': new_data['avatar']}})
                 
                 session['user'] = new_data
-                print('the requesst is ')
-                for item in request.files:
-                    print(item)
 
-                print(request)
                 return redirect(url_for('index'))
             else:
                 flash('the username is already in use', error)
                 return redirect(url_for('register'))
         flash(f'{check_response}', error)
-        print(request)
         return redirect(url_for('register'))
     if request.method == 'GET':
         return render_template('register.html')
@@ -151,10 +152,6 @@ def user():
         return redirect(url_for('login'))
     session_refresh()
     try:
-        print('voy a intentar abir el avatar')
-        print('avatar: ' + session.get('user')['avatar'])
-        print('base dir: ' + BASE_DIR)
-        print('upload folder: ' + UPLOAD_FOLDER)
         with open(os.path.join(UPLOAD_FOLDER, 'avatars', session.get('user').get('_id'))) as avt:
             print('pude abrir el avatar')
             session['user']['avatar'] = avt.read()
@@ -162,10 +159,31 @@ def user():
             contacts_with_avatar = []
             for idx, c in enumerate(session.get('user').get('contacts')):
                 contacts_with_avatar.append(c)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
-                    print('pude abrir el avatar')
-                    contacts_with_avatar[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        contacts_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        contacts_with_avatar[idx]['avatar'] = avt.read()
             session['user']['contacts'] = contacts_with_avatar
+    except Exception as ex:
+        raise(ex)
+    try:
+        if session.get('user').get('groups'):
+            groups_with_avatar = []
+            for idx, g in enumerate(session.get('user').get('groups')):
+                groups_with_avatar.append(g)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('group_id'))) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+            session['user']['groups'] = groups_with_avatar
     except Exception as ex:
         raise(ex)
     return render_template('user.html', user=session['user'])
@@ -191,7 +209,6 @@ def settings():
             update_data['password'] = generate_password_hash(update_data['password'])
         else:
             update_data.pop('password')
-        print(f'data for update is : {update_data}')
         mongo.users.update_one({'_id': ObjectId(session['user']['_id'])}, {'$set': update_data})
         session_refresh()
         return redirect(url_for('user'))
@@ -214,7 +231,6 @@ def map_event(event_id):
         return redirect(url_for('login'))
     session_refresh()
     event = mongo.events.find_one({'_id': ObjectId(event_id)})
-    print(event)
     if event:
         return render_template('map.html', locations=[],  event=event, user=session.get('user'))
     else:
