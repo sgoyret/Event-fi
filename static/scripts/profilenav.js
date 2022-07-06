@@ -145,7 +145,7 @@ window.addEventListener("load", function() {
     }
     async function groupMake() {
         const groupform =
-        '<div id="groupform">' +
+        '<dialog id="groupform">' +
             '<form id="groupdata" method="POST">' +
                     '<label id="groupavatar" for="avatar">' +
                         '<i class="bx bx-camera"></i>' +
@@ -158,7 +158,7 @@ window.addEventListener("load", function() {
             '<div class="closepopup" id="closepopup">' +
                 '<i class="bx bx-arrow-back"></i>' +
             '</div>' +
-        '</div>';
+        '</dialog>';
         // When the user clicks on Crear nuevo grupo, next popup shows up...
         if (document.getElementById('addgroup')) {
             document.getElementById('addgroup').addEventListener("click", function() {
@@ -174,7 +174,9 @@ window.addEventListener("load", function() {
                     };
                     reader.readAsDataURL(file);
                 });
+                document.getElementById('groupform').showModal();
                 document.getElementById('closepopup').addEventListener("click", function() {
+                    document.getElementById('groupform').close();
                     document.getElementById('groupform').remove();
                 });
                 document.getElementById('creationgroup').addEventListener("click", function() {
@@ -307,7 +309,6 @@ window.addEventListener("load", function() {
         document.getElementById('usercontacts').classList.add('none');
         document.getElementsByClassName('content')[0].id = 'groupscontent';
         this.classList.add('selected');
-        groupMake();
     });
     document.getElementById('contacts').addEventListener("click", function() {
         const selected = document.getElementsByClassName('selected')
