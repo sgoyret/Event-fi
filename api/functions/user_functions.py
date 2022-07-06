@@ -3,6 +3,8 @@ from flask import redirect, url_for, session, jsonify
 from pymongo import MongoClient
 from functions.validations import *
 from api.views import session_refresh
+from api import UPLOAD_FOLDER
+import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')
@@ -60,6 +62,12 @@ def add_new_contact(user, req):
     session_refresh()
     # return redirect(url_for('user'))
     # must redirect to /user in the front
+    try:
+        with open(os.path.join(UPLOAD_FOLDER, 'avatars', new_contact.get('user_id'))) as avt:
+            print('pude abrir el avatar')
+            new_contact['avatar'] = avt.read()
+    except Exception as ex:
+        print(ex)
     return jsonify(new_contact), 201
 
 def delete_contact(req):
@@ -74,7 +82,7 @@ def delete_contact(req):
     contact_to_delete['user_id'] = str(contact_to_delete['_id'])
     contact_to_delete.pop('_id')
 
-    # remove contact in session
+    # remove contact in sessioni
     if session.get('user').get('contacts'):
         try:
             session['user']['contacts'].remove(contact_to_delete)
