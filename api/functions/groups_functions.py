@@ -31,7 +31,7 @@ def add_new_group(req):
             "user_id": new_group_data['owner'],
             "username": session.get('user').get('username'),
             "name": session.get('user').get('name'),
-            'last_name': session.get('user').get('lastname'),
+            'last_name': session.get('user').get('last_name'),
             "type": "admin"
         }
         new_group_data['members'] = []
