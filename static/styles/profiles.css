@@ -299,6 +299,10 @@ ul, li {
     overflow-y: auto;
     overflow-x: hidden;
 }
+.memberinfo {
+    text-align: left;
+    width: 40%;
+}
 #membersnav, #groupsnav, #eventsnav {
     width: 50%;
     text-align: center;
@@ -389,6 +393,11 @@ ul, li {
     width: 35px;
     height: 35px;
 }
+.bx-dots-vertical {
+    font-size: 35px;
+    color: #5a5a5a;
+    align-self: center;
+}
 .bx-plus {
     font-size: 35px;
     color: #5a5a5a;
@@ -405,6 +414,11 @@ input[type="datetime-local"] {
 }
 .addmember input {
     all: unset;
+}
+.membername {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 .addmember {
     display: flex;
