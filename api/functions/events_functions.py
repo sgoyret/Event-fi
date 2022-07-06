@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from functions.validations import *
 from api.views import session_refresh
 from api import UPLOAD_FOLDER
+from datetime import datetime
 import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -50,7 +51,7 @@ def add_new_event(req):
             new_event_data['members'].append(owner_admin) # set owner as member with type admin
             # create event
             obj = mongo.events.insert_one(new_event_data)
-            
+
             with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id)), 'w+') as file:
                 file.write(avatar)
             new_event_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
@@ -93,15 +94,19 @@ def add_new_event(req):
 
             if req.get_json().get('members') is None:
                 req.get_json()['members'] = []
+    
             for item in req.get_json().get('members'):
+                user = None
                 if item.get('user_id'):
                     user = mongo.users.find_one({'_id': ObjectId(item.get('user_id'))})
-                if item.get('username'):
+                elif item.get('username'):
                     user = mongo.users.find_one({'username': item.get('username')})
                 if user:
-                    add_event_member(req.get_json(), user, {'type': 'guest'})
+                    created_event = mongo.events.find_one({'_id': ObjectId(obj.inserted_id)})
+                    add_event_member(created_event, user, {'type': 'guest'})
                 else:
                     return {'error': 'user not found'}
+                
             return jsonify({'status':'created event', 'event_id': str(obj.inserted_id)})
 
 def delete_event(event):
@@ -168,6 +173,7 @@ def add_event_member(event, user, req):
                 'type': req.get('type'),
                 'avatar': user.get('avatar')
             }
+
     for item in req:
         new_user_event_data[item] = req.get(item)
     if req.get('type') is None:
