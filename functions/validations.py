@@ -1,6 +1,6 @@
 import re
 import imghdr
-
+import datetime
 
 def validate_image(avatar):
     return True
@@ -42,18 +42,25 @@ def validate_group_creation(values):
     
     return True
 
-
 def validate_event_creation(values):
     """Validates the basic info for a new event"""
     event_regex = {
         'name': '^[a-zA-Z0-9\-]{4,12}$', #groupname regex
     }
+    s_date = datetime.fromisoformat(values.get('start_date'))
+    e_date = datetime.fromisoformat(values.get('start_date'))
+    current_date = datetime.now()
+    if s_date >= current_date:
+        if s_date >= e_date:
+            return {'error': 'the event must start before it ends'}
+    else:
+        return {'error': 'the event can not bee in the past... or can it?'}
 
     # checking if all fields have been checked
     for key in event_regex:
         if key not in values:
             return {'error': f'missing {key}'}
-    
+
     for key, value in values.items():
         print(f'checking key {key}')
         if key == 'avatar_content':
@@ -65,7 +72,7 @@ def validate_event_creation(values):
             return {'error': f'{key} is not in user_regex'}
         # checking input value matches regex
         if not re.match(event_regex[key], value):
-                return {'error': f'{value} didnt mmatch {event_regex[key]}'}
+                return {'error': f'{value} did not match {event_regex[key]}'}
 
     return True
 
