@@ -234,6 +234,7 @@ window.addEventListener("load", function() {
                     const formdata = {};
                     const formelements = document.getElementById('groupdata').getElementsByTagName('input');
                     for (let item of formelements) {
+                        console.log(item.value)
                         if (item.value == '') {
                             showResponse('Debes rellenar todos los campos');
                             return;
@@ -276,7 +277,7 @@ window.addEventListener("load", function() {
                             "<i class='bx bx-arrow-back'></i>" +
                         "</div>" +
                         "<div class='popupheader'>" +
-                            "<div class='popupheaderavatar' id='" + element.id + "'> </div>" +
+                            "<div class='popupheaderavatar' id='" + element.id + "' style='background-image: url(" + groupdata.avatar + ")'> </div>" +
                             "<div class='popupheadertext'>" +
                                 "<div class='grouptitle'>" +  groupdata.name + "</div>" +
                                 //"<div class='groupimg'> <img src='https://scontent.fmvd1-1.fna.fbcdn.net/v/t1.6435-9/91138397_142569460618578_9003032990434983936_n.png?_nc_cat=103&ccb=1-7&_nc_sid=973b4a&_nc_ohc=kANVgvRdsLsAX-y7miA&_nc_ht=scontent.fmvd1-1.fna&oh=00_AT8CDHH4X_DslZ24jK7kec_aSOWS9DrvcUQ1LUHqnvR2nA&oe=62BDC452' alt=''>" + "</div>" +
@@ -308,21 +309,18 @@ window.addEventListener("load", function() {
                         const member = document.createElement('div');
                         member.classList.add('listcontact');
                         if (element.type == 'admin') {
-                            member.innerHTML = "<div class='image'>"+
-                                                    "<div class='img'> </div>" +
-                                                "</div>" +
-                                                "<div class='membername'>" + element.name + "</div>" +
-                                                "<div class='memberrole'> <i class='bx bx-crown' ></i> </div>" +
-                                                "</div>";
+                            member.innerHTML = 
+                                "<div class='img' style='background-image: url(" + element.avatar + "')> </div>" +
+                                "<div class='membername'>" + element.name + "</div>" +
+                                "<div class='memberrole'> <i class='bx bx-crown' ></i> </div>" +
+                                "</div>";
                             document.getElementById('popupmembers').appendChild(member);
                         } else {
                             member.innerHTML =
-                             "<div class='image'>"+
-                                     "<div class='img'> </div>" +
-                             "</div>" +
-                            "<div class='membername'>" + element.name + "</div>" +
-                            "<div class='memberrole'> </div>" +
-                            "</div>";
+                                "<div class='img' style='background-image: url(" + element.avatar + "')> </div>" +
+                                "<div class='membername'>" + element.name + "</div>" +
+                                "<div class='memberrole'> </div>" +
+                                "</div>";
                             document.getElementById('popupmembers').appendChild(member);
                         }
                     }
