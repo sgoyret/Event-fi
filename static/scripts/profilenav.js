@@ -234,6 +234,7 @@ window.addEventListener("load", function() {
                     const formdata = {};
                     const formelements = document.getElementById('groupdata').getElementsByTagName('input');
                     for (let item of formelements) {
+                        console.log(item.value)
                         if (item.value == '') {
                             showResponse('Debes rellenar todos los campos');
                             return;

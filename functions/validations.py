@@ -44,7 +44,7 @@ def validate_group_creation(values):
         print(f'checking key {key}')
         if key != 'avatar_content':
             if not re.match(group_regex.get(key), values.get(key)):
-                    return {'error': f'{values.get(key)} did not match {user_regex[key]}'}
+                    return {'error': f'{values.get(key)} did not match {group_regex[key]}'}
     return True
 
 
