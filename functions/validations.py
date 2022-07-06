@@ -1,6 +1,6 @@
 import re
 import imghdr
-import datetime
+from datetime import datetime
 
 def validate_image(avatar):
     return True
