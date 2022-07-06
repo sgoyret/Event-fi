@@ -62,6 +62,46 @@ def single_group(group_id):
             group_data[key] = group[key]
             if key == '_id':
                 group_data[key] = str(group[key])
+        if group['members'][user_idx].get('type') == 'admin':
+            user_type = 'admin'
+        else:
+            user_type = 'member'
+        group_data['type'] = user_type
+        # turn event avatar from route to actual image
+        try:
+            with open(os.path.join(UPLOAD_FOLDER, 'avatars', group_data.get('_id'))) as avt:
+                print('pude abrir el avatar')
+                group_data['avatar'] = avt.read()
+        except Exception as ex:
+            print(ex)
+        # turn event members avatars from route to actual image
+        if group.get('members'):
+            members_with_avatar = []
+            for idx, m in enumerate(group.get('members')):
+                members_with_avatar.append(m)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', m.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+            group_data['members'] = members_with_avatar
+        # turn event groups avatars from route to actual image
+        if group.get('events'):
+            events_with_avatar = []
+            for idx, e in enumerate(group.get('events')):
+                events_with_avatar.append(m)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', e.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        events_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        events_with_avatar[idx]['avatar'] = avt.read()
+            group_data['events'] = events_with_avatar
         return jsonify(group_data)
 
     if request.method == 'PUT':

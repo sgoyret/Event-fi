@@ -170,6 +170,22 @@ def user():
             session['user']['contacts'] = contacts_with_avatar
     except Exception as ex:
         raise(ex)
+    try:
+        if session.get('user').get('groups'):
+            groups_with_avatar = []
+            for idx, g in enumerate(session.get('user').get('groups')):
+                groups_with_avatar.append(g)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('group_id'))) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+            session['user']['groups'] = groups_with_avatar
+    except Exception as ex:
+        raise(ex)
     return render_template('user.html', user=session['user'])
 
 @app.route('/user/settings', methods=['GET', 'POST'], strict_slashes=False)

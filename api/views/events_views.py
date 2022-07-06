@@ -32,6 +32,19 @@ def events():
                         user_events[idx]['avatar'] = avt.read()
                 except Exception as ex:
                     print(ex)
+                if e.get('members'):
+                    members_with_avatar = []
+                    for idx, m in enumerate(e.get('members')):
+                        members_with_avatar.append(m)
+                        try:
+                            with open(os.path.join(UPLOAD_FOLDER, 'avatars', m.get('user_id'))) as avt:
+                                print('pude abrir el avatar')
+                                members_with_avatar[idx]['avatar'] = avt.read()
+                        except Exception as ex:
+                            with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                                print('pude abrir el avatar')
+                                members_with_avatar[idx]['avatar'] = avt.read()
+                    user_events[idx]['members'] = members_with_avatar
         return jsonify(user_events)
         
     if request.method == 'POST':
@@ -64,6 +77,43 @@ def single_event(event_id):
     if request.method == 'GET':
         # return event json object
         event['_id'] = str(event['_id'])
+        user_type = event['members'][user_idx]['type']
+        event['type'] = user_type
+        # turn event avatar from route to actual image
+        try:
+            with open(os.path.join(UPLOAD_FOLDER, 'avatars', event.get('_id'))) as avt:
+                print('pude abrir el avatar')
+                event['avatar'] = avt.read()
+        except Exception as ex:
+            print(ex)
+        # turn event members avatars from route to actual image
+        if event.get('members'):
+            members_with_avatar = []
+            for idx, m in enumerate(event.get('members')):
+                members_with_avatar.append(m)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', m.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+            event['members'] = members_with_avatar
+        # turn event groups avatars from route to actual image
+        if event.get('groups'):
+            groups_with_avatar = []
+            for idx, g in enumerate(event.get('groups')):
+                groups_with_avatar.append(m)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+            event['groups'] = groups_with_avatar
         return jsonify(event)
     
     if request.method == 'PUT':
@@ -102,7 +152,19 @@ def event_members(event_id):
 
 
     if request.method == 'GET':
-        return jsonify(event.get('members'))
+        if event.get('members'):
+            members_with_avatar = []
+            for idx, m in enumerate(event.get('members')):
+                members_with_avatar.append(m)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', m.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+        return jsonify(members_with_avatar)
 
     if request.method == 'POST':
         # add member to event
