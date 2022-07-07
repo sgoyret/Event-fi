@@ -6,9 +6,9 @@ async function popupnav(members, groups, events) {
                 if (document.getElementById('groupsnav').classList === 'navselected') { 
                 } else {
                     const addmemberbar = document.getElementById('addmember');
-                    const membersinfo = document.getElementById('popupmembers');
-                    const eventsinfo = document.getElementById('popupevents');
-                    const groupsinfo = document.getElementById('popupgroups');
+                    const membersinfo = document.getElementsByClassName('popupmembers')[0];
+                    const eventsinfo = document.getElementsByClassName('popupevents')[0];
+                    const groupsinfo = document.getElementsByClassName('popupgroups')[0];
                     if (membersinfo){
                         membersinfo.style.display = "none";
                     }
@@ -35,9 +35,9 @@ async function popupnav(members, groups, events) {
             document.getElementById('membersnav').addEventListener("click", function() {
                 if (document.getElementById('membersnav').classList === 'navselected') { 
                 } else {
-                    const membersinfo = document.getElementById('popupmembers');
-                    const eventsinfo = document.getElementById('popupevents');
-                    const groupsinfo = document.getElementById('popupgroups');
+                    const membersinfo = document.getElementsByClassName('popupmembers')[0];
+                    const eventsinfo = document.getElementsByClassName('popupevents')[0];
+                    const groupsinfo = document.getElementsByClassName('popupgroups')[0];
                     if (membersinfo){
                         membersinfo.style.display = "unset";
                     }
@@ -47,7 +47,9 @@ async function popupnav(members, groups, events) {
                     if (groupsinfo) {
                         groupsinfo.style.display = "none";
                     }
-                    document.getElementById('addmember').style.display = "flex";
+                    if (document.getElementById('addmember')) {
+                        document.getElementById('addmember').style.display = "flex";
+                    }
                     document.getElementsByClassName('navselected')[0].classList.remove('navselected');
                     document.getElementById('membersnav').classList.add('navselected');
                     popupnav(members, groups, events);
@@ -63,9 +65,9 @@ async function popupnav(members, groups, events) {
                 if (document.getElementById('eventsnav').classList === 'navselected') { 
                 } else {
                     const addmemberbar = document.getElementById('addmember');
-                    const membersinfo = document.getElementById('popupmembers');
-                    const eventsinfo = document.getElementById('popupevents');
-                    const groupsinfo = document.getElementById('popupgroups');
+                    const membersinfo = document.getElementsByClassName('popupmembers')[0];
+                    const eventsinfo = document.getElementsByClassName('popupevents')[0];
+                    const groupsinfo = document.getElementsByClassName('popupgroups')[0];
                     if (membersinfo){
                         membersinfo.style.display = "none";
                     }
@@ -133,7 +135,7 @@ map.on('load', function() {
                             "</div>" +
                             "<div class='popupcontent'>" +
                                 "<div class='popupmembers'></div>" +
-                                "<div class='popupgroups' style='display:none'></div>" +
+                                "<div class='popupgroups'></div>" +
                         "</div>" +
                             '<div class="closepopup" id="closepopup">' + 
                             "<i class='bx bx-arrow-back'></i>" +
@@ -144,6 +146,22 @@ map.on('load', function() {
                     element.insertAdjacentHTML('afterbegin', eventpopup);
                     const membersnav = document.getElementById('membersnav');
                     const groupsnav = document.getElementById('groupsnav');
+                    if (data.groups) {
+                        for (let element of data.groups) {
+                            const group = document.createElement('div');
+                            group.classList.add('group');
+                            group.innerHTML =
+                        "<div class='groupavatar' style='background-image: url(" + element.avatar +")'>" +
+                            "</div>" +
+                            "<div class='groupinfo'>" +
+                                "<div class='groupname'>" + element.name + "</div>" +
+                            "</div>" +
+                        "</div>";
+                            document.getElementsByClassName('popupgroups')[0].style.display = 'none';
+                            document.getElementsByClassName('popupgroups')[0].appendChild(group);
+                        }
+                    } else {
+                    }
                     if (data.members) {
                         for (let element of data.members) {
                             const member = document.createElement('div');
@@ -158,7 +176,7 @@ map.on('load', function() {
                             "</div>" +
                         "</div>";
                             document.getElementsByClassName('popupmembers')[0].appendChild(member);
-                            if (element.type === 'admin' || element.type === 'sudo') {
+                            if (data.type === 'admin' || data.type === 'sudo') {
                                 const manage = document.createElement('div');
                                 manage.classList.add('membermanage');
                                 manage.innerHTML = "<i class='bx bx-dots-vertical'></i>"; 

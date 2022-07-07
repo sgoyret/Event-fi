@@ -170,7 +170,8 @@ window.addEventListener("load", function() {
                     const reader = new FileReader();
                     reader.onload = function (e) {
                         hiddenAvatarContent.value = e.target.result;
-                        console.log(hiddenAvatarContent.value)
+                        document.getElementById('groupavatar').style.backgroundImage = "url(" + hiddenAvatarContent.value + ")";
+                        document.getElementById('groupavatar').style.backgroundSize = "cover";
                     };
                     reader.readAsDataURL(file);
                 });

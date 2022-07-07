@@ -24,14 +24,21 @@ dialog::backdrop {
     background: #18191a59;
     backdrop-filter: blur(1px);
   }
+#creationgroup {
+    border: 2px solid #6105e3;
+    width: 15%;
+    border-radius: 2px;
+    cursor: pointer;
+}
 #groupavatar {
-    height: 75px;
-    width: 75px;
+    height: 90px;
+    width: 90px;
     background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    cursor:pointer;
 }
 #groupdata {
     display: flex;
@@ -54,6 +61,7 @@ dialog::backdrop {
     align-items: center;
 }
 .edit_prof{
+    cursor: pointer;
     margin-top: 10px;
     width: 150px;
     height: 25px;
@@ -92,6 +100,7 @@ dialog::backdrop {
     line-height: 200%;
 }
 .selection {
+    cursor: pointer;
     height: 5%;
     display: flex;
     background-color: #f1f1f1;
@@ -142,6 +151,7 @@ dialog::backdrop {
 }
 
 .listevent, .listcontact, .listgroup {
+    cursor: pointer;
     position: relative;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -275,6 +285,7 @@ ul, li {
     height: 50px;
 }
 .bx-trash, .bx-x {
+    cursor: pointer;
     font-size: 35px;
     color: #5a5a5a;
 }
@@ -395,6 +406,7 @@ ul, li {
     align-self: center;
 }
 .bx-plus {
+    cursor: pointer;
     font-size: 35px;
     color: #5a5a5a;
 }
@@ -482,7 +494,7 @@ input[type="datetime-local"] {
   }
   .bx-camera {
     font-size: 35px;
-    color: #5a5a5a;
+    color: #6105e3;
     }
   label > input {
     display: none;

@@ -9,18 +9,20 @@ async function creationPopup(formdata) {
             '<div class="popup" id="eventcreate">' +
             '<div id="form">' +
             '<form id="eventdata" method="POST" autocomplete="off">' +
-            '<input name="name" class="creation" placeholder="Titulo"></input>' +
-            '<label id="avatarlabel">' +
-            '<i class="bx bx-camera"></i>' +
-            '<input id="avatar" name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>' +
-            '</label>' +
-            '<label for="start_date">Fecha de inicio</label>' +
-            '<input type="datetime-local" name="start_date" id="start_date">' +
-            '<label for="end_date">Fecha de finalización</label>' +
-            '<input type="datetime-local" name="end_date" class="creation"></input>' +
+            '<div class="avatarimg">' +
+                '<label id="avatarlabel">' +
+                    '<i class="bx bx-camera"></i>' +
+                    '<input id="avatar" name="avatar" class="creation" placeholder="Fecha" type="file" accept="image/png, image/gif, image/jpeg"></input>' +
+                '</label>' +
+            '</div>' +
+            '<input style="text-align:center;padding-top:10px" name="name" class="creation" placeholder="Titulo"></input>' +
             '<select id="location" class>' +
-            '<option value> Lugar </option>' +
+                '<option value> Lugar </option>' +
             '</select>' +
+            '<label for="start_date">Fecha de inicio</label>' + 
+            '<input type="datetime-local" style="all: unset;" name="start_date" id="start_date">' +
+            '<label for="end_date">Fecha de finalización</label>' +
+            '<input type="datetime-local" style="all: unset;" name="end_date" class="creation"></input>' +
             '<input name="description" class="creation" placeholder="Descripcion" style="height: 40%;"></input>' +
             '<input name="avatar_content" id="avatar_content" style="display:none;" ></input>' +
             ' <div class="creationbutton" id="creationevent"> Crear</div>' +
@@ -70,6 +72,8 @@ async function creationPopup(formdata) {
         reader.onload = function (e) {
             hiddenAvatarContent.value = e.target.result;
             console.log(hiddenAvatarContent.value)
+            document.getElementById('avatarlabel').style.backgroundImage = "url(" + hiddenAvatarContent.value + ")";
+            document.getElementById('avatarlabel').style.backgroundSize = "cover";
         };
         reader.readAsDataURL(file);
     });
