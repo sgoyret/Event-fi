@@ -1,149 +1,97 @@
 window.addEventListener("load", function() {
     groupMake();
+    grouppopup();
+});
     async function popupnav(members, groups, events) {
         // Function that adds aesthetic to the navbar
-        if (groups) {
-        try {
-            document.getElementById('groupsnav').addEventListener("click", function() {
-                if (document.getElementById('groupsnav').classList === 'navselected') {
-                 console.log("hola!")   
-                } else {
-                    const selected = document.getElementsByClassName('navselected');
-                    const event_id = document.getElementsByClassName('popupheaderavatar')[0].id;
-                    const request = new XMLHttpRequest();
-                    request.open('GET', '/api/events/' + event_id + '/groups')
-                    request.setRequestHeader('Content-Type', 'application/json');
-                    request.setRequestHeader('Access-Control-Allow-Origin', '*');
-                    request.setRequestHeader('Access-Control-Allow-Headers', '*');
-                    request.send();
-                    request.onload = function() {
-                        const data = JSON.parse(request.responseText)
-                        console.log(data)
-                    console.log(selected);
-                    for (let element of selected) {
-                        element.classList.remove('navselected');
-                    };
-                    document.getElementById('groupsnav').classList.add('navselected');
-                    document.getElementsByClassName('popupcontent')[0].innerHTML = ''
-                    if (groups) {
-                        for (let element of groups) {
-                            const group = document.createElement('div');
-                            group.classList.add('listed');
-                            group.innerHTML = "<div class='memberavatar'> </div>" +
-                                                "<div class='membername'>" + element.name + "</div>" +
-                                                "</div>";
-                            document.getElementsByClassName('popupcontent')[0].appendChild(group);
+        if (groups == true) {
+            try {
+                document.getElementById('groupsnav').addEventListener("click", function() {
+                    if (document.getElementById('groupsnav').classList === 'navselected') { 
+                    } else {
+                        const addmemberbar = document.getElementById('addmember');
+                        const membersinfo = document.getElementById('popupmembers');
+                        const eventsinfo = document.getElementById('popupevents');
+                        const groupsinfo = document.getElementById('popupgroups');
+                        if (membersinfo){
+                            membersinfo.style.display = "none";
                         }
+                        if (eventsinfo) {
+                            eventsinfo.style.display = "none";
+                        }
+                        if (groupsinfo) {
+                            groupsinfo.style.display = "unset";
+                        }
+                        if(addmemberbar) {
+                            addmemberbar.style.display = "none";
+                        }
+                        document.getElementsByClassName('navselected')[0].classList.remove('navselected');
+                        document.getElementById('groupsnav').classList.add('navselected');
                         popupnav(members, groups, events);
-                }
-            };
-        };
-    });
+                    }
+            });
         } catch (error) {
             console.log(error)
         }
     }
-
-        try {
-            document.getElementById('membersnav').addEventListener("click", function () {
-                if (document.getElementById('membersnav').classList.contains('navselected')){
-                } else {
-                    const selected = document.getElementsByClassName('navselected');
-                    for (let element of selected) {
-                        element.classList.remove('navselected');
-                    };
-                    document.getElementById('membersnav').classList.add('navselected');
-                    document.getElementsByClassName('popupcontent')[0].innerHTML = ''
-                    document.getElementById('popupnav').insertAdjacentHTML("afterend",
-                    '<div class="addmember" id="addmember">' +
-                        '<div class="dropdownicon" id="addfromcontacts">'+
-                            '<i class="bx bx-down-arrow-alt"></i>' +
-                            '<input type="text" placeholder="Añadir miembro" id="addtotext">' +
-                        '</div>' +
-                        '<div class="searchbutton" id="addsearch">' +
-                            '<i class="bx bx-plus"></i>' +
-                        '</div>' +
-                    '</div>');
-                    if (members) {
-                        for (let element of members){
-                            const member = document.createElement('div');
-                            member.classList.add('listcontact');
-                            if (element.type == 'admin') {
-                                member.innerHTML = "<div class='image'>"+
-                                                        "<div class='img'> </div>" +
-                                                    "</div>" +
-                                                    "<div class='membername'>" + element.name + "</div>" +
-                                                    "<div class='memberrole'> <i class='bx bx-crown' ></i> </div>" +
-                                                    "</div>";
-                                document.getElementById('popupcontent').appendChild(member);
-                            } else {
-                                member.innerHTML =
-                                "<div class='image'>"+
-                                        "<div class='img'> </div>" +
-                                "</div>" +
-                                "<div class='membername'>" + element.name + ' ' + element.last_name + "</div>" +
-                                "<div class='memberusername'> @" + element.username + "</div>" +
-                                "<div class='memberrole'> </div>" +
-                                "</div>";
-                                document.getElementById('popupcontent').appendChild(member);
-                            }
+        if (members === true) {
+            try {
+                document.getElementById('membersnav').addEventListener("click", function() {
+                    if (document.getElementById('membersnav').classList === 'navselected') { 
+                    } else {
+                        const membersinfo = document.getElementById('popupmembers');
+                        const eventsinfo = document.getElementById('popupevents');
+                        const groupsinfo = document.getElementById('popupgroups');
+                        if (membersinfo){
+                            membersinfo.style.display = "unset";
                         }
+                        if (eventsinfo) {
+                            eventsinfo.style.display = "none";
+                        }
+                        if (groupsinfo) {
+                            groupsinfo.style.display = "none";
+                        }
+                        document.getElementById('addmember').style.display = "flex";
+                        document.getElementsByClassName('navselected')[0].classList.remove('navselected');
+                        document.getElementById('membersnav').classList.add('navselected');
+                        popupnav(members, groups, events);
                     }
-                }
             });
         } catch (error) {
-            console.log(error);
-        }    
-        if (events) {
-        try {
-            document.getElementById('eventsnav').addEventListener("click", function () {
-                if (document.getElementById('eventsnav').classList.contains('navselected')) {
-                } else {
-                const selected = document.getElementsByClassName('navselected');
-                for (let element of selected) {
-                    element.classList.remove('navselected');
-                };
-                document.getElementById('eventsnav').classList.add('navselected');
-                document.getElementsByClassName('popupcontent')[0].innerHTML = ''
-                document.getElementById('grouppopup').removeChild(document.getElementById('addmember'))
-                    for (let element of events) {
-                        const event = document.createElement('div');
-                        event.classList.add('listevent');
-                        event.innerHTML = 
-                        "<div class='image'>"+
-                            "<div class='img'> </div>" +
-                        "</div>" +
-                        "<div class='info'>" +
-                            "<div class='eventname'>" + element.name + "</div>" +
-                            "<div class='eventdate'>" + element.start_date + "</div>" +
-                        "</div>";
-
-                        document.getElementsByClassName('popupcontent')[0].appendChild(event);
-                    }
-                }
-            });
-        } catch (error) {
-            console.log(error);
+            console.log(error)
         }
-    } else {
-        document.getElementById('eventsnav').addEventListener("click", function () {
-            if (document.getElementById('eventsnav').classList.contains('navselected')) {
-            } else {
-            const selected = document.getElementsByClassName('navselected');
-            for (let element of selected) {
-                element.classList.remove('navselected');
-            };
-            document.getElementById('eventsnav').classList.add('navselected');
-            document.getElementsByClassName('popupcontent')[0].innerHTML = ''
-            document.getElementById('grouppopup').removeChild(document.getElementById('addmember'))
-            const noevents = document.createElement('div')
-            noevents.classList.add('noevent')
-            noevents.innerHTML = 'Este grupo no tiene ningún evento proximamente'
-            document.getElementsByClassName('popupcontent')[0].appendChild(noevents)
-            }
-        });
+}
+        if (events === true) {
+            try {
+                document.getElementById('eventsnav').addEventListener("click", function() {
+                    if (document.getElementById('eventsnav').classList === 'navselected') { 
+                    } else {
+                        const addmemberbar = document.getElementById('addmember');
+                        const membersinfo = document.getElementById('popupmembers');
+                        const eventsinfo = document.getElementById('popupevents');
+                        const groupsinfo = document.getElementById('popupgroups');
+                        if (membersinfo){
+                            membersinfo.style.display = "none";
+                        }
+                        if (eventsinfo) {
+                            eventsinfo.style.display = "none";
+                        }
+                        if (groupsinfo) {
+                            groupsinfo.style.display = "unset";
+                        }
+                        if(addmemberbar) {
+                            addmemberbar.style.display = "none";
+                        }
+                        document.getElementsByClassName('navselected')[0].classList.remove('navselected');
+                        document.getElementById('eventsnav').classList.add('navselected');
+                        popupnav(members, groups, events);
+                    }
+            });
+        } catch (error) {
+            console.log(error)
+        }
     };
-};
+    };
 
     async function closepopup () {
         const close = document.getElementsByClassName('closepopup')[0];
@@ -197,7 +145,7 @@ window.addEventListener("load", function() {
     }
     async function groupMake() {
         const groupform =
-        '<div id="groupform">' +
+        '<dialog id="groupform">' +
             '<form id="groupdata" method="POST">' +
                     '<label id="groupavatar" for="avatar">' +
                         '<i class="bx bx-camera"></i>' +
@@ -210,7 +158,7 @@ window.addEventListener("load", function() {
             '<div class="closepopup" id="closepopup">' +
                 '<i class="bx bx-arrow-back"></i>' +
             '</div>' +
-        '</div>';
+        '</dialog>';
         // When the user clicks on Crear nuevo grupo, next popup shows up...
         if (document.getElementById('addgroup')) {
             document.getElementById('addgroup').addEventListener("click", function() {
@@ -226,7 +174,9 @@ window.addEventListener("load", function() {
                     };
                     reader.readAsDataURL(file);
                 });
+                document.getElementById('groupform').showModal();
                 document.getElementById('closepopup').addEventListener("click", function() {
+                    document.getElementById('groupform').close();
                     document.getElementById('groupform').remove();
                 });
                 document.getElementById('creationgroup').addEventListener("click", function() {
@@ -297,12 +247,14 @@ window.addEventListener("load", function() {
                             '</div>' +
                         '</div>' +
                         "<div class='popupcontent' id='popupcontent'>" +
-                            '<div class="popupmembers" id="popupmembers"> </div>'+
+                            '<div class="popupmembers" id="popupmembers"> </div>' +
+                        '</div>' +
+                            '<div class="popupevents" id="popupevents" style="display:none;"> </div>' +
                         "</div>" +
                     "</div>" +
                     "</div>";
                     document.getElementById('wraper').insertAdjacentHTML('afterbegin', grouppopup);
-                    popupnav(groupdata.members, null, groupdata.events);
+                    popupnav(true, null, true);
                     closepopup();
                     addmember();
                     for (let element of groupdata.members){
@@ -311,17 +263,35 @@ window.addEventListener("load", function() {
                         if (element.type == 'admin') {
                             member.innerHTML = 
                                 "<div class='img' style='background-image: url(" + element.avatar + "')> </div>" +
-                                "<div class='membername'>" + element.name + "</div>" +
-                                "<div class='memberrole'> <i class='bx bx-crown' ></i> </div>" +
-                                "</div>";
+                                "<div class='memberinfo'>" +
+                                    "<div class='membername'>" + element.name + " " + element.last_name + "<i class='bx bx-crown' ></i> </div>" +
+                                    "<div class='memberusername'>@" + element.username + "</div>" +
+                                "</div>" +
+                                "<div class='membermanage'><i class='bx bx-dots-vertical'></i></div>";
                             document.getElementById('popupmembers').appendChild(member);
                         } else {
                             member.innerHTML =
-                                "<div class='img' style='background-image: url(" + element.avatar + "')> </div>" +
-                                "<div class='membername'>" + element.name + "</div>" +
-                                "<div class='memberrole'> </div>" +
-                                "</div>";
+                            "<div class='img' style='background-image: url(" + element.avatar + "')> </div>" +
+                            "<div class='memberinfo'>" +
+                                "<div class='membername'>" + element.name + " " + element.last_name + "</div>" +
+                                "<div class='memberusername'>@" + element.username + "</div>" +
+                            "</div>" +
+                            "<div class='membermanage'><i class='bx bx-dots-vertical'></i></div>";
                             document.getElementById('popupmembers').appendChild(member);
+                        }
+                    }
+                    if (groupdata.events.length == 0) {
+                        for (let element of groupdata.events){
+                            const event = document.createElement('div');
+                            event.classList.add('listevent');
+                            event.innerHTML =
+                                "<div class='eventimg' style='background-image: url(" + element.avatar + "')> </div>" +
+                                "<div class='eventinfo'>" +
+                                    "<div class='eventtitle'>" + element.name + "</div>" +
+                                    "<div class='eventdate'>" + element.start_date + "</div>" +
+                                "</div>" +
+                                "<div class='eventmanage'><i class='bx bx-dots-vertical'></i></div>";
+                            document.getElementById('popupevents').appendChild(event);
                         }
                     }
                 };
@@ -329,7 +299,7 @@ window.addEventListener("load", function() {
             };
         };
     // Listener for the main navbar to orientate the user to the right page
-    this.document.querySelector('#groups').addEventListener("click", function() {
+    document.getElementById('groups').addEventListener("click", function() {
         const selected = document.getElementsByClassName('selected');
         console.log(selected);
         for (let element of selected) {
@@ -339,9 +309,8 @@ window.addEventListener("load", function() {
         document.getElementById('usercontacts').classList.add('none');
         document.getElementsByClassName('content')[0].id = 'groupscontent';
         this.classList.add('selected');
-        groupMake();
     });
-    this.document.querySelector('#contacts').addEventListener("click", function() {
+    document.getElementById('contacts').addEventListener("click", function() {
         const selected = document.getElementsByClassName('selected')
         console.log(selected);
         for (let element of selected) {
@@ -416,6 +385,4 @@ window.addEventListener("load", function() {
             };
         };
     });
-});
-    grouppopup();
 });

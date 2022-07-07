@@ -75,6 +75,7 @@ def add_new_event(req):
                 'start_date': new_event_data['start_date'],
                 'end_date': new_event_data['end_date'],
                 'description': new_event_data['description'],
+                'location': new_event_data['location'].get('name'),
                 'type': 'admin'
                 })
             # update user events in db
@@ -187,6 +188,7 @@ def add_event_member(event, user, req):
     event_for_user['name'] = event.get('name')
     event_for_user['start_date'] = event.get('start_date')
     event_for_user['end_date'] = event.get('end_date')
+    event_for_user['location'] = event.get('location').get('name')
     event_for_user['type'] = new_user_event_data.get('type')
     update_user = mongo.users.update_one({'_id': user['_id']}, {'$push': {'events': event_for_user}}) # push event to user events'
     if update_event is not None and update_user is not None:
@@ -278,7 +280,7 @@ def add_event_group(group, event):
         'name': event.get('name'),
         'start_date': event.get('start_date'),
         'end_date': event.get('end_date'),
-        'location': event.get('location'),
+        'location': event.get('location').get('name'),
         'avatar': event.get('avatar')
     }
     # add group to event
