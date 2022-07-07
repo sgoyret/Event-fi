@@ -31,7 +31,11 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route('/', strict_slashes=False)
+@app.route('/', methods=['GET'], strict_slashes=False)
+def landing():
+    """returns landing page"""
+    return render_template('landing.html')
+
 @app.route('/index', methods=['GET'], strict_slashes=False)
 def index():
     """user base page"""
@@ -77,7 +81,7 @@ def login():
                 user.pop('password')
                 session['user'] = user
                 session['test'] = 'am i here?'
-                return redirect('/')
+                return redirect(url_for('index'))
             else:
                 return {'error': 'wrong password'}
         else:
@@ -243,6 +247,7 @@ def map_event(event_id):
         return render_template('map.html', locations=[],  event=event, user=session.get('user'))
     else:
         return {"error": "event not found"}
+
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
