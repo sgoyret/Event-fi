@@ -176,7 +176,7 @@ def add_event_member(event, user, req):
                 'type': req.get('type'),
                 'avatar': user.get('avatar')
             }
-
+    print(f'new user event data is: {new_user_event_data}')
     for item in req:
         new_user_event_data[item] = req.get(item)
     if req.get('type') is None:
