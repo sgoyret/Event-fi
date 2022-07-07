@@ -112,7 +112,7 @@ def single_event(event_id):
         if event.get('groups'):
             groups_with_avatar = []
             for idx, g in enumerate(event.get('groups')):
-                groups_with_avatar.append(m)
+                groups_with_avatar.append(g)
                 try:
                     with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('user_id'))) as avt:
                         print('pude abrir el avatar')
@@ -176,6 +176,7 @@ def event_members(event_id):
 
     if request.method == 'POST':
         # add member to event
+        print(f'going to add {user.get("username")} to {event.get("name")}')
         return add_event_member(event, user, request.get_json())
 
     if request.method == 'PUT':
