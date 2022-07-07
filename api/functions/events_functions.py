@@ -75,6 +75,7 @@ def add_new_event(req):
                 'start_date': new_event_data['start_date'],
                 'end_date': new_event_data['end_date'],
                 'description': new_event_data['description'],
+                'location': new_event_data['location'].get('name'),
                 'type': 'admin'
                 })
             # update user events in db
@@ -107,7 +108,7 @@ def add_new_event(req):
                 else:
                     return {'error': 'user not found'}
                 
-            return jsonify({'status':'created event', 'event_id': str(obj.inserted_id)})
+            return jsonify({'status': 'created event', 'event_id': str(obj.inserted_id), 'event': event_to_location})
 
 def delete_event(event):
     """deletes an event"""
@@ -147,6 +148,8 @@ def delete_event(event):
 
 def add_event_member(event, user, req):
     """adds a member to an event"""
+    print('entered add evnet member')
+    print(f'the event to add members is: {str(event)}')
     user_idx = None
     for idx, item in enumerate(event.get('members')):
         if item.get('user_id') == session.get('user').get('_id'):
@@ -185,13 +188,14 @@ def add_event_member(event, user, req):
     event_for_user['name'] = event.get('name')
     event_for_user['start_date'] = event.get('start_date')
     event_for_user['end_date'] = event.get('end_date')
+    event_for_user['location'] = event.get('location').get('name')
     event_for_user['type'] = new_user_event_data.get('type')
     update_user = mongo.users.update_one({'_id': user['_id']}, {'$push': {'events': event_for_user}}) # push event to user events'
     if update_event is not None and update_user is not None:
         mongo.users.update_one({'_id': user['_id']}, {'$push': {'notifications': 'Has sido agregado al evento ' + event['name']}})
         return "user added to event"
     else:
-        return {'error': 'Failed, couldn\'t add user to event'}
+        return {'error': 'Failed, couldn\'t add user to event', 'member': new_user_event_data}
     
 def update_event_member(event, user, req):
     """updates an event type to a member"""
@@ -276,7 +280,7 @@ def add_event_group(group, event):
         'name': event.get('name'),
         'start_date': event.get('start_date'),
         'end_date': event.get('end_date'),
-        'location': event.get('location'),
+        'location': event.get('location').get('name'),
         'avatar': event.get('avatar')
     }
     # add group to event

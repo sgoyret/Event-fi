@@ -29,7 +29,9 @@
                     "coordinates": {{value.position.geometry.coordinates|tojson|safe}}
                 },
                 "properties": {
-                    'id' : '{{value.get("location_id")}}'
+                    'id' : '{{value.get("location_id")}}',
+                    'name': '{{value.get("name")}}',
+                    'avatar': '{{value.get("avatar")}}'
                 }
             })
         {% endfor %}

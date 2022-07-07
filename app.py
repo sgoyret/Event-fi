@@ -221,6 +221,14 @@ def map():
         if l.get('_id'):
             l['location_id'] = str(l['_id'])
             l.pop('_id')
+        try:
+            print(f'yendo a abrir: {l.get("name")}')
+            with open(os.path.join(UPLOAD_FOLDER, l['avatar'])) as avt:
+                print('pude abrir el avatar de la location')
+                l['avatar'] = avt.read()
+                print(f'now the avatar is {l.get("avatar")}')
+        except Exception as ex:
+            print(ex)
         locations.append(l)
 
     return render_template('map.html', locations=locations, event=[], user=session.get('user'))

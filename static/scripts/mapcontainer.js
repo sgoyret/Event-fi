@@ -236,10 +236,12 @@ map.on('load', function() {
                 // create a HTML element for each feature
     console.log(geojson.features)
     for (let element of geojson.features) {
-        console.log(element)
+        console.log('este es el elemento');
+        console.log(element);
         const el = document.createElement('div');
         el.classList.add('marker');
-        el.style = "background-color: white"
+        console.log(element);
+        el.style = "background-image: url("+element.properties.avatar+");";
         el.id = element.properties.id;
         el.addEventListener("click", function(){
             var request = new XMLHttpRequest();

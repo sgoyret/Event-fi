@@ -26,10 +26,11 @@ def locations():
                 user_locations.append(l)
                 try:
                     with open(os.path.join(UPLOAD_FOLDER, 'avatars', l.get('location_id'))) as avt:
-                        print('pude abrir el avatar')
+                        print('pude abrir el avatar de la location')
                         user_locations[idx]['avatar'] = avt.read()
                 except Exception as ex:
                     print(ex)
+        print(f'returning user locations: {user_locations}')
         return jsonify(user_locations)
 
     """
@@ -80,7 +81,6 @@ def location_info(location_id):
     for item in session.get('user').get('locations'):
         if item.get('location_id') == location_id:
             location = mongo.locations.find_one({'_id': ObjectId(location_id)})
-    print(location)
 
     if location is None:
         return {'error': 'location not found or acces denied'}

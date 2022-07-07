@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from functions.validations import *
 from api.functions.events_functions import *
 from api import UPLOAD_FOLDER
+from datetime import datetime
 import os
 
 
@@ -24,8 +25,15 @@ def events():
         #                              'id2': {'avatar':'', 'title':'First job', 'location':'A very good company', 'date': '01/07/2022'}}
         user_events = []
         if session.get('user').get('events'):
-            for idx, e in enumerate(session.get('user').get('events')):
-                user_events.append(e)
+            filters = request.get_json().get('filters')
+            sorted_events = sorted(session.get('user').get('events'), key=lambda d: d['start_date'])
+            for idx, e in enumerate(sorted_events):
+                if filters.get('find_date'):
+                    find = datetime.strftime(filters.get('find_date'))
+                    if datetime.strftime(e.get('start_date')) == find:
+                        user_events.append(e)
+                else:
+                    user_events.append(e)
                 try:
                     with open(os.path.join(UPLOAD_FOLDER, 'avatars', e.get('_id'))) as avt:
                         print('pude abrir el avatar')
