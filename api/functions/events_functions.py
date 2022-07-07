@@ -116,7 +116,7 @@ def delete_event(event):
         return {'error': 'you are not the owner of the event'}
     id_list = []
     for item in event['members']:
-        id_list.append(ObjectId(item))
+        id_list.append(ObjectId(item.get('user_id')))
     update_list = []
     for item in id_list:
         result = mongo.users.update_one({'_id': item},
@@ -127,13 +127,13 @@ def delete_event(event):
             update_list.append(result)
     # deletes event from location
     event_at_location = {
-        'event_id': event.geT('_id'),
+        'event_id': str(event.get('_id')),
         'name': event.get('name'),
         'avatar': event.get('avatar'),
         'start_date': event.get('start_date'),
         'end_date': event.get('end_date')
     }
-    update_location = mongo.locations.update_one({'_id': ObjectId(event.get('location'))}, {'$pull': {'events': event_at_location}})
+    update_location = mongo.locations.update_one({'_id': ObjectId(event.get('location').get('location_id'))}, {'$pull': {'events': event_at_location}})
     update_list.append(update_location)
     # deletes event
     delete = mongo.events.delete_one({'_id': event['_id']})
