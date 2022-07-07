@@ -42,9 +42,13 @@ dialog::backdrop {
 }
 #groupdata {
     display: flex;
+    flex-direction: column;
     width: 100%;
     align-items: center;
     justify-content: center;
+}
+#groupdata > * {
+    margin: .5rem 0 1rem 0;
 }
 .wraper {
     position: absolute;
