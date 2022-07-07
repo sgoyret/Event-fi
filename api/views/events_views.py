@@ -105,7 +105,7 @@ def single_event(event_id):
                         members_with_avatar[idx]['avatar'] = avt.read()
                 except Exception as ex:
                     with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
-                        print('pude abrir el avatar')
+                        print(f'the exceptions is: {ex}')
                         members_with_avatar[idx]['avatar'] = avt.read()
             event['members'] = members_with_avatar
         # turn event groups avatars from route to actual image
