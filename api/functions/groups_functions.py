@@ -32,7 +32,8 @@ def add_new_group(req):
             "username": session.get('user').get('username'),
             "name": session.get('user').get('name'),
             'last_name': session.get('user').get('last_name'),
-            "type": "admin"
+            "type": "admin",
+            "avatar": session.get('user').get('avatar')
         }
         new_group_data['members'] = []
         new_group_data['members'].append(creator_info) # set owner as member with type admin
@@ -97,10 +98,13 @@ def add_group_member(user, group, req):
     # {_id, type?}
     for item in req.get_json():
         new_user_to_group[item] = req.get_json()[item]
-    new_user_to_group['username'] = str(user.get('username'))
-    new_user_to_group['user_id'] = str(user.get('_id'))
-    new_user_to_group['name'] = str(user.get('name'))
-    new_user_to_group['last_name'] = str(user.get('last_name'))
+    new_user_to_group = {
+        'user_id': str(user.get('_id')),
+        'username': user.get('username'),
+        'name': user.get('name'),
+        'last_name': user.get('last_name'),
+        'avatar': user.get('avatar')
+    }
 
     new_group_to_user = {
         'group_id': str(group.get('_id')),
