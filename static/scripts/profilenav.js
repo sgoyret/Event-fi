@@ -1,6 +1,7 @@
 window.addEventListener("load", function() {
     groupMake();
     grouppopup();
+    mainNavbar();
 });
     async function popupnav(members, groups, events) {
         // Function that adds aesthetic to the navbar
@@ -210,7 +211,7 @@ window.addEventListener("load", function() {
             });
         };
     };
-    async function grouppopup () {
+async function grouppopup () {
         // Function that checks if the user clicked on a group from the list and if so, displays the group popup
         for (let element of document.getElementsByClassName('listgroup')) {
             
@@ -299,91 +300,93 @@ window.addEventListener("load", function() {
                });            
             };
         };
-    // Listener for the main navbar to orientate the user to the right page
-    document.getElementById('groups').addEventListener("click", function() {
-        const selected = document.getElementsByClassName('selected');
-        console.log(selected);
-        for (let element of selected) {
-            element.classList.remove('selected');
-        };
-        document.getElementById('usergroups').classList.remove('none');
-        document.getElementById('usercontacts').classList.add('none');
-        document.getElementsByClassName('content')[0].id = 'groupscontent';
-        this.classList.add('selected');
-    });
-    document.getElementById('contacts').addEventListener("click", function() {
-        const selected = document.getElementsByClassName('selected')
-        console.log(selected);
-        for (let element of selected) {
-            element.classList.remove('selected');
-        };
-        document.getElementById('usercontacts').classList.remove('none');
-        document.getElementById('usergroups').classList.add('none');
-        this.classList.add('selected');
-        document.getElementById('addcontact').addEventListener("click", function() {
-            const request = new XMLHttpRequest();
-            const username = document.getElementById('searchcontact').value;
-            request.open('POST', '/api/users/contacts', true);
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.send(JSON.stringify({username: username}));
-            request.onload = function() {
-                console.log(request.response);
-                const contact = JSON.parse(request.response);
-                console.log(contact.error);
-                if (contact.error) {
-                    return;
-                } else {
-                const contactlist = document.createElement('div');
-                const deletecontact = document.createElement('div');
-                deletecontact.innerHTML = 
-                "<div class='manage'>" +
-                "<div class='manage-button-contact'>" +
-                "<i  id='trash' class='bx bx-user-x'></i>" +
-                "</div>" +
-                "</div>";
-                contactlist.classList.add('listcontact');
-                contactlist.id = contact.user_id;
-                contactlist.innerHTML =
-                "<div clasavatar_contents='image'>"+
-                    "<div class='img' style='background-image: url("+ contact.avatar + ")'> </div>" +
-                "</div>" +
-                "<div class='info'>" +
-                    "<p>" + contact.name + ' ' + contact.last_name + "</p>" +
-                    "<p>@" + contact.username + "</p>" +
-                "</div>";
-                if (document.getElementById('nocontacts')) {
-                    document.getElementById('nocontacts').remove();
-                }
-                document.getElementById('usercontacts').appendChild(contactlist);
-                deletecontact.addEventListener("click", function() {
-                    const contactminipopup =
-                    '<div class="minipopup" id="minipopup">' +
-                                '<p>¿Quieres eliminar este contacto?</p>' +
-                                '<div class="minipopupbtn">' +
-                                    '<button class="minipopup-button">Si</button>' +
-                                    '<button class="minipopup-button">No</button>' +
-                                '</div>' +
-                    '</div>';
-                    document.getElementById('wraper').insertAdjacentHTML('afterbegin', contactminipopup);
-                    for (let button of document.getElementsByClassName('minipopup-button')) {
-                        button.addEventListener("click", function() {
-                            if (this.innerHTML == 'Si') {            
-                            const request = new XMLHttpRequest();
-                            request.open('DELETE', '/api/users/contacts/');
-                            request.setRequestHeader('Content-Type', 'application/json');
-                            request.send(JSON.stringify({'user_id': contact.user_id}));
-                            request.onload = function() {
-                            console.log(request.response);
-                            document.getElementById('minipoup').remove();
-                            };
-                        } else {
-                            document.getElementById('minipopup').remove();
-                        }  
-                        });
-                    }
-                });
-                contactlist.appendChild(deletecontact);
+async function mainNavbar(){
+        document.getElementById('groups').addEventListener("click", function() {
+            const selected = document.getElementsByClassName('selected');
+            console.log(selected);
+            for (let element of selected) {
+                element.classList.remove('selected');
             };
-        };
+            document.getElementById('usergroups').classList.remove('none');
+            document.getElementById('usercontacts').classList.add('none');
+            document.getElementsByClassName('content')[0].id = 'groupscontent';
+            this.classList.add('selected');
+        });
+        document.getElementById('contacts').addEventListener("click", function() {
+            const selected = document.getElementsByClassName('selected')
+            console.log(selected);
+            for (let element of selected) {
+                element.classList.remove('selected');
+            };
+            document.getElementById('usercontacts').classList.remove('none');
+            document.getElementById('usergroups').classList.add('none');
+            this.classList.add('selected');
+            document.getElementById('addcontact').addEventListener("click", function() {
+                const request = new XMLHttpRequest();
+                const username = document.getElementById('searchcontact').value;
+                request.open('POST', '/api/users/contacts', true);
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.send(JSON.stringify({username: username}));
+                request.onload = function() {
+                    console.log(request.response);
+                    const contact = JSON.parse(request.response);
+                    console.log(contact.error);
+                    if (contact.error) {
+                        return;
+                    } else {
+                    const contactlist = document.createElement('div');
+                    const deletecontact = document.createElement('div');
+                    deletecontact.innerHTML = 
+                    "<div class='manage'>" +
+                    "<div class='manage-button-contact'>" +
+                    "<i  id='trash' class='bx bx-user-x'></i>" +
+                    "</div>" +
+                    "</div>";
+                    contactlist.classList.add('listcontact');
+                    contactlist.id = contact.user_id;
+                    contactlist.innerHTML =
+                    "<div clasavatar_contents='image'>"+
+                        "<div class='img' style='background-image: url("+ contact.avatar + ")'> </div>" +
+                    "</div>" +
+                    "<div class='info'>" +
+                        "<p>" + contact.name + ' ' + contact.last_name + "</p>" +
+                        "<p>@" + contact.username + "</p>" +
+                    "</div>";
+                    if (document.getElementById('nocontacts')) {
+                        document.getElementById('nocontacts').remove();
+                    }
+                    document.getElementById('usercontacts').appendChild(contactlist);
+                    deletecontact.addEventListener("click", function() {
+                        const contactminipopup =
+                        '<div class="minipopup" id="minipopup">' +
+                                    '<p>¿Quieres eliminar este contacto?</p>' +
+                                    '<div class="minipopupbtn">' +
+                                        '<button class="minipopup-button">Si</button>' +
+                                        '<button class="minipopup-button">No</button>' +
+                                    '</div>' +
+                        '</div>';
+                        document.getElementById('wraper').insertAdjacentHTML('afterbegin', contactminipopup);
+                        for (let button of document.getElementsByClassName('minipopup-button')) {
+                            button.addEventListener("click", function() {
+                                if (this.innerHTML == 'Si') {            
+                                const request = new XMLHttpRequest();
+                                request.open('DELETE', '/api/users/contacts/');
+                                request.setRequestHeader('Content-Type', 'application/json');
+                                request.send(JSON.stringify({'user_id': contact.user_id}));
+                                request.onload = function() {
+                                console.log(request.response);
+                                document.getElementById('minipoup').remove();
+                                };
+                            } else {
+                                document.getElementById('minipopup').remove();
+                            }  
+                            });
+                        }
+                    });
+                    contactlist.appendChild(deletecontact);
+                };
+            };
+        });
     });
-});
+}
+    // Listener for the main navbar to orientate the user to the right page
