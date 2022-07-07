@@ -130,7 +130,7 @@ def single_event(event_id):
 
     if request.method == 'DELETE':
         # delete event
-        return delete_event(event, request)
+        return delete_event(event)
 
 @api_views.route('/api/events/<event_id>/members', strict_slashes=False, methods=['GET', 'PUT', 'POST', 'DELETE'])
 def event_members(event_id):
