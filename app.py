@@ -173,7 +173,7 @@ def user():
                         contacts_with_avatar[idx]['avatar'] = avt.read()
             session['user']['contacts'] = contacts_with_avatar
     except Exception as ex:
-        raise(ex)
+        print(ex)
     try:
         if session.get('user').get('groups'):
             groups_with_avatar = []

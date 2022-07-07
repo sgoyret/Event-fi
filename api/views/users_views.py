@@ -61,7 +61,7 @@ def contacts():
                 contacts_with_avatar.append(c)
                 try:
                     with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('user_id'))) as avt:
-                        print('pude abrir el avatar')
+                        print(f'pude abrir el avatar del contact {c.get("username")}')
                         contacts_with_avatar[idx]['avatar'] = avt.read()
                 except Exception as ex:
                     with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:

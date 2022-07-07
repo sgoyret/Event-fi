@@ -149,7 +149,9 @@ map.on('load', function() {
                     const membersnav = document.getElementById('membersnav');
                     const groupsnav = document.getElementById('groupsnav');
                     if (data.groups) {
+                        console.log('the event has groups')
                         for (let element of data.groups) {
+                            console.log(element)
                             const group = document.createElement('div');
                             group.classList.add('group');
                             group.innerHTML =
