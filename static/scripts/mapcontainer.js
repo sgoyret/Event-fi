@@ -136,6 +136,8 @@ map.on('load', function() {
                             "<div class='popupcontent'>" +
                                 "<div class='popupmembers'></div>" +
                                 "<div class='popupgroups'></div>" +
+                            "</div>" +
+                                "</div>" +
                         "</div>" +
                             '<div class="closepopup" id="closepopup">' + 
                             "<i class='bx bx-arrow-back'></i>" +
@@ -162,25 +164,49 @@ map.on('load', function() {
                         }
                     } else {
                     }
+                    if (data.type === 'admin' || data.type === 'sudo') {
+                        document.getElementsByClassName('popupgroups')[0].style.display = 'none';
+                        const addmember = document.createElement('div');
+                        addmember.classList.add('addmember');
+                        addmember.innerHTML =
+                            "<div class='dropdownicon' id='addfromcontacts'>" +
+                                "<i class='bx bx-down-arrow-alt'></i>" +
+                                "<input class='inputtext' type='text' placeholder='Agregar a invitados' id='addtotext'>" +
+                            "</div>" +
+                            "<div class='searchbutton' id='addsearch'>" +
+                                "<i class='bx bx-plus'></i>" +               
+                            "</div>";
+                        document.getElementsByClassName('popupmembers')[0].appendChild(addmember);
+                        const addgroup = document.createElement('div');
+                        addgroup.classList.add('addgroup');
+                        addgroup.innerHTML =
+                        "<div class='dropdownicon' id='addfromcontacts'>" +
+                            "<i class='bx bx-down-arrow-alt'></i>" +
+                            "<input class='inputtext' type='text' placeholder='Agregar a grupos' id='addtotext'></input>" +
+                        "</div>" +
+                        "<div class='searchbutton' id='addsearchgroup'>" +
+                            "<i class='bx bx-plus'></i>" +
+                        "</div>";
+                        document.getElementsByClassName('popupgroups')[0].appendChild(addgroup);
+                    }
                     if (data.members) {
                         for (let element of data.members) {
                             const member = document.createElement('div');
                             member.classList.add('member');
-                            member.id = 'member';
+                            member.id = element.user_id;
                             member.innerHTML = 
                             "<div class='memberavatar' style='background-image: url(" + element.avatar +")'>" +
                             "</div>" +
                             "<div class='memberinfo'>" +
                                 "<div class='membername'>" + element.name + "</div>" +
                                 "<div class='memberusername'>" + element.username + "</div>" +
-                            "</div>" +
-                        "</div>";
+                            "</div>";
                             document.getElementsByClassName('popupmembers')[0].appendChild(member);
                             if (data.type === 'admin' || data.type === 'sudo') {
                                 const manage = document.createElement('div');
                                 manage.classList.add('membermanage');
                                 manage.innerHTML = "<i class='bx bx-dots-vertical'></i>"; 
-                                document.getElementById('member').appendChild(manage);
+                                document.getElementById(element.user_id).appendChild(manage);
                                 manage.addEventListener("click", function() {
                                     const manageuser = document.createElement('dialog');
                                     manageuser.id = 'managepopup';
