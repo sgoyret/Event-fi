@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+}
+:root {
+    --level-one: translateZ(3rem);
+    --level-two: translateZ(6rem);
+    --level-three: translateZ(9rem);
+    
+    --fw-normal: 400;
+    --fw-bold: 700;
+    
+    --clr: #6105e3c4;
+  }
+
+.card-container {
+    min-width:40rem;
+    margin: auto;
+    padding:auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    
+}
+ body {
+    height: 20vh;
+    display: table-row;
+    place-items: center;
+    font-family: 'Poppins',sans-serif;
+  }
+  
+  .card {
+    min-width: 35%;
+    margin: 2rem;
+  }
+  
+  .card__content {
+    width: 100%;
+    height: 600px;
+    text-align: center;
+    position: relative;
+    padding: 15em 5em;
+    transition: transform 3s;
+    transform-style: preserve-3d;
+  }
+  
+  .card .flipcard {
+    cursor: pointer;
+    transform: rotateY(180deg);
+  }
+  
+  .card__front,
+  .card__back {
+    width: min(90%, 600px);
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+    padding: 5em 3em;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    display: grid;
+    align-content: center;
+  }
+  
+  .avatar{
+    width: 100%; 
+    height:100%; 
+    border-radius: 50%; 
+    padding:5%;
+  }
+  
+  .card__front::before {
+    content: '';
+    position: absolute;
+    --spacer: 1em;
+    top: var(--spacer);
+    bottom: var(--spacer);
+    left: var(--spacer);
+    right: var(--spacer);
+    border: 3px solid currentColor;
+    transform: var(--level-one);
+  }
+  
+  .card__title {
+    font-size: 1.35rem;
+    transform: var(--level-three);
+    order: 2;
+    text-transform: uppercase;
+  }
+  
+  .card__subtitle {
+    transform: var(--level-two);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: .75rem;
+    font-weight: var(--fw-bold);
+    opacity: .7;
+  }
+  
+  .card__body {
+    min-width: 100;
+    font-weight: var(fw-normal);
+    font-size: .75rem;
+    line-height: 1.6;
+  }
+  
+  
+  
+  .card__back {
+    transform: rotateY(-180deg);
+    color: var(--clr);
+    background-color: #fff;
+    
+  }
+  .social_media .bx{
+    font-size:30px;
+    color:#6105e3c4;
+    margin: 5px;
+  }
+   .bxl-github:hover{
+    background-color: #1f093fe0;
+  }
+.objectives{
+  width: 100%;
+  height: 100%;
+}
+.objective-title {
+margin-left: 5%;
+}
+@media screen and (max-width: 800px){
+  .flipcard{
+    width: min(60%, 800px);
+    position: relative;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+    padding: 5em 3em;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    display: grid;
+    align-content: center;
+    margin-top:10px;
+    margin-bottom:10px;
+  }
+}
+@media screen and (max-width: 300px){
+  .flipcard{
+   
+    width: min(40%, 300px);
+    position: relative;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+    padding: 5em 3em;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    display: grid;
+    align-content: center;
+    margin-top:10px;
+    margin-bottom:10px;
+  }
+} 

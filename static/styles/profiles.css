@@ -5,7 +5,51 @@ body {
     padding: 0;
     font-family: 'Poppins', sans-serif;
 }
-
+#groupform {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fafafa;
+    z-index: 10;
+    opacity: 1;
+    box-sizing: border-box;
+    /* border-radius: 2px; */
+    color: black;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    border: 0px;
+}
+dialog::backdrop {
+    background: #18191a59;
+    backdrop-filter: blur(1px);
+  }
+#creationgroup {
+    border: 2px solid #6105e3;
+    width: 15%;
+    border-radius: 2px;
+    cursor: pointer;
+}
+#groupavatar {
+    height: 90px;
+    width: 90px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor:pointer;
+}
+#groupdata {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+#groupdata > * {
+    margin: .5rem 0 1rem 0;
+}
 .wraper {
     position: absolute;
     width: 100%;
@@ -21,6 +65,7 @@ body {
     align-items: center;
 }
 .edit_prof{
+    cursor: pointer;
     margin-top: 10px;
     width: 150px;
     height: 25px;
@@ -59,6 +104,7 @@ body {
     line-height: 200%;
 }
 .selection {
+    cursor: pointer;
     height: 5%;
     display: flex;
     background-color: #f1f1f1;
@@ -70,8 +116,8 @@ body {
 .avatar {
     background-color: white;
     border: 2px solid #6105e3;
-    height: 100px;
-    width: 100px;
+    height: 75px;
+    width: 75px;
     border-radius: 50%;
 }
 .none {
@@ -81,10 +127,12 @@ body {
     display: unset;
 }
 .img {
-    background-color: #6205e3;
     height: 75px;
     width: 75px;
+    background-size: cover;
+    box-shadow: 0px 0px 7px -2px darkslategrey;
     border-radius: 50%;
+
 }
 .info > p {
     margin: 0;
@@ -107,17 +155,29 @@ body {
 }
 
 .listevent, .listcontact, .listgroup {
+    cursor: pointer;
+    position: relative;
     padding-top: 15px;
     padding-bottom: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    border-bottom: 1px solid #f1f1f1;
+    
+}
+
+.listevent::after, .listcontact::after, .listgroup::after {
+    content: "";
+    width: 95%;
+    height: 1px;
+    background: lightslategray;
+    position: absolute;
+    bottom: 0;
+    margin: auto;
 }
 .avatar img {
     vertical-align: middle;
-    
+    background-size: contain;
     height: 100%;
     width: 100%;
 }
@@ -217,6 +277,7 @@ ul, li {
     height: 100px;
     border-radius: 50%;
     background-color: white;
+    background-size: cover;
     border: 2px solid #6205e3;
 }
 .popupnav {
@@ -228,6 +289,7 @@ ul, li {
     height: 50px;
 }
 .bx-trash, .bx-x {
+    cursor: pointer;
     font-size: 35px;
     color: #5a5a5a;
 }
@@ -247,6 +309,10 @@ ul, li {
     height: 55%;
     overflow-y: auto;
     overflow-x: hidden;
+}
+.memberinfo {
+    text-align: left;
+    width: 40%;
 }
 #membersnav, #groupsnav, #eventsnav {
     width: 50%;
@@ -338,7 +404,13 @@ ul, li {
     width: 35px;
     height: 35px;
 }
+.bx-dots-vertical {
+    font-size: 35px;
+    color: #5a5a5a;
+    align-self: center;
+}
 .bx-plus {
+    cursor: pointer;
     font-size: 35px;
     color: #5a5a5a;
 }
@@ -354,6 +426,11 @@ input[type="datetime-local"] {
 }
 .addmember input {
     all: unset;
+}
+.membername {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 .addmember {
     display: flex;
@@ -413,12 +490,15 @@ input[type="datetime-local"] {
     background-color: white;
     height: 30px;
   }
+  .addgroup > p {
+    width: 80%;
+  }
   #addgrouptext {
     width: 50%;
   }
   .bx-camera {
     font-size: 35px;
-    color: #5a5a5a;
+    color: #6105e3;
     }
   label > input {
     display: none;
@@ -426,6 +506,6 @@ input[type="datetime-local"] {
   label {
     display: block;
   }
-  .image, #avatarlabel {
+  .image,  #avatarlabel {
     width: 20%;
   }

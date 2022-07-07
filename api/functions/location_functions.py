@@ -1,13 +1,7 @@
-from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import session
 from pymongo import MongoClient
 from functions.validations import *
-from api.functions.events_functions import add_event_member
-from werkzeug.security import generate_password_hash, check_password_hash
-import json
 from api.views import session_refresh
-import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
 mongo = mongo.get_database('EVdb')

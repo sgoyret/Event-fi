@@ -1,12 +1,10 @@
 from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import session, jsonify
 from pymongo import MongoClient
 from functions.validations import *
-from werkzeug.security import generate_password_hash, check_password_hash
-import json
 from api.views import session_refresh
 from api import UPLOAD_FOLDER
+from datetime import datetime
 import os
 
 mongo = MongoClient('mongodb+srv://Eventify:superuser@cluster0.cm2bh.mongodb.net/test')
@@ -53,7 +51,7 @@ def add_new_event(req):
             new_event_data['members'].append(owner_admin) # set owner as member with type admin
             # create event
             obj = mongo.events.insert_one(new_event_data)
-            
+
             with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id)), 'w+') as file:
                 file.write(avatar)
             new_event_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
@@ -77,6 +75,7 @@ def add_new_event(req):
                 'start_date': new_event_data['start_date'],
                 'end_date': new_event_data['end_date'],
                 'description': new_event_data['description'],
+                'location': new_event_data['location'].get('name'),
                 'type': 'admin'
                 })
             # update user events in db
@@ -96,16 +95,20 @@ def add_new_event(req):
 
             if req.get_json().get('members') is None:
                 req.get_json()['members'] = []
+    
             for item in req.get_json().get('members'):
+                user = None
                 if item.get('user_id'):
                     user = mongo.users.find_one({'_id': ObjectId(item.get('user_id'))})
-                if item.get('username'):
+                elif item.get('username'):
                     user = mongo.users.find_one({'username': item.get('username')})
                 if user:
-                    add_event_member(req.get_json(), user, {'type': 'guest'})
+                    created_event = mongo.events.find_one({'_id': ObjectId(obj.inserted_id)})
+                    add_event_member(created_event, user, {'type': 'guest'})
                 else:
                     return {'error': 'user not found'}
-            return jsonify({'status':'created event', 'event_id': str(obj.inserted_id)})
+                
+            return jsonify({'status': 'created event', 'event_id': str(obj.inserted_id), 'event': event_to_location})
 
 def delete_event(event):
     """deletes an event"""
@@ -113,7 +116,7 @@ def delete_event(event):
         return {'error': 'you are not the owner of the event'}
     id_list = []
     for item in event['members']:
-        id_list.append(ObjectId(item))
+        id_list.append(ObjectId(item.get('user_id')))
     update_list = []
     for item in id_list:
         result = mongo.users.update_one({'_id': item},
@@ -124,13 +127,13 @@ def delete_event(event):
             update_list.append(result)
     # deletes event from location
     event_at_location = {
-        'event_id': event.geT('_id'),
+        'event_id': str(event.get('_id')),
         'name': event.get('name'),
         'avatar': event.get('avatar'),
         'start_date': event.get('start_date'),
         'end_date': event.get('end_date')
     }
-    update_location = mongo.locations.update_one({'_id': ObjectId(event.get('location'))}, {'$pull': {'events': event_at_location}})
+    update_location = mongo.locations.update_one({'_id': ObjectId(event.get('location').get('location_id'))}, {'$pull': {'events': event_at_location}})
     update_list.append(update_location)
     # deletes event
     delete = mongo.events.delete_one({'_id': event['_id']})
@@ -145,6 +148,8 @@ def delete_event(event):
 
 def add_event_member(event, user, req):
     """adds a member to an event"""
+    print('entered add evnet member')
+    print(f'the event to add members is: {str(event)}')
     user_idx = None
     for idx, item in enumerate(event.get('members')):
         if item.get('user_id') == session.get('user').get('_id'):
@@ -171,6 +176,7 @@ def add_event_member(event, user, req):
                 'type': req.get('type'),
                 'avatar': user.get('avatar')
             }
+
     for item in req:
         new_user_event_data[item] = req.get(item)
     if req.get('type') is None:
@@ -182,13 +188,14 @@ def add_event_member(event, user, req):
     event_for_user['name'] = event.get('name')
     event_for_user['start_date'] = event.get('start_date')
     event_for_user['end_date'] = event.get('end_date')
+    event_for_user['location'] = event.get('location').get('name')
     event_for_user['type'] = new_user_event_data.get('type')
     update_user = mongo.users.update_one({'_id': user['_id']}, {'$push': {'events': event_for_user}}) # push event to user events'
     if update_event is not None and update_user is not None:
         mongo.users.update_one({'_id': user['_id']}, {'$push': {'notifications': 'Has sido agregado al evento ' + event['name']}})
         return "user added to event"
     else:
-        return {'error': 'Failed, couldn\'t add user to event'}
+        return {'error': 'Failed, couldn\'t add user to event', 'member': new_user_event_data}
     
 def update_event_member(event, user, req):
     """updates an event type to a member"""
@@ -273,7 +280,7 @@ def add_event_group(group, event):
         'name': event.get('name'),
         'start_date': event.get('start_date'),
         'end_date': event.get('end_date'),
-        'location': event.get('location'),
+        'location': event.get('location').get('name'),
         'avatar': event.get('avatar')
     }
     # add group to event

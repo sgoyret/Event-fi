@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles/landing_slider.css">
+    <link rel="stylesheet" href="/static/styles/landing_cards.css">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <title>Eventify</title>
+</head>
+<body>
+<header>
+    <div id="logo">Event<a id="logo-s">Fi</a></div>
+    <span class="sign"><a class="act" href="/login">Login</a></span>
+    <span class="sign"><a href="/register">Register</a></span>
+</header>
+
+<div class="slider">
+    <div class="myslider fade" style="display:block">
+        <div class="txt">
+        
+    </div>   
+    <img class="immg" src="/static/img/screen_shoot_slider1.png" style="width: 100%; height:100%;">
+    </div>
+    <div class="myslider fade">
+        <div class="txt">
+        <h1>New way</h1>
+        <p>for make events</p>
+    </div>   
+    <img class="immg" src="/static/img/pin_slider2.png" style="width: 100%; height:100%;">
+    </div>
+    <div class="myslider fade">
+        <div class="txt">
+        </div>   
+    <img class="immg" src="/static/img/phones.png" style="width: 100%; height:100%;">
+
+    </div>
+    <a class="prev" onclick="plusSlide(-1)">&#10094</a>
+    <a class="next" onclick="plusSlide(1)">&#10095</a>
+    <div class="dotbox" style="text-align:center;">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+
+</div>
+<div id="objectives">
+    <h1 class="objective-title">Objetives:</h1>
+    <p class="objective">Our project was inspired by the necessity of a way to easily share and find out about events, 
+      that didn’t require multiple apps and steps to achieve, these events being work, friends, family or culturally related.
+      Event-fi is a platform created thinking in those porposes, trying to solve the antiqued way for events organization and bringing 
+      a new organizational experience with a high level of customization.</p>
+</div>
+<div class="card-container">
+    <div class ="card flipcard">
+        <div class="card__content">
+          <div class="card__front">
+            <img class="avatar" src="/static/img/flipe2.png">
+            <div class="social_media">
+              <a href='https://github.com/flipeprez';>
+                <i class='bx bxl-github'></i></a>
+                
+                <a class="ln_btn_fp" href="https://www.linkedin.com/in/felipe-p%C3%A9rez-86a77b165/">  
+                <i onclick=social_media_ln_fp() class='bx bxl-linkedin-square'></i>
+              </a>
+            </div>
+            <h3 class="card__title">Felipe Pérez</h3>
+            <h5 class="card__subtitle">FrontEnd</h5>
+          </div> 
+          
+          <div class="card__back">
+            <p class="card__body">About me: <br>
+              im interested in front end design and continue progressing  in technologies like react and vue</p>
+          </div>
+          
+        </div>
+      </div>
+
+    <div class="card flipcard">
+        <div class="card__content">
+          <div class="card__front">
+            <img class="avatar" src="/static/img/santi_pic.png">
+            <div class="social_media">
+              <a href="#">
+                <i class='bx bxl-github'></i></a>
+                <a href="#">  
+                <i class='bx bxl-linkedin-square'></i>
+              </a>
+            </div>
+            <h3 class="card__subtitle">Devops</h3>
+            <h5 class="card__title">Santiago Goyret</h5>
+          </div> 
+          
+          <div class="card__back">
+            <p class="card__body">About me: <br>
+              Santiago likes to set up and manage linux servers.</p>
+          </div>
+          
+        </div>
+    </div>
+
+    <div class="card flipcard">
+        <div class="card__content">
+          <div class="card__front">
+            <img class="avatar" src="/static/img/Martin Casamayou 3.png">
+            <div class="social_media">
+              <a href="#">
+                <i class='bx bxl-github'></i></a>
+                <a href="#">  
+                <i class='bx bxl-linkedin-square'></i>
+              </a>
+            </div>
+            <h3 class="card__subtitle">BackEnd</Back-End></h3>
+            <h5 class="card__title">Martin Casamayou</h5>
+          </div> 
+          
+          <div class="card__back">
+            <p class="card__body">About me: <br>
+              design and implement the database schema using MongoDB
+              as well as creating and configuring the web application
+              of eVentify.
+              </p>
+          </div>
+          
+        </div>
+      </div>
+
+    <div class="card flipcard">
+        <div class="card__content">
+          <div class="card__front">
+            <img class="avatar" src="/static/img/diego_pic.png">
+            <div class="social_media">
+              <a href="#">
+                <i class='bx bxl-github'></i></a>
+                <a href="#">  
+                <i class='bx bxl-linkedin-square'></i>
+              </a>
+            </div>
+            <h3 class="card__subtitle">Full Stack</h3>
+            <h5 class="card__title">Diego Merentiel</h5>
+          </div> 
+          
+          <div class="card__back">
+            <p class="card__body">About me: <br>
+              Like Fullstack i build a better connection between front, back and the project manager.
+            </p>
+          </div>
+          
+        </div>
+      </div>
+</div>
+<script>
+  function myFunction() {
+    location.href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Expressions_and_Operators"
+  }
+  </script>
+  
+    <script src="/static/scripts/landing_sliders.js"></script>
+    <script src="/static/scripts/landing_card.js"></script>
+</body>
+</html>

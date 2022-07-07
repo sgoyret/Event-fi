@@ -1,14 +1,10 @@
 from api.views import api_views
 from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import session, request, redirect, url_for, jsonify
 from pymongo import MongoClient
 from functions.validations import *
 from api.functions.location_functions import *
-from werkzeug.security import generate_password_hash, check_password_hash
-from api.views import session_refresh
 from api import UPLOAD_FOLDER
-import json
 import os
 
 
@@ -28,9 +24,13 @@ def locations():
         if session.get('user').get('locations'):
             for idx, l in enumerate(session.get('user').get('locations')):
                 user_locations.append(l)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', l.get('location_id'))) as avt:
-                    print('pude abrir el avatar')
-                    user_locations[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', l.get('location_id'))) as avt:
+                        print('pude abrir el avatar de la location')
+                        user_locations[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    print(ex)
+        print(f'returning user locations: {user_locations}')
         return jsonify(user_locations)
 
     """
@@ -81,7 +81,6 @@ def location_info(location_id):
     for item in session.get('user').get('locations'):
         if item.get('location_id') == location_id:
             location = mongo.locations.find_one({'_id': ObjectId(location_id)})
-    print(location)
 
     if location is None:
         return {'error': 'location not found or acces denied'}
@@ -124,7 +123,7 @@ def location_admins(location_id):
     if admin is None:
         return {"error": "user not found"}
 
-    if request.met62bac189de0df0b72c23d24bhod == 'POST':
+    if request.method == 'POST':
         return add_location_admin(admin, location)
 
     if request.method == 'DELETE':

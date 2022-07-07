@@ -31,7 +31,11 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route('/', strict_slashes=False)
+@app.route('/', methods=['GET'], strict_slashes=False)
+def landing():
+    """returns landing page"""
+    return render_template('landing.html')
+
 @app.route('/index', methods=['GET'], strict_slashes=False)
 def index():
     """user base page"""
@@ -77,7 +81,7 @@ def login():
                 user.pop('password')
                 session['user'] = user
                 session['test'] = 'am i here?'
-                return redirect('/')
+                return redirect(url_for('index'))
             else:
                 return {'error': 'wrong password'}
         else:
@@ -170,6 +174,22 @@ def user():
             session['user']['contacts'] = contacts_with_avatar
     except Exception as ex:
         raise(ex)
+    try:
+        if session.get('user').get('groups'):
+            groups_with_avatar = []
+            for idx, g in enumerate(session.get('user').get('groups')):
+                groups_with_avatar.append(g)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('group_id'))) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        groups_with_avatar[idx]['avatar'] = avt.read()
+            session['user']['groups'] = groups_with_avatar
+    except Exception as ex:
+        raise(ex)
     return render_template('user.html', user=session['user'])
 
 @app.route('/user/settings', methods=['GET', 'POST'], strict_slashes=False)
@@ -205,6 +225,14 @@ def map():
         if l.get('_id'):
             l['location_id'] = str(l['_id'])
             l.pop('_id')
+        try:
+            print(f'yendo a abrir: {l.get("name")}')
+            with open(os.path.join(UPLOAD_FOLDER, l['avatar'])) as avt:
+                print('pude abrir el avatar de la location')
+                l['avatar'] = avt.read()
+                print(f'now the avatar is {l.get("avatar")}')
+        except Exception as ex:
+            print(ex)
         locations.append(l)
 
     return render_template('map.html', locations=locations, event=[], user=session.get('user'))
@@ -219,6 +247,7 @@ def map_event(event_id):
         return render_template('map.html', locations=[],  event=event, user=session.get('user'))
     else:
         return {"error": "event not found"}
+
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)

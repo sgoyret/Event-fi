@@ -1,11 +1,8 @@
 from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import request, session
 from pymongo import MongoClient
 from functions.validations import *
 from api.functions.events_functions import add_event_member, delete_event_group
-from werkzeug.security import generate_password_hash, check_password_hash
-import json
 import os
 from api import UPLOAD_FOLDER
 from api.views import session_refresh
@@ -18,32 +15,37 @@ def add_new_group(req):
     """adds a new group to the database"""
     if validate_group_creation(req.get_json()):
         new_group_data = {}
-        if 'avatar' not in request.files:
-            return {'error': 'no avatar'}
-        avatar = request.form.get('avatar_content')
+        # guardar contenido de la imagen en variable para escribirla en archivo
+        avatar = request.get_json().get('avatar_content')
         if avatar is None:
             return {'error': 'no avatar data'}
         if validate_image(avatar) is False:
             return {'error': 'image is not supported'}
+        # guardr todos los items del form en nuevo diccionaroi para insertar
         for item in req.get_json():
             new_group_data[item] = req.get_json()[item]
-
+        # popear el contenideo de la imagen para no guardar algo tan pessado en la base de datos
+        new_group_data.pop('avatar_content')
         new_group_data['owner'] = str(session.get('user').get('_id')) # set owner
         creator_info = {
             "user_id": new_group_data['owner'],
             "username": session.get('user').get('username'),
             "name": session.get('user').get('name'),
-            'last_name': session.get('user').get('lastname'),
+            'last_name': session.get('user').get('last_name'),
             "type": "admin"
         }
         new_group_data['members'] = []
         new_group_data['members'].append(creator_info) # set owner as member with type admin
         obj = mongo.groups.insert_one(new_group_data)
-        
-        with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id), 'w+')) as file:
-            file.write(avatar)
-        new_group_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
-        mongo.groups.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_group_data['avatar']}})
+        print('going to write the avatar into the system')
+        # guardar el avatar en un archivo en /static/avatars/id del grupo
+        try:
+            with open(os.path.join(UPLOAD_FOLDER, 'avatars', str(obj.inserted_id)), 'w+') as file:
+                file.write(avatar)
+                new_group_data['avatar'] = f'/static/avatars/{str(obj.inserted_id)}'
+                mongo.groups.update_one({'_id': obj.inserted_id}, {'$set': {'avatar': new_group_data['avatar']}})
+        except Exception as ex:
+            raise ex
 
         # update user groups in session
         if session.get('user').get('groups') is None:
@@ -51,6 +53,7 @@ def add_new_group(req):
         session['user']['groups'].append({
             'group_id': str(obj.inserted_id),
             'name': new_group_data['name'],
+            'avatar': f'/static/avatars/{str(obj.inserted_id)}',
             'type': 'admin'
             })
 
@@ -101,6 +104,7 @@ def add_group_member(user, group, req):
 
     new_group_to_user = {
         'group_id': str(group.get('_id')),
+        'avatar': group.get('avatar'),
         'name': group.get('name')
     }
     

@@ -1,14 +1,9 @@
-import json
-import requests
 from api.views import api_views
 from bson.objectid import ObjectId
-from flask import Blueprint, render_template, session, request, redirect, url_for, session, flash, jsonify
-from flask_cors import CORS
+from flask import session, request, redirect, url_for, jsonify
 from pymongo import MongoClient
 from functions.validations import *
 from api.functions.groups_functions import *
-from werkzeug.security import generate_password_hash, check_password_hash
-from api.views import session_refresh
 from api import UPLOAD_FOLDER
 
 
@@ -29,9 +24,12 @@ def groups():
         if session.get('user').get('groups'):
             for idx, g in enumerate(session.get('user').get('groups')):
                 user_groups.append(g)
-                with open(os.path.join(UPLOAD_FOLDER, 'avatars', c.get('_id'))) as avt:
-                    print('pude abrir el avatar')
-                    user_groups[idx]['avatar'] = avt.read()
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', g.get('_id'))) as avt:
+                        print('pude abrir el avatar')
+                        user_groups[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    print(ex)
         return jsonify(user_groups)
 
     if request.method == 'POST':
@@ -64,6 +62,46 @@ def single_group(group_id):
             group_data[key] = group[key]
             if key == '_id':
                 group_data[key] = str(group[key])
+        if group['members'][user_idx].get('type') == 'admin':
+            user_type = 'admin'
+        else:
+            user_type = 'member'
+        group_data['type'] = user_type
+        # turn event avatar from route to actual image
+        try:
+            with open(os.path.join(UPLOAD_FOLDER, 'avatars', group_data.get('_id'))) as avt:
+                print('pude abrir el avatar')
+                group_data['avatar'] = avt.read()
+        except Exception as ex:
+            print(ex)
+        # turn event members avatars from route to actual image
+        if group.get('members'):
+            members_with_avatar = []
+            for idx, m in enumerate(group.get('members')):
+                members_with_avatar.append(m)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', m.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        members_with_avatar[idx]['avatar'] = avt.read()
+            group_data['members'] = members_with_avatar
+        # turn event groups avatars from route to actual image
+        if group.get('events'):
+            events_with_avatar = []
+            for idx, e in enumerate(group.get('events')):
+                events_with_avatar.append(m)
+                try:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', e.get('user_id'))) as avt:
+                        print('pude abrir el avatar')
+                        events_with_avatar[idx]['avatar'] = avt.read()
+                except Exception as ex:
+                    with open(os.path.join(UPLOAD_FOLDER, 'avatars', 'default_user')) as avt:
+                        print('pude abrir el avatar')
+                        events_with_avatar[idx]['avatar'] = avt.read()
+            group_data['events'] = events_with_avatar
         return jsonify(group_data)
 
     if request.method == 'PUT':
