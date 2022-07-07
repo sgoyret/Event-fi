@@ -107,7 +107,7 @@ def add_new_event(req):
                 else:
                     return {'error': 'user not found'}
                 
-            return jsonify({'status':'created event', 'event_id': str(obj.inserted_id)})
+            return jsonify({'status': 'created event', 'event_id': str(obj.inserted_id), 'event': event_to_location})
 
 def delete_event(event):
     """deletes an event"""
@@ -147,6 +147,8 @@ def delete_event(event):
 
 def add_event_member(event, user, req):
     """adds a member to an event"""
+    print('entered add evnet member')
+    print(f'the event to add members is: {str(event)}')
     user_idx = None
     for idx, item in enumerate(event.get('members')):
         if item.get('user_id') == session.get('user').get('_id'):
@@ -191,7 +193,7 @@ def add_event_member(event, user, req):
         mongo.users.update_one({'_id': user['_id']}, {'$push': {'notifications': 'Has sido agregado al evento ' + event['name']}})
         return "user added to event"
     else:
-        return {'error': 'Failed, couldn\'t add user to event'}
+        return {'error': 'Failed, couldn\'t add user to event', 'member': new_user_event_data}
     
 def update_event_member(event, user, req):
     """updates an event type to a member"""
