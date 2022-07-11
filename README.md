@@ -156,20 +156,9 @@ Simpler to explain with a code example, how is that the app handles communicatin
 
 2. As seen, the center is specified with the location of the event.
 
-  
-  
-
-
-
-
-
-
-
-
 ## Backend
 > For the MVP we decided to use Python along with Flask, a lightweight backend framework that allows us to quickly develop and test functionalities for the app as well as adding new endpoints that handle Server Side Rendering, thanks to the usage of the Jinja2 engine creating the needed static html content already loaded with the necessary data. 
 Since the information may vary a lot between each event and location, to store our data we integrated MongoDB to our workflow, based on its document based non-relational schema with great dynamic capabilities.
-
 
 ### MongoDB Collections
 #### User Collection
@@ -189,90 +178,83 @@ Since the information may vary a lot between each event and location, to store o
  - ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=flat&logo=mongodb&logoColor=white)
 
 ## RestfulAPI
-> In order to retrieve data from the different models, the following routes are implemented.
-*note that you need valid credentials in most of the functionalities*
+In order to retrieve data from the different models, the following routes are implemented.
+##### note that you need valid credentials in most of the functionalities. Only "sudo" users have access to every endpoint of the app
 
 ### User routes
 >    /api/users/<user_id>
-##### GET ()
+##### GET ( )
 Returns the information of a given user
 
 >    /api/users/<user_id>/contacts
-##### GET ()
+##### GET ( )
 Returns a list with all the user contacts
-##### POST (contact_id)
+##### POST ({'user_id': <user_id>})
 If the contact_id exists in the database, the contact info is added to the user contact list
-##### DELETE (contact_id)
+##### DELETE ({'user_id': <user_id>})
 If the contact_id is found in the user contacts, it is removed from the list.
 
 >    /api/users/<user_id>/notifications
-##### GET (checking)
+##### GET ({'checking': \<bool>)
 If checking is True, then it just returns a message signaling that the user has unread notifications.
 If checking is False, then it returns the user notifications to the front and deletes them.
 
 ### Group routes
 >.    /api/groups
-##### GET ()
+##### GET ( )
 Returns a list with all the groups that the current logged user is part of.
-##### POST ()
+##### POST ( )
 Adds a new group and sets the creator as owner and admin
 
 >    /api/groups/<group_id>
-##### GET ()
+##### GET ( )
 Returns the information of a given group (name, avatar, members and events)
-##### PUT ()
+##### PUT ( )
 Sends new form to update the group info
-##### DELETE ()
+##### DELETE ( )
 Removes the group from all the relations and then deletes it from the database.
 
-
-
-
-
-
-
-
 >    /api/groups/<group_id>/members
-##### GET ()
+##### GET ( )
 Returns a list with all the members of a group.
-##### POST (user_id, type)
+##### POST ({'user_id': <user_id>, 'type': \<type>})
 If the user exists, it is added to the group members with its type if it is specified.
-##### PUT (user_id, type)
+##### PUT ({'user_id': <user_id>, 'type': \<type>})
 Updates the type of a group member, in order to give or remove admin privileges.
-##### DELETE (user_id)
+##### DELETE ({'user_id': <user_id>})
 Removes a member from the group.
 
 >    /api/events
-##### GET(filter)
+#### GET({'filter': {'start_date': 11/07/2022}})
 Returns a list of all the upcoming events for the current logged user.
 If the filter is specified with a date, then it will only show the events for that particular day.
-##### POST()
+##### POST( )
 Adds a new event setting the creator as owner and admin, also gives the possibility to invite groups or specific users in the creation form.
 
 >    /api/events/<event_id>
-##### GET ()
+##### GET ( )
 Returns the information of a given event (name, avatar, start_date, end_date, location, groups, members)
-##### PUT ()
+##### PUT ( )
 Updates the information of the event through a form.
-##### DELETE ()
+##### DELETE ( )
 Removes the event from all the collections it is related to and then deletes it from the database.
 
 >    /api/events/<event_id>/members
-##### GET ()
+##### GET ( )
 Returns a list with the information of all the members of a given event.
-##### POST (user_id, type)
+##### POST ({'user_id': <user_id>, 'type': \<type>})
 Adds a new member to the event with a member type if specified.
-##### PUT (user_id, type)
+##### PUT ({'user_id': <user_id>, 'type': \<type>})
 Updates the type of a given member, used for managing admin privileges.
-##### DELETE (user_id)
+##### DELETE ({'user_id': <user_id>})
 Removes a member from the event.
 
 >     /api/events/<event_id>/groups
-##### GET ()
+##### GET ( )
 Returns a list with the information of all the groups of a given event.
-##### POST (group_id)
+##### POST ({'group_id': <group_id>})
 Adds all the members from the group to the event member list and also the group itself to the event group list.
-##### DELETE (group_id)
+##### DELETE ({'group_id': <group_id>})
 Removes all the group members and the group itself from the event.
 
 ## License
