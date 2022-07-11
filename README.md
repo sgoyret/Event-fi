@@ -67,7 +67,7 @@ This web app, though responsive, is mainly focused on mobile usage.
  - ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
  - ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
  - ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
- - ![image]({https://img.shields.io/badge/-MapBox-blue})
+ - ![img]({https://img.shields.io/badge/-MapBox-blue})
  
  ## HTML5 & CSS3
  ### Documents
