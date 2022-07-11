@@ -162,15 +162,15 @@ Since the information may vary a lot between each event and location, to store o
 
 ### MongoDB Collections
 #### User Collection
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_user_collection.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_user_collection.png | width=300)
 ##### user with contacts
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_collection_with_contact.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_collection_with_contact.png | width=400)
 #### Group Collection
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_group_collection.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_group_collection.png | width=500)
 #### Location Collection
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_location_collection.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_location_collection.png | width=250)
 #### Event Collection
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_event_collection.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_event_collection.png | width=350)
 ### Technologies implemented
  - ![Python](https://img.shields.io/badge/python-3670A0?style=flat&logo=python&logoColor=ffdd54)
  - ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=flat&logo=flask&logoColor=white)
