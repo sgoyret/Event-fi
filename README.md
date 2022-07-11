@@ -1,4 +1,6 @@
 # Event-fi
+![image](https://github.com/BergeDios/Event-fi/blob/main/banner.png)
+
 >Event-Fi is an app designed to comfortably create, manage, share and find events, via a single simple app. It utilizes a map layout (using mapbox GL) based on markers for each location/event, in order to have an easy visualization and a user-friendly experience.
 
 You can visit our Page and register to our app [here!](event-fi.com)
@@ -11,6 +13,8 @@ You can visit our Page and register to our app [here!](event-fi.com)
 > Diego Merentiel, as FullStack Developer  [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/diego-merentiel)
 
 > Santiago Goyret, as Project Manager and DevOps [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/santiago-goyret)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi)
 
 ## Infraestructure
 
