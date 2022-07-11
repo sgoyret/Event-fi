@@ -37,7 +37,7 @@ You can visit our Page and register to our app [here!](event-fi.com)
 			 $ ./config.sh
 - 3. You are done! The app is now running in the background in **localhost:8000**
 
-> You can check the status of the service running **sudo systemctl status event-fi.service**. Also all the logs from the app down to debug level, are being redirected to /var/log/gunicorn/stdout and /var/log/gunicorn/stderr.
+> You can check the status of the service running **$ sudo systemctl status event-fi.service**. Also all the logs from the app down to debug level, are being redirected to **/var/log/gunicorn/stdout** and **/var/log/gunicorn/stderr**.
 
 
 ### App Architecture
