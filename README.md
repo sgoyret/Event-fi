@@ -77,7 +77,7 @@ E --> A
  - ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
  - ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
  - ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
- - ![image](https://img.shields.io/badge/-MapBox%20GL-blue)
+ - ![image](https://img.shields.io/static/v1?label=&message=MapBox%20GL&color=blue&style=for-the-badge)
  
 ## HTML5 & CSS3
  
