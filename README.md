@@ -170,6 +170,11 @@ Simpler to explain with a code example, how is that the app handles communicatin
 > For the MVP we decided to use Python along with Flask, a lightweight backend framework that allows us to quickly develop and test functionalities for the app as well as adding new endpoints that handle Server Side Rendering, thanks to the usage of the Jinja2 engine creating the needed static html content already loaded with the necessary data. 
 Since the information may vary a lot between each event and location, to store our data we integrated MongoDB to our workflow, based on its document based non-relational schema with great dynamic capabilities.
 
+
+### MongoDB Collections
+##### User Collection
+
+*user with contacts*
 ### Technologies implemented
  - ![Python](https://img.shields.io/badge/python-3670A0?style=flat&logo=python&logoColor=ffdd54)
  - ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=flat&logo=flask&logoColor=white)
