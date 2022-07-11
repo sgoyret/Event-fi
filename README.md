@@ -24,7 +24,7 @@
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi) ![GitHub repo size](https://img.shields.io/github/repo-size/BergeDios/Event-fi) ![Lines of code](https://img.shields.io/tokei/lines/github/BergeDios/Event-fi) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/BergeDios/Event-fi)
+![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi) ![GitHub repo size](https://img.shields.io/github/repo-size/BergeDios/Event-fi) ![Lines of code](https://img.shields.io/tokei/lines/github/BergeDios/Event-fi) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/BergeDios/Event-fi) ![GitHub language count](https://img.shields.io/github/languages/count/BergeDios/Event-fi)
 
 ## Infraestructure
 
