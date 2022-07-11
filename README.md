@@ -1,4 +1,4 @@
-# Event-fi
+# Event-Fi
 ![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/banner.png)
 
 >Event-Fi is an app designed to comfortably create, manage, share and find events, via a single simple app. It utilizes a map layout (using mapbox GL) based on markers for each location/event, in order to have an easy visualization and a user-friendly experience.
@@ -15,6 +15,23 @@ You can visit our Page and register to our app [here!](event-fi.com)
 > **Santiago Goyret**, as Project Manager and DevOps [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/santiago-goyret)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi)
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/flipeprez"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/flipe2.png" width="100px;" alt=""/><br /><sub><b>Felipe Perez</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=flipeprez" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Diekkan"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/diego_pic.png" width="100px;" alt=""/><br /><sub><b>Diego Merentiel</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=Diekkan" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ojo-perezoso"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/Martin%20Casamayou%203.png" width="100px;" alt=""/><br /><sub><b>Martin Casamayou</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=ojo-perezoso" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/BergeDios"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/santi_pic.png" width="100px;" alt=""/><br /><sub><b>Martin Casamayou</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=BergeDios" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## Infraestructure
 
@@ -41,7 +58,7 @@ You can visit our Page and register to our app [here!](event-fi.com)
 			 $ ./config.sh
 - 3. You are done! The app is now running in the background in **localhost:8000**
 
-> You can check the status of the service running **$ sudo systemctl status event-fi.service**. Also all the logs from the app down to debug level, are being redirected to **/var/log/gunicorn/stdout** and **/var/log/gunicorn/stderr**.
+> You can check the status of the service running `$ sudo systemctl status event-fi.service`. Also all the logs from the app down to debug level, are being redirected to `/var/log/gunicorn/stdout` and `/var/log/gunicorn/stderr`.
 
 
 ### App Architecture
@@ -143,9 +160,9 @@ Since the information may vary a lot between each event and location, to store o
 
 ### Technologies implemented
  - ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+ - ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
  - ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
  - ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
- - ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 
 ## RestfulAPI
 > In order to retrieve data from the different models, the following routes are implemented.
