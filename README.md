@@ -24,7 +24,7 @@
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi)
+![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi) ![GitHub repo size](https://img.shields.io/github/repo-size/BergeDios/Event-fi) ![Lines of code](https://img.shields.io/tokei/lines/github/BergeDios/Event-fi) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/BergeDios/Event-fi)
 
 ## Infraestructure
 
@@ -55,6 +55,25 @@
 
 
 ### App Architecture
+
+#### Environment
+
+> A Ubuntu Server (22.04) running over AWS EC2
+
+[![Bash](https://img.shields.io/static/v1?label=&message=GNU%20Bash&color=4EAA25&logo=GNU%20Bash&logoColor=4EAA25&labelColor=2F333A)](https://www.gnu.org/software/bash/)<!-- bash -->
+[![Vim](https://img.shields.io/static/v1?label=&message=Vim&color=019733&logo=Vim&logoColor=019733&labelColor=2F333A)](https://www.vim.org/)<!-- vim -->
+[![VS Code](https://img.shields.io/static/v1?label=&message=Visual%20Studio%20Code&color=007ACC&logo=Visual%20Studio%20Code&logoColor=007ACC&labelColor=2F333A)](https://code.visualstudio.com/)<!-- vs code -->
+
+#### Cloud
+<!-- AWS -->
+[![AWS](https://img.shields.io/static/v1?label=&message=Amazon%20AWS%20EC2&color=232F3E&logo=Amazon%20AWS&logoColor=232F3E&labelColor=F5F5F5)](https://aws.amazon.com/)
+
+#### Server stack
+
+[![Ubuntu](https://img.shields.io/static/v1?label=&message=Ubuntu&color=E95420&logo=Ubuntu&logoColor=E95420&labelColor=2F333A)](https://ubuntu.com/)<!-- ubuntu -->
+[![Nginx](https://img.shields.io/static/v1?label=&message=NGINX&color=009639&logo=NGINX&logoColor=009639&labelColor=2F333A)](https://nginx.org/)<!-- nginx -->
+[![Gunicorn](https://img.shields.io/static/v1?label=&message=Gunicorn&color=499848&logo=Gunicorn&logoColor=499848&labelColor=2F333A)](https://gunicorn.org/)<!-- gunicorn -->
+
 >Our app has a basic infrastructure consisting of a server instance hosted via the AWS EC2 service. Then with the Nginx web server we reverse proxy our localhost, that is deploying our app via Gunicorn service in the background through the port 8000.
 We also hold a second instance to the side enabling us to have a blue/green deployment strategy to reduce downtime and facilitate update deployments.
 
