@@ -23,7 +23,6 @@ async function popupnav(members, groups, events) {
                     }
                     document.getElementsByClassName('navselected')[0].classList.remove('navselected');
                     document.getElementById('groupsnav').classList.add('navselected');
-                    popupnav(members, groups, events);
                 }
         });
     } catch (error) {
@@ -52,7 +51,6 @@ async function popupnav(members, groups, events) {
                     }
                     document.getElementsByClassName('navselected')[0].classList.remove('navselected');
                     document.getElementById('membersnav').classList.add('navselected');
-                    popupnav(members, groups, events);
                 }
         });
     } catch (error) {
@@ -82,7 +80,6 @@ async function popupnav(members, groups, events) {
                     }
                     document.getElementsByClassName('navselected')[0].classList.remove('navselected');
                     document.getElementById('eventsnav').classList.add('navselected');
-                    popupnav(members, groups, events);
                 }
         });
     } catch (error) {
@@ -146,8 +143,6 @@ map.on('load', function() {
                 "</div>";
                     document.getElementsByClassName('back')[0].style.display = 'none';
                     element.insertAdjacentHTML('afterbegin', eventpopup);
-                    const membersnav = document.getElementById('membersnav');
-                    const groupsnav = document.getElementById('groupsnav');
                     if (data.groups) {
                         console.log('the event has groups')
                         for (let element of data.groups) {
@@ -231,10 +226,6 @@ map.on('load', function() {
                         nomembers.innerHTML = 'Este evento no tiene invitados aún'
                         document.getElementsByClassName('popupmembers')[0].appendChild(nomembers)
                     }
-                    membersnav.addEventListener('click', function () {
-                    });
-                    groupsnav.addEventListener('click', function () {
-                    });
                     const closepopup = document.getElementById('closepopup');
                     closepopup.addEventListener('click', function () {
                         element.removeChild(element.firstChild);
@@ -308,8 +299,6 @@ map.on('load', function() {
             "</div>";
                 document.getElementsByClassName('back')[0].style.display = 'none';
                 element.insertAdjacentHTML('afterbegin', locationpopup);
-                const membersnav = document.getElementById('membersnav');
-                const groupsnav = document.getElementById('groupsnav');
             }
         })
         console.log(element.geometry.coordinates)

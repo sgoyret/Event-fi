@@ -12,7 +12,7 @@
     <script src="/static/scripts/eventpopup.js"></script>
     <script>
         {% if event %}
-        window.addEventListener("DOMContentLoaded", function () {
+        window.addEventListener("load", function () {
             displayEvent({{event.location.position|tojson|safe}}, "{{event._id|safe}}")
         });
         {% endif %}

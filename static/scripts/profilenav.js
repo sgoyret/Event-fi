@@ -28,7 +28,6 @@ window.addEventListener("load", function() {
                         }
                         document.getElementsByClassName('navselected')[0].classList.remove('navselected');
                         document.getElementById('groupsnav').classList.add('navselected');
-                        popupnav(members, groups, events);
                     }
             });
         } catch (error) {
@@ -55,14 +54,13 @@ window.addEventListener("load", function() {
                         document.getElementById('addmember').style.display = "flex";
                         document.getElementsByClassName('navselected')[0].classList.remove('navselected');
                         document.getElementById('membersnav').classList.add('navselected');
-                        popupnav(members, groups, events);
                     }
             });
         } catch (error) {
             console.log(error)
         }
 }
-        if (events === true) {
+        if (events === true) {popupnav
             try {
                 document.getElementById('eventsnav').addEventListener("click", function() {
                     if (document.getElementById('eventsnav').classList === 'navselected') { 
@@ -85,7 +83,6 @@ window.addEventListener("load", function() {
                         }
                         document.getElementsByClassName('navselected')[0].classList.remove('navselected');
                         document.getElementById('eventsnav').classList.add('navselected');
-                        popupnav(members, groups, events);
                     }
             });
         } catch (error) {
