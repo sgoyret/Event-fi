@@ -1,5 +1,5 @@
 # Event-fi
-![image](https://github.com/BergeDios/Event-fi/blob/main/banner.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/banner.png)
 
 >Event-Fi is an app designed to comfortably create, manage, share and find events, via a single simple app. It utilizes a map layout (using mapbox GL) based on markers for each location/event, in order to have an easy visualization and a user-friendly experience.
 
