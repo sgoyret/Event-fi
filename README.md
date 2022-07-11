@@ -3,7 +3,7 @@
 
 >Event-Fi is an app designed to comfortably create, manage, share and find events, via a single simple app. It utilizes a map layout (using mapbox GL) based on markers for each location/event, in order to have an easy visualization and a user-friendly experience.
 
-You can visit our Page and register to our app [here!](event-fi.com)
+[![image](https://img.shields.io/static/v1?label=You%20can%20visit%20our%20Page%20and%20register&message=here!&color=blue&style=plastic)](event-fi.com)
 
 ## Authors
 
