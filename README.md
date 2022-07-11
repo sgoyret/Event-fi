@@ -1,12 +1,15 @@
-#Event-fi
+# Event-fi
 >Event-Fi is an app designed to comfortably create, manage, share and find events, via a single simple app. It utilizes a map layout (using mapbox GL) based on markers for each location/event, in order to have an easy visualization and a user-friendly experience.
 
 You can visit our Page and register to our app [here!](event-fi.com)
 
 ## Authors
 > Martin Casamayou, as Backend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/martin-casamayou-del-pino-24b554222/)
+
 > Felipe Perez, as Frontend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/felipe-pérez-86a77b165/)
+
 > Diego Merentiel, as FullStack Developer  [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/diego-merentiel)
+
 > Santiago Goyret, as Project Manager and DevOps [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/santiago-goyret)
 
 ## Dependencies & Installation
