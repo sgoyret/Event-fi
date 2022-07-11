@@ -12,7 +12,7 @@ You can visit our Page and register to our app [here!](event-fi.com)
 
 > Santiago Goyret, as Project Manager and DevOps [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/santiago-goyret)
 
-## Dependencies & Installation
+## Infraestructure
 
 ### Dependencies
 - Python 3.10.4
@@ -39,7 +39,7 @@ You can visit our Page and register to our app [here!](event-fi.com)
 
 			$ python app.py
 
-## App Architecture
+### App Architecture
 >Our app has a basic infrastructure consisting of a server instance hosted via the AWS EC2 service. Then with the Nginx web server we reverse proxy our localhost, that is deploying our app via Gunicorn service in the background through the port 8000.
 We also hold a second instance to the side enabling us to have a blue/green deployment strategy to reduce downtime and facilitate update deployments.
 
