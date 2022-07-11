@@ -85,7 +85,7 @@ Main structure being:
 ### Styles
 There is a style sheet for each template created, each one sharing characteristics like the color palette used. User experience is focused, with a simple interface. Here you can see for example our User view of the main page in the app showing the events it's invited to:
  
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_events.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_events.png) ![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_profile.png)
 
 
 ## JavaScript
