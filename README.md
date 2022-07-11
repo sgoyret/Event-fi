@@ -170,7 +170,7 @@ Since the information may vary a lot between each event and location, to store o
 #### Location Collection
 ![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_location_collection.png)
 #### Event Collection
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_event_colleciton.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_event_collection.png)
 ### Technologies implemented
  - ![Python](https://img.shields.io/badge/python-3670A0?style=flat&logo=python&logoColor=ffdd54)
  - ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=flat&logo=flask&logoColor=white)
