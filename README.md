@@ -29,17 +29,17 @@ You can visit our Page and register to our app [here!](event-fi.com)
 ## Infraestructure
 
 ### Dependencies
-- Python 3.10.4
-- Pip 22.0.2
-- Werkzeug 2.1.2
-- Flask 2.1.2
-- Flask_Session 0.4.0
-- Flask_Cors 3.0.10
-- Flask_PyMongo 2.3.0
-- PyMongo 4.1.1
-- dnspython 2.2.1
-- Nginx 1.18.0
-- Gunicorn 20.1.0
+- ![image](https://img.shields.io/static/v1?label=Python&message=3.10.4&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Pip&message=22.0.2&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Werkzeug&message=2.1.2&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Flask&message=2.1.2&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Flask_Session&message=0.4.0&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Flask_Cors&message=3.0.10&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Flask_PyMongo&message=2.3.0&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=PyMongo&message=4.1.1&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=dnspython&message=2.2.1&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Nginx&message=1.18.0&color=lightgrey&style=plastic)
+- ![image](https://img.shields.io/static/v1?label=Gunicorn&message=20.1.0&color=lightgrey&style=plastic)
 
 ### Installation
 >On an Ubuntu 22.04 based server follow this next steps
