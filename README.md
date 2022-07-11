@@ -175,7 +175,7 @@ Since the information may vary a lot between each event and location, to store o
 ##### User Collection
 ![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_user_collection.png)
 *user with contacts*
-![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_collection_with_contacts.png)
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_collection_with_contact.png)
 ##### Group Collection
 ![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/basic_group_collection.png)
 ##### Location Collection
