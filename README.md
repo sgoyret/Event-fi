@@ -21,10 +21,10 @@ You can visit our Page and register to our app [here!](event-fi.com)
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/flipeprez"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/flipe2.png" width="100px;" alt=""/><br /><sub><b>Felipe Perez</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=flipeprez" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/Diekkan"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/diego_pic.png" width="100px;" alt=""/><br /><sub><b>Diego Merentiel</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=Diekkan" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/flipeprez"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/flipe2.png" width="100px;" alt=""/><br /><sub><b>Felipe Perez</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=flipeprez" title="Code">💻</a><a href="https://www.linkedin.com/in/felipe-pérez-86a77b165/"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/linkedin.png" width="10px:"  height="10px;" alt=""/></a></td>
+    <td align="center"><a href="https://github.com/diekkan"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/diego_pic.png" width="100px;" alt=""/><br /><sub><b>Diego Merentiel</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=diekkan" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ojo-perezoso"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/Martin%20Casamayou%203.png" width="100px;" alt=""/><br /><sub><b>Martin Casamayou</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=ojo-perezoso" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/BergeDios"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/santi_pic.png" width="100px;" alt=""/><br /><sub><b>Martin Casamayou</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=BergeDios" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/bergedios"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/santi_pic.png" width="100px;" alt=""/><br /><sub><b>Santiago Goyret</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=bergedios" title="Code">💻</a></td>
   </tr>
 </table>
 
