@@ -83,7 +83,10 @@ Main structure being:
 	    </div>
 
 ### Styles
-There is a style sheet for each template created, each one sharing characteristics like the color palette used. User experience is focused, with a simple interface.
+There is a style sheet for each template created, each one sharing characteristics like the color palette used. User experience is focused, with a simple interface. Here you can see for example our User view of the main page in the app showing the events it's invited to:
+ 
+![image](https://github.com/BergeDios/Event-fi/blob/main/static/img/user_events.png)
+
 
 ## JavaScript
 >Js is used to request and display dynamic content from or to the API that was made. Visually speaking, it is used to make navigation bars and interactive buttons as well.
