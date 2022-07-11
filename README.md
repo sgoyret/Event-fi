@@ -6,13 +6,13 @@
 You can visit our Page and register to our app [here!](event-fi.com)
 
 ## Authors
-> Martin Casamayou, as Backend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/martin-casamayou-del-pino-24b554222/)
+> **Martin Casamayou**, as Backend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/martin-casamayou-del-pino-24b554222/)
 
-> Felipe Perez, as Frontend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/felipe-pérez-86a77b165/)
+> **Felipe Perez**, as Frontend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/felipe-pérez-86a77b165/)
 
-> Diego Merentiel, as FullStack Developer  [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/diego-merentiel)
+> **Diego Merentiel**, as FullStack Developer  [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/diego-merentiel)
 
-> Santiago Goyret, as Project Manager and DevOps [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/santiago-goyret)
+> **Santiago Goyret**, as Project Manager and DevOps [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/santiago-goyret)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi)
 
@@ -67,7 +67,7 @@ E --> A
  - ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
  - ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
  - ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
- - ![image](https://img.shields.io/badge/-MapBox-blue)
+ - ![image](https://img.shields.io/badge/-MapBox%20GL-blue)
  
 ## HTML5 & CSS3
  
@@ -139,7 +139,6 @@ Simpler to explain with a code example, how is that the app handles communicatin
 Since the information may vary a lot between each event and location, to store our data we integrated MongoDB to our workflow, based on its document based non-relational schema with great dynamic capabilities.
 
 ### Technologies implemented
->
  - ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
  - ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
  - ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
