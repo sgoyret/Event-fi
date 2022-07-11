@@ -6,25 +6,16 @@
 You can visit our Page and register to our app [here!](event-fi.com)
 
 ## Authors
-> **Martin Casamayou**, as Backend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/martin-casamayou-del-pino-24b554222/)
-
-> **Felipe Perez**, as Frontend Developer [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/felipe-pérez-86a77b165/)
-
-> **Diego Merentiel**, as FullStack Developer  [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/diego-merentiel)
-
-> **Santiago Goyret**, as Project Manager and DevOps [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/santiago-goyret)
-
-![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/flipeprez"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/flipe2.png" width="100px;" alt=""/><br /><sub><b>Felipe Perez</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=flipeprez" title="Code">💻</a><br /><a href="https://www.linkedin.com/in/felipe-pérez-86a77b165/"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/linkedin.png" width="20px;"  height="20px;" z-index="999" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/diekkan"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/diego_pic.png" width="100px;" alt=""/><br /><sub><b>Diego Merentiel</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=diekkan" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/ojo-perezoso"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/Martin%20Casamayou%203.png" width="100px;" alt=""/><br /><sub><b>Martin Casamayou</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=ojo-perezoso" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/bergedios"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/santi_pic.png" width="100px;" alt=""/><br /><sub><b>Santiago Goyret</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=bergedios" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/flipeprez"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/flipe2.png" width="100px;" alt=""/><br /><sub><b>Felipe Perez</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=flipeprez" title="Code">💻</a><br /><a href="https://www.linkedin.com/in/felipe-pérez-86a77b165/"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/linkedin.png" width="18px;"  height="18px;" z-index="999" alt=""/></a></td>
+    <td align="center"><a href="https://github.com/diekkan"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/diego_pic.png" width="100px;" alt=""/><br /><sub><b>Diego Merentiel</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=diekkan" title="Code">💻</a><br /><a href="https://www.linkedin.com/in/diego-merentiel/"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/linkedin.png" width="18px;"  height="18px;" z-index="999" alt=""/></a></td>
+    <td align="center"><a href="https://github.com/ojo-perezoso"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/Martin%20Casamayou%203.png" width="100px;" alt=""/><br /><sub><b>Martin Casamayou</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=ojo-perezoso" title="Code">💻</a><br /><a href="https://www.linkedin.com/in/martin-casamayou-del-pino-24b554222/"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/linkedin.png" width="18px;"  height="18px;" z-index="999" alt=""/></a></td>
+    <td align="center"><a href="https://github.com/bergedios"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/santi_pic.png" width="100px;" alt=""/><br /><sub><b>Santiago Goyret</b></sub></a><br /><a href="https://github.com/Event-fi/commits?author=bergedios" title="Code">💻</a><br /><a href="https://www.linkedin.com/in/santiago-goyret"><img src="https://github.com/BergeDios/Event-fi/blob/main/static/img/linkedin.png" width="18px;"  height="18px;" z-index="999" alt=""/></a></td>
   </tr>
 </table>
 
@@ -32,6 +23,8 @@ You can visit our Page and register to our app [here!](event-fi.com)
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+![GitHub last commit](https://img.shields.io/github/last-commit/BergeDios/Event-fi)
 
 ## Infraestructure
 
