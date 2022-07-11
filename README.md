@@ -58,7 +58,7 @@ E --> A
 ```
 
 ## Front-end
-This web app, though responsive, is mainly focused on mobile usage. 
+>This web app, though responsive, is mainly focused on mobile usage. 
 [ Desktop usage works as well ]. For this reason, it is highly recommended to be tested in small devices.
 
 ### Technologies implemented
@@ -67,11 +67,12 @@ This web app, though responsive, is mainly focused on mobile usage.
  - ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
  - ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
  - ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
- - ![img]({https://img.shields.io/badge/-MapBox-blue})
+ - ![image](https://img.shields.io/badge/-MapBox-blue)
  
- ## HTML5 & CSS3
- ### Documents
- HTML documents were designed with Jinja's templates engine. There is a *base.html* template which contains the main structure of almost every document on the app, this being inherited by the rest of templates.
+## HTML5 & CSS3
+ 
+### Documents
+HTML documents were designed with Jinja's templates engine. There is a *base.html* template which contains the main structure of almost every document on the app, this being inherited by the rest of templates.
 Main structure being:
 
         <div  class="wraper"  id="wraper">// Where all elements go
@@ -85,7 +86,7 @@ Main structure being:
 There is a style sheet for each template created, each one sharing characteristics like the color palette used. User experience is focused, with a simple interface.
 
 ## JavaScript
-Js is used to request and display dynamic content from or to the API that was made. Visually speaking, it is used to make navigation bars and interactive buttons as well.
+>Js is used to request and display dynamic content from or to the API that was made. Visually speaking, it is used to make navigation bars and interactive buttons as well.
 Script contents are divided into several functions, but no framework or library was used to make modules.
 
 ### Requesting data to the app's API
@@ -106,7 +107,7 @@ Simpler to explain with a code example, how is that the app handles communicatin
 >     }
 
 ## Mapbox
-  The app has an integrated map that is provided by Mapbox GL JS API. Whenever the event is clicked, the user will be redirected to a view which will display a map, giving geological information about the particular location requested.
+> The app has an integrated map that is provided by Mapbox GL JS API. Whenever the event is clicked, the user will be redirected to a view which will display a map, giving geological information about the particular location requested.
  
  A more technical example of how the app communicates with the Mapbox API will be the following:
  
@@ -133,9 +134,19 @@ Simpler to explain with a code example, how is that the app handles communicatin
 
 
 
+## Backend
+> For the MVP we decided to use Python along with Flask, a lightweight backend framework that allows us to quickly develop and test functionalities for the app as well as adding new endpoints that handle Server Side Rendering, thanks to the usage of the Jinja2 engine creating the needed static html content already loaded with the necessary data. 
+Since the information may vary a lot between each event and location, to store our data we integrated MongoDB to our workflow, based on its document based non-relational schema with great dynamic capabilities.
+
+### Technologies implemented
+>
+ - ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+ - ![Jinja](https://img.shields.io/badge/jinja-white.svg?style=for-the-badge&logo=jinja&logoColor=black)
+ - ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+ - ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 
 ## RestfulAPI
-In order to retrieve data from the different models, the following routes are implemented.
+> In order to retrieve data from the different models, the following routes are implemented.
 *note that you need valid credentials in most of the functionalities*
 
 ### User routes
