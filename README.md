@@ -35,9 +35,10 @@ You can visit our Page and register to our app [here!](event-fi.com)
 - 2.  Run our Configuration Script to install all dependencies
 
 			 $ ./config.sh
-- 3. Run the app
+- 3. You are done! The app is now running in the background in **localhost:8000**
 
-			$ python app.py
+> You can check the status of the service running **sudo systemctl status event-fi.service**. Also all the logs from the app down to debug level, are being redirected to /var/log/gunicorn/stdout and /var/log/gunicorn/stderr.
+
 
 ### App Architecture
 >Our app has a basic infrastructure consisting of a server instance hosted via the AWS EC2 service. Then with the Nginx web server we reverse proxy our localhost, that is deploying our app via Gunicorn service in the background through the port 8000.
