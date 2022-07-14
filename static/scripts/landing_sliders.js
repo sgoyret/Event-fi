@@ -1,4 +1,4 @@
-const mySlide = document.querySelectorAll('.myslider');
+const mySlide = document.querySelectorAll('.myslider'),
     dot = document.querySelectorAll('.dot');
 let counter = 1;
 slidefun(counter);
@@ -8,7 +8,7 @@ let timer = setInterval(autoslide, 8000);
     counter += 1;
     slidefun(counter);
 }
-function plusSlide(n) {
+function plusSlides(n) {
 counter +=n;
 slidefun(counter);
 resetTimer();

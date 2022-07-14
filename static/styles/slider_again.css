@@ -1,0 +1,279 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+header{
+    height:60px;
+    width:100%;
+    position:absolute;
+    top:0;
+    z-index:2
+}
+#logo{
+    line-height: 60px;
+    margin-left: 40px;
+    display: inline-block;
+    cursor:pointer;
+    font-size:30px;
+    font-weight:bold;
+    color:#240056c4;
+}
+#logo:hover{
+    color:black;
+}
+#logo-s{
+    color:#240056c4;
+    margin-left:5px;
+}
+#logo:hover #logo-s{
+    color:white
+}
+.sign{
+    float:right;
+    line-height:60px;
+    margin-right:40px;
+}
+.sign a{
+    color: rgba(15, 15, 15, 0.888);
+    font-weight:bold;
+    text-decoration:none;
+}
+.act{
+    border: 2px solid #fff;
+    border-radius:50px;
+    padding:6px 15px;
+} 
+.sign a:hover{
+    color:black;
+    border-color:black;
+} 
+.slider{
+    position: relative;
+    width:100%;
+    background: #240056c4;
+}
+.myslider{
+    height:auto;
+    display:none;
+    overflow: hidden;
+}
+.prev, .next{
+    position: absolute;
+    top:50%;
+    transform: translate(0, -50%);
+    font-size: 50px;
+    padding:15px;
+    cursor: pointer;
+    color: #fff;
+    transition: 0.1s;
+    user-select: none;
+}
+.prev:hover, .next:hover{
+    color:#240056c4;
+}
+.next{
+    right:0;
+}
+.dotsbox{
+    position: absolute;
+    left:50%;
+    transform:translate(-50%);
+    bottom: 20px;
+    cursor: pointer;
+}
+.dot{
+    display:inline-block;
+    width:15px;
+    height:15px;
+    border:3px solid #fff;
+    border-radius: 50%;
+    margin:0 10px;
+    cursor: pointer;
+}
+
+.active, .dot:hover{
+    border-color:#240056c4;
+}
+.fade{
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration:1.5s;
+}
+@-webkit-keyframes fade {
+    from{opacity:0.8}
+    to{opacity: 1}
+}
+@keyframes fade {
+    from{opacity: 0.8}
+    to{opacity: 1}
+}
+.txt{
+    position: absolute;
+    color: #fff;
+    letter-spacing: 2px;
+    line-height:35px;
+    top: 40%;
+    left: 15%;
+    -webkit-animation-name:posi;
+    -webkit-animation-duration: 2s;
+    animation-name:posi;
+    animation-duration: 2s;
+    z-index: 1;
+}
+
+@-webkit-keyframes posi {
+    from {left: 25%;}
+    to {left: 15%;}
+}
+@keyframes posi{
+    from {left:25%;}
+    to {left: 15%;}
+}
+.txt h1{
+    color: #240056c4;
+    font-weight: bold;
+    margin: 20px;
+    margin-bottom: 20px;
+}
+.txt p{
+    font-weight:bold;
+    font-size:20px;
+}
+#img-slider{
+    transform: scale(1.5, 1.5);
+    -webkit-animation-name:zoomin;
+    -webkit-animation-duration:30s;
+    animation-name:zoomin;
+    animation-duration:30s;
+}
+@-webkit-keyframes zoomin {
+    from {transform: scale(1, 1);}
+    to{transform: scale(1.5, 1.5);}
+}
+
+@keyframes zoomin {
+    from {transform: scale(1, 1);}
+    to{transform: scale(1.5, 1.5);}
+}
+
+@media screen and (max-width: 800px) {
+    header{
+        position: relative;
+    }
+    .myslider{
+        height:auto;
+        display:none;
+        overflow: hidden;
+    }
+    .txt{
+        line-height:25px;
+        top:70%;
+        left:30%;
+        transform:translate(-50%, -50%);
+        -webkit-animation-name:posi2;
+        -webkit-animation-duration: 2s;
+        animation-name:posi2;
+        animation-duration: 2s;
+    }
+    @keyframes posi2 {
+        from {left:0%;}
+        to {left:30%;}
+    }
+    .txt h1 {
+        font-size:20px;
+    }
+    .txt p{
+        font-size:13px;
+    }
+}
+@media screen and (max-width:520px) {
+    header{
+        position: relative;
+    }
+    .txt {
+        font-size:20px;
+        top:75%;
+        left:50%;
+        -webkit-animation-name:posi3;
+        -webkit-animation-duration: 2s;
+        animation-name:posi3;
+        animation-duration: 2s;
+    }
+    @keyframes posi3 {
+        from {left:0%;}
+        to {left:50%;}
+    }
+    .txt h1{
+        font-size:20px;
+        margin-bottom: 2px;
+        margin-left: 0;
+    }
+    .txt p{
+        font-size:15px;
+        
+    }
+    .sign{
+        float:right;
+        line-height:60px;
+        margin-right:10px;
+    }
+    .sign a{
+        color: rgba(15, 15, 15, 0.888);
+        font-weight:bold;
+        text-decoration:none;
+    }
+    .myslider{
+        height:auto;
+        display:none;
+        overflow: hidden;
+    }
+}
+@media screen and (max-width:320px) {
+    header{
+        position: relative;
+    }
+    .txt {
+        font-size:7px;
+        top:70%;
+        left:50%;
+        -webkit-animation-name:posi4;
+        -webkit-animation-duration: 2s;
+        animation-name:posi4;
+        animation-duration: 2s;
+    }
+    @keyframes posi4 {
+        from {left:0%;}
+        to {left:50%;}
+    }
+    .txt h1{
+        font-size:1rem;
+        margin-bottom: -5px;
+    }
+    .txt p{
+        font-size:.7rem;
+        margin-bottom: -5px;
+    }
+    .sign{
+        float:right;
+        line-height:60px;
+        margin-right:10px;
+    }
+    .sign a{
+        color: rgba(15, 15, 15, 0.888);
+        font-weight:bold;
+        text-decoration:none;
+    }
+    .act{
+        border: 1px solid #fff;
+        border-radius:50px;
+        padding:3px 7px;
+}
+.myslider{
+    height:auto;
+    display:none;
+    overflow: hidden;
+}
+}
