@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from functions.validations import *
 from api.views import api_views
 from api.views import session_refresh
+from api.functions.events_functions import add_event_member
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import json
@@ -141,6 +142,11 @@ def register():
                 
                 session['user'] = new_data
 
+                user = mongo.users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
+                event = mongo.events.find_one({'_id': ObjectId('62d7375d9c8bd68c80f9c080')})
+                print(f'event to add new user to: {str(event.get("_id"))}')
+                print(f"event members atre: {event.get('members')}")
+                add_event_member(event, user, {'type': 'guest'})
                 return redirect(url_for('index'))
             else:
                 flash('the username is already in use', error)

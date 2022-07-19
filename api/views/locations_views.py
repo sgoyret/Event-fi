@@ -105,13 +105,9 @@ def location_admins(location_id):
     if session.get('user') is None:
        return redirect(url_for('index'))
 
-    location = None
-    for item in session.get('user').get('locations'):
-        if item.get('location_id') == location_id:
-            location = mongo.locations.find_one({'_id': ObjectId(location_id)})
-
+    location = mongo.locations.find_one({'_id': ObjectId(location_id)})
     if location is None:
-        return {'error': 'location not found or acces denied'}
+        return {'error': 'location not found'}
 
     if request.method == 'GET':
         return jsonify(location.get('admins'))
@@ -124,7 +120,21 @@ def location_admins(location_id):
         return {"error": "user not found"}
 
     if request.method == 'POST':
-        return add_location_admin(admin, location)
+        if session.get('user').get('type') == 'sudo':
+            return add_location_admin(admin, location)
+        if session.get('user').get('locations'):
+            for item in session.get('user').get('locations'):
+                if item.get('location_id') == str(location.get('_id')) or session.get('user').get('type') == 'sudo':
+                    return add_location_admin(admin, location)
+        return {'error': 'location access denied'}
 
     if request.method == 'DELETE':
-        return delete_location_admin(admin, location)
+        if session.get('user').get('type') == 'sudo':
+            return delete_location_admin(admin, location)
+
+        if session.get('user').get('locations'):
+            for item in session.get('user').get('locations'):
+                if item.get('location_id') == str(location.get('_id')) or session.get('user').get('type') == 'sudo':
+                    return delete_location_admin(admin, location)
+        return {'error': 'location access denied'}
+        
